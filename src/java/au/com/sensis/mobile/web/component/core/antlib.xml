@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<antlib xmlns:current="ant:current" xmlns:antcontrib="antlib:net.sf.antcontrib">
+    <macrodef name="extract-all-component-policies" uri="antlib:au.com.sensis.mobiles">
+           <attribute name="componentLibDir"/>
+           <attribute name="destDir"/>
+           <attribute name="mscMgrpComponentScriptsBaseUrl"/>           
+           <attribute name="mscMgrpComponentImagesBaseUrl"/>           
+           
+           <sequential>
+               <mkdir dir="@{destDir}"/>
+               <antcontrib:for param="currComponentJar">
+                   <path>
+                        <fileset dir="@{componentLibDir}" includes="**/*-component-*.jar"/>               
+                   </path>
+                   <sequential>
+                       <current:extract-component-policies srcJar="@{currComponentJar}"
+                          destDir="@{destDir}" 
+                        mscMgrpComponentScriptsBaseUrl="@{mscMgrpComponentScriptsBaseUrl}"
+                        mscMgrpComponentImagesBaseUrl="@{mscMgrpComponentImagesBaseUrl}"/>
+                   </sequential>
+               </antcontrib:for>   
+           </sequential>
+    </macrodef>
+    
+    <macrodef name="extract-component-policies" uri="antlib:au.com.sensis.mobiles">
+           <attribute name="srcJar"/>
+           <attribute name="destDir"/>
+           <attribute name="mscMgrpComponentScriptsBaseUrl"/>
+           <attribute name="mscMgrpComponentImagesBaseUrl"/>
+           <sequential>
+                <echo message="Extracting policies for @{srcJar} ..."/>
+                <copy todir="@{destDir}" overwrite="true">
+                    <zipfileset src="@{srcJar}">
+                        <patternset>
+                            <include name="mcs/**/*"/>
+                        </patternset>
+                    </zipfileset>
+                    <globmapper from="mcs/policies/*" to="*"/>
+                    <filterset>
+                        <filter token="MCS-MGRP-COMPONENT-SCRIPTS-BASE-URL" value="@{mscMgrpComponentScriptsBaseUrl}"/>
+                        <filter token="MCS-MGRP-COMPONENT-IMAGES-BASE-URL" value="@{mscMgrpComponentImagesBaseUrl}"/>
+                    </filterset>
+                </copy>
+           </sequential>
+    </macrodef>
+</antlib>
