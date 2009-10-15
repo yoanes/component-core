@@ -6,10 +6,10 @@
 >
 
     <tlib-version>1.0</tlib-version>
-    <uri>/META-INF/taglibs/core.tld</uri>
+    <uri>/au/com/sensis/mobile/web/component/core/core.tld</uri>
     <tag-file>
         <name>setup</name>
-        <path>/META-INF/tags/setup.tag</path>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/setup.tag</path>
     </tag-file>
     <tag>
         <name>script</name>
