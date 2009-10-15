@@ -45,8 +45,8 @@
           - (without requiring the version number to actually change).
           -->
         <filesystem name="fs" checkmodified="true" latest="latest-time" changingPattern=".*" cache="fs-cache">
-            <ivy pattern="${ivy.local.desk.repository.dir}/[organisation]/[module]/ivys/ivy-[revision].xml" />
-            <artifact pattern="${ivy.local.desk.repository.dir}/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>    
+            <ivy pattern="C:\ivy-local-desk-repository/[organisation]/[module]/ivys/ivy-[revision].xml" />
+            <artifact pattern="C:\ivy-local-desk-repository/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>    
         </filesystem>
 
         <chain name="chain-resolver" returnFirst="true">
