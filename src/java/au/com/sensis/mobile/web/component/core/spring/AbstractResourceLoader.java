@@ -19,7 +19,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 	 * @param bundleName
 	 * @return
 	 */
-	protected final String getBundlePath(String bundleName) {
+	protected final String getBundlePath(final String bundleName) {
 		return JAVASCRIPT_BUNDLES_BASE_PATH + bundleName;
 	}
 
@@ -27,7 +27,7 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 	 * @param bundleName
 	 * @return
 	 */
-	protected final String getBundleExplodedFilesLoaderPath(String bundleName) {
+	protected final String getBundleExplodedFilesLoaderPath(final String bundleName) {
 		return JAVASCRIPT_EXPLODED_LOADER_BASE_PATH + bundleName;
 	}
 
@@ -35,15 +35,14 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 	 * @param explodedJavaScriptFilename
 	 * @return
 	 */
-	protected final String getSingleExplodedJavaScriptFilePath(String explodedJavaScriptFilename) {
+	protected final String getSingleExplodedJavaScriptFilePath(final String explodedJavaScriptFilename) {
 		return JAVASCRIPT_EXPLODED_JAVASCRIPT_BASE_PATH + explodedJavaScriptFilename;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see au.com.sensis.mobile.web.component.core.spring.ResourceLoader#loadJavaScriptBundle(java.lang.String)
 	 */
-	@Override
-	public InputStream loadJavaScriptBundle(String bundleName) {
+	public InputStream loadJavaScriptBundle(final String bundleName) {
 		final String bundlePath = getBundlePath(bundleName);
 		return loadFile(bundlePath);
 	}
@@ -51,23 +50,21 @@ public abstract class AbstractResourceLoader implements ResourceLoader {
 	/* (non-Javadoc)
 	 * @see au.com.sensis.mobile.web.component.core.spring.ResourceLoader#loadJavaScriptBundleExplodedFilesLoader(java.lang.String)
 	 */
-	@Override
-	public InputStream loadJavaScriptBundleExplodedFilesLoader(String bundleName) {
-		String bundleOnClasspath = getBundleExplodedFilesLoaderPath(bundleName);
+	public InputStream loadJavaScriptBundleExplodedFilesLoader(final String bundleName) {
+		final String bundleOnClasspath = getBundleExplodedFilesLoaderPath(bundleName);
 		return loadFile(bundleOnClasspath);
 	}
 
 	/* (non-Javadoc)
 	 * @see au.com.sensis.mobile.web.component.core.spring.ResourceLoader#loadSingleExlpodedJavaScriptFile(java.lang.String)
 	 */
-	@Override
-	public InputStream loadSingleExlpodedJavaScriptFile(String explodedJavaScriptFilename) {
-		String explodedJavaScriptFilenameOnClasspath = getSingleExplodedJavaScriptFilePath(explodedJavaScriptFilename);
+	public InputStream loadSingleExlpodedJavaScriptFile(final String explodedJavaScriptFilename) {
+		final String explodedJavaScriptFilenameOnClasspath = getSingleExplodedJavaScriptFilePath(explodedJavaScriptFilename);
 		return loadFile(explodedJavaScriptFilenameOnClasspath);
 
 	}
 
 	protected abstract InputStream loadFile(String filePath);
-	
+
 
 }
