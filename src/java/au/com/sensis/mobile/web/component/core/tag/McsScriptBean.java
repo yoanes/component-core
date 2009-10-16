@@ -9,109 +9,135 @@ import javax.servlet.jsp.tagext.JspFragment;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
-import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/* package */ final class McsScriptBean {
+/**
+ * Wraps data for a Volantis mcs:script element, including behaviour
+ * to write out the correct markup.
+ *
+ * @author Adrian.Koh2@sensis.com.au
+ */
+public class McsScriptBean {
 
-	private final String src;
-	private final String name;
-	private final String type;
-
-	/* package */ McsScriptBean(String src, String name, String type) {
-		this.src = src;
-		this.name = name;
-		this.type = type;
-		
-	}
-	
-	/* package */ String getId() {
-		if (StringUtils.isNotBlank(getSrc())) {
-			return getSrc();
-		} else {
-			return getName();
-		}
-	}
-
-	/**
-	 * @return the src
-	 */
-	/* package */ String getSrc() {
-		return src;
-	}
-	
-	/* package */ void writeMcsScript(JspWriter jspWriter, JspFragment jspBody) throws IOException, JspException {
-		jspWriter.println("<mcs:script ");
-		
-		if (StringUtils.isNotBlank(getType())) {
-			jspWriter.println("type=\"" + getType() + "\" ");
-		}
-		
-		if (StringUtils.isNotBlank(getSrc())) {
-			jspWriter.println("src=\"" + getSrc() + "\"/>");
-		} else {
-			jspWriter.println(">");
-			jspBody.invoke(jspWriter);
-			jspWriter.println("</mcs:script>");
-		}
-	}
+    private final String src;
+    private final String name;
+    private final String type;
 
     /**
-     * Implementation of the equals method that compares every field.
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
+     * Default constructor.
+     * @param src Value of the src attribute of the mcs:script.
+     * @param name Name to associate with the element, in the case that the src attribute is blank.
+     * @param type Value of the type attribute of the mcs:script.
+     */
+    public McsScriptBean(final String src, final String name, final String type) {
+        this.src = src;
+        this.name = name;
+        this.type = type;
+
+    }
+
+    /**
+     * @return The unique identifier to associate with this element. This may be used to detect
+     * duplicates. If {@link #getSrc()} is not blank, it is used. Otherwise, {@link #getName()} is
+     * used.
+     */
+    public String getId() {
+        if (StringUtils.isNotBlank(getSrc())) {
+            return getSrc();
+        } else {
+            return getName();
+        }
+    }
+
+    /**
+     * @return the src
+     */
+    public String getSrc() {
+        return src;
+    }
+
+    /**
+     * Writes out an mcs:script element.
+     * @param jspWriter {@link JspWriter} to write to.
+     * @param jspBody {@link JspFragment} fragment representing the body of the tag.
+     * @throws IOException Thrown if an IO error occurs.
+     * @throws JspException Thrown if any other error occurs.
+     */
+    public void writeMcsScript(final JspWriter jspWriter, final JspFragment jspBody)
+            throws IOException, JspException {
+        jspWriter.println("<mcs:script ");
+
+        if (StringUtils.isNotBlank(getType())) {
+            jspWriter.println("type=\"" + getType() + "\" ");
+        }
+
+        if (StringUtils.isNotBlank(getSrc())) {
+            jspWriter.println("src=\"" + getSrc() + "\"/>");
+        } else {
+            jspWriter.println(">");
+            jspBody.invoke(jspWriter);
+            jspWriter.println("</mcs:script>");
+        }
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
-        
-        if (obj == null || !this.getClass().equals(obj.getClass())) {
+
+        if ((obj == null) || !this.getClass().equals(obj.getClass())) {
             return false;
         }
 
-        McsScriptBean rhs = (McsScriptBean) obj;
-        EqualsBuilder equalsBuilder = new EqualsBuilder();
+        final McsScriptBean rhs = (McsScriptBean) obj;
+        final EqualsBuilder equalsBuilder = new EqualsBuilder();
 
-        equalsBuilder.append(this.src, rhs.src);
+        equalsBuilder.append(src, rhs.src);
+        equalsBuilder.append(name, rhs.name);
+        equalsBuilder.append(type, rhs.type);
         return equalsBuilder.isEquals();
     }
 
     /**
-     * Implementation of hashCode that uses every field. (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
+     * {@inheritDoc}
      */
     @Override
     public int hashCode() {
-        HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
-        hashCodeBuilder.append(this.src);
+        final HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+        hashCodeBuilder.append(src);
+        hashCodeBuilder.append(name);
+        hashCodeBuilder.append(type);
         return hashCodeBuilder.toHashCode();
     }
-    
+
     /**
-     * Produces a String using {@link ReflectionToStringBuilder}.
+     * {@inheritDoc}
      */
     @Override
     public String toString() {
-    	return new ToStringBuilder(this).append("src", getSrc()).toString();
+        return new ToStringBuilder(this)
+            .append("src", getSrc())
+            .append("name", getName())
+            .append("type", getType())
+            .toString();
     }
 
-	/**
-	 * @return the name
-	 */
-	/* package */ String getName() {
-		return name;
-	}
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-	/**
-	 * @return the type
-	 */
-	/* package */ String getType() {
-		return type;
-	}
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
 
-
-	
 }

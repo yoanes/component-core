@@ -11,143 +11,185 @@ import javax.servlet.jsp.tagext.TagData;
 import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.ValidationMessage;
 
-import org.apache.commons.lang.StringUtils;
-
+/**
+ * Facade to a Volantis mcs:script tag that prevents duplicates from being output.
+ *
+ * @author Adrian.Koh2@sensis.com.au
+ */
 public class ScriptTag extends SimpleTagSupport {
 
-	private static final String PAGE_CONTEXT_ATTRIBUTE_NAME =
-			SimpleTagSupport.class.getPackage() + "."
-					+ SimpleTagSupport.class.getName() + ".mcsScriptBeanMap";
+    /**
+     * Attribute name use to store a map of (id, {@link McsScriptBean}) pairs.
+     */
+    public static final String MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME
+        = ScriptTag.class.getName() + ".mcsScriptBeanMap";
 
-	private String src;
-	private String type;
-	private String name;
+    private String src;
+    private String type;
+    private String name;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.jsp.tagext.SimpleTagSupport#doTag()
-	 */
-	@Override
-	public void doTag() throws JspException, IOException {
-		if (getMcsScriptBeanMapFromPageContext() == null) {
-			initMcsScriptBeanMapInPageContext();
-		}
+    private McsScriptBeanFactory mcsScriptBeanFactory;
 
-		final McsScriptBean mcsScriptBean =
-				new McsScriptBean(getSrc(), getName(), getType());
+    /**
+     * Default constructor.
+     */
+    public ScriptTag() {
+        setMcsScriptBeanFactory(new DefaultMcsScriptBeanFactory());
+    }
 
-		if (!getMcsScriptBeanMapFromPageContext().containsKey(
-				mcsScriptBean.getId())) {
-			getMcsScriptBeanMapFromPageContext().put(mcsScriptBean.getId(),
-					mcsScriptBean);
-			mcsScriptBean
-					.writeMcsScript(getJspContext().getOut(), getJspBody());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void doTag() throws JspException, IOException {
+        initMcsScriptBeanMapInJspContextIfRequired();
 
-		}
-	}
+        final McsScriptBean mcsScriptBean =
+                getMcsScriptBeanFactory().createMcsScriptBean(getSrc(), getName(),
+                        getType());
 
-	private void initMcsScriptBeanMapInPageContext() {
-		getJspContext()
-				.setAttribute(PAGE_CONTEXT_ATTRIBUTE_NAME,
-						new HashMap<String, McsScriptBean>(),
-						PageContext.REQUEST_SCOPE);
-	}
+        if (!getMcsScriptBeanMapFromJspContext().containsKey(
+                mcsScriptBean.getId())) {
+            getMcsScriptBeanMapFromJspContext().put(mcsScriptBean.getId(),
+                    mcsScriptBean);
+            mcsScriptBean
+                    .writeMcsScript(getJspContext().getOut(), getJspBody());
 
-	/**
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	private Map<String, McsScriptBean> getMcsScriptBeanMapFromPageContext() {
-		return (Map<String, McsScriptBean>) getJspContext().getAttribute(PAGE_CONTEXT_ATTRIBUTE_NAME, PageContext.REQUEST_SCOPE);
-	}
+        }
+    }
 
-	/**
-	 * @return the src
-	 */
-	public String getSrc() {
-		return src;
-	}
+    private void initMcsScriptBeanMapInJspContextIfRequired() {
+        if (getMcsScriptBeanMapFromJspContext() == null) {
+            getJspContext().setAttribute(MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME,
+                    new HashMap<String, McsScriptBean>(),
+                    PageContext.REQUEST_SCOPE);
+        }
+    }
 
-	/**
-	 * @param src
-	 *            the src to set
-	 */
-	public void setSrc(String src) {
-		this.src = src;
-	}
+    /**
+     * @return Map of ids to {@link McsScriptBean}s obtained from the
+     *         JspContext.
+     */
+    @SuppressWarnings("unchecked")
+    private Map<String, McsScriptBean> getMcsScriptBeanMapFromJspContext() {
+        return (Map<String, McsScriptBean>) getJspContext().getAttribute(
+                MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME, PageContext.REQUEST_SCOPE);
+    }
 
-	/**
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
+    /**
+     * @return the src
+     */
+    public String getSrc() {
+        return src;
+    }
 
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
+    /**
+     * @param src
+     *            the src to set
+     */
+    public void setSrc(final String src) {
+        this.src = src;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * @param type
+     *            the type to set
+     */
+    public void setType(final String type) {
+        this.type = type;
+    }
 
-	public static class ScriptTagExtraInfo extends TagExtraInfo {
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-		/**
-		 * @see javax.servlet.jsp.tagext.TagExtraInfo#validate(javax.servlet.jsp.tagext.TagData)
-		 */
-		@Override
-		public ValidationMessage[] validate(TagData data) {
-			Object srcAttr = data.getAttribute("src");
-			Object nameAttr = data.getAttribute("name");
-			if (srcAttr == null && nameAttr == null) {
-				return new ValidationMessage[] { new ValidationMessage(data
-						.getId(),
-						"You must set either the src or name attributes but not both. src='"
-								+ srcAttr + "'; name='" + nameAttr + "'") };
-			} else if (srcAttr != null && nameAttr != null) {
-				return new ValidationMessage[] { new ValidationMessage(data
-						.getId(),
-						"You must set either the src or name attributes but not both. src='"
-								+ srcAttr + "'; name='" + nameAttr + "'") };
+    /**
+     * @param name
+     *            the name to set
+     */
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-			} else {
-				return null;
-			}
-//			String srcAttr = data.getAttributeString("src");
-//			String nameAttr = data.getAttributeString("name");
-//			if (StringUtils.isBlank(srcAttr) && StringUtils.isBlank(nameAttr)) {
-//				return new ValidationMessage[] { new ValidationMessage(data
-//						.getId(),
-//						"You must set either the src or name attributes but not both. src='"
-//						+ srcAttr + "'; name='" + nameAttr + "'") };
-//			} else if (StringUtils.isNotBlank(srcAttr)
-//					&& StringUtils.isNotBlank(nameAttr)) {
-//				return new ValidationMessage[] { new ValidationMessage(data
-//						.getId(),
-//						"You must set either the src or name attributes but not both. src='"
-//						+ srcAttr + "'; name='" + nameAttr + "'") };
-//				
-//			} else {
-//				return null;
-//			}
-		}
-		
-		
-		
-	}
+    /**
+     * @return the mcsScriptBeanFactory
+     */
+    private McsScriptBeanFactory getMcsScriptBeanFactory() {
+        return mcsScriptBeanFactory;
+    }
+
+    /**
+     * @param mcsScriptBeanFactory {@link McsScriptBeanFactory} to set.
+     */
+    protected void setMcsScriptBeanFactory(final McsScriptBeanFactory mcsScriptBeanFactory) {
+        this.mcsScriptBeanFactory = mcsScriptBeanFactory;
+    }
+
+    /**
+     * Factory for {@link McsScriptBean}s to facilitate testing.
+     */
+    public static interface McsScriptBeanFactory {
+        /**
+         * Create an {@link McsScriptBean}.
+         * @param src See {@link McsScriptBean}.
+         * @param name See {@link McsScriptBean}.
+         * @param type See {@link McsScriptBean}.
+         * @return a new {@link McsScriptBean}.
+         */
+        McsScriptBean createMcsScriptBean(final String src, final String name, final String type);
+    }
+
+    /**
+     * Default {@link McsScriptBeanFactory} implementation.
+     */
+    public static class DefaultMcsScriptBeanFactory implements McsScriptBeanFactory {
+
+        /**
+         * {@inheritDoc}
+         */
+        public McsScriptBean createMcsScriptBean(final String src, final String name,
+                final String type) {
+            return new McsScriptBean(src, name, type);
+        }
+    }
+
+    /**
+     * {@link TagExtraInfo} implementation for validating the data set into the {@link ScriptTag}.
+     */
+    public static class ScriptTagExtraInfo extends TagExtraInfo {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public ValidationMessage[] validate(final TagData data) {
+            final Object srcAttr = data.getAttribute("src");
+            final Object nameAttr = data.getAttribute("name");
+            if ((srcAttr == null) && (nameAttr == null)) {
+                return new ValidationMessage[] { new ValidationMessage(data
+                        .getId(),
+                        "You must set either the src or name attributes but not both. src='"
+                                + srcAttr + "'; name='" + nameAttr + "'") };
+            } else if ((srcAttr != null) && (nameAttr != null)) {
+                return new ValidationMessage[] { new ValidationMessage(data
+                        .getId(),
+                        "You must set either the src or name attributes but not both. src='"
+                                + srcAttr + "'; name='" + nameAttr + "'") };
+
+            } else {
+                return null;
+            }
+        }
+
+    }
 }
