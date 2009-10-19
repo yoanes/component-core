@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="/WEB-INF/taglibs/c.tld"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="core" uri="/au/com/sensis/mobile/web/component/core/core.tld"%>
 
 <%--
