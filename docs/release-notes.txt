@@ -1,3 +1,9 @@
+==== Version 1.0.1-001 (tag: not tagged yet) ====
+
+Next bleeding edge version on the way to 1.0.2 for the rockit 
+Common UI project. Changes summary:
+* ScriptTag is now abstracted away from Volantis.  
+
 ==== Version 1.0.1 (tag: v1_0_1) ====
 
 Deliverable from iteration 1.0.1 of the rockit Common UI project 
