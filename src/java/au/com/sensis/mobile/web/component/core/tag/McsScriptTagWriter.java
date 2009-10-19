@@ -12,12 +12,11 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * Wraps data for a Volantis mcs:script element, including behaviour
- * to write out the correct markup.
+ * {@link ScriptTagWriter} implementation that knows how to output Volantis mcs:script tags.
  *
  * @author Adrian.Koh2@sensis.com.au
  */
-public class McsScriptBean {
+public final class McsScriptTagWriter implements ScriptTagWriter {
 
     private final String src;
     private final String name;
@@ -29,7 +28,7 @@ public class McsScriptBean {
      * @param name Name to associate with the element, in the case that the src attribute is blank.
      * @param type Value of the type attribute of the mcs:script.
      */
-    public McsScriptBean(final String src, final String name, final String type) {
+    public McsScriptTagWriter(final String src, final String name, final String type) {
         this.src = src;
         this.name = name;
         this.type = type;
@@ -37,9 +36,10 @@ public class McsScriptBean {
     }
 
     /**
-     * @return The unique identifier to associate with this element. This may be used to detect
-     * duplicates. If {@link #getSrc()} is not blank, it is used. Otherwise, {@link #getName()} is
-     * used.
+     * {@inheritDoc}
+     *
+     * This implementation uses the algorithm: If {@link #getSrc()} is not
+     * blank, it is used. Otherwise, {@link #getName()} is used.
      */
     public String getId() {
         if (StringUtils.isNotBlank(getSrc())) {
@@ -57,13 +57,9 @@ public class McsScriptBean {
     }
 
     /**
-     * Writes out an mcs:script element.
-     * @param jspWriter {@link JspWriter} to write to.
-     * @param jspBody {@link JspFragment} fragment representing the body of the tag.
-     * @throws IOException Thrown if an IO error occurs.
-     * @throws JspException Thrown if any other error occurs.
+     * {@inheritDoc}
      */
-    public void writeMcsScript(final JspWriter jspWriter, final JspFragment jspBody)
+    public void writeScript(final JspWriter jspWriter, final JspFragment jspBody)
             throws IOException, JspException {
         jspWriter.println("<mcs:script ");
 
@@ -93,7 +89,7 @@ public class McsScriptBean {
             return false;
         }
 
-        final McsScriptBean rhs = (McsScriptBean) obj;
+        final McsScriptTagWriter rhs = (McsScriptTagWriter) obj;
         final EqualsBuilder equalsBuilder = new EqualsBuilder();
 
         equalsBuilder.append(src, rhs.src);

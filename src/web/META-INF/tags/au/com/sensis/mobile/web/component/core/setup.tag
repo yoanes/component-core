@@ -13,7 +13,6 @@
 
 <core:script src="${baseCompMcsPath}/core/scripts/core-component.mscr"></core:script>
 
-<%--
 <core:script name="deviceInfo" type="text/javascript">
     var Device = new McsDevice(
         '<pipeline:value-of expr="device:getDeviceName()"/>',
@@ -31,5 +30,3 @@
                       <pipeline:value-of expr="device:getPolicyValue('pixelsy')"/>)
     );
 </core:script>
---%>
-

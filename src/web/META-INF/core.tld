@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-jsptaglibrary_2_1.xsd"
     version="2.1"
 >
-
+    <description>Tag library for the core component.</description>
     <tlib-version>1.0</tlib-version>
     <uri>/au/com/sensis/mobile/web/component/core/core.tld</uri>
     <tag-file>
@@ -13,6 +13,7 @@
     </tag-file>
     <tag>
         <name>script</name>
+        <description>Facade to a markup specific script tag. Prevents duplicate tags from being written to the current request.</description>
         <tag-class>au.com.sensis.mobile.web.component.core.tag.ScriptTag</tag-class>
         <tei-class>au.com.sensis.mobile.web.component.core.tag.ScriptTag$ScriptTagExtraInfo</tei-class>
         <body-content>scriptless</body-content>
@@ -33,6 +34,13 @@
             <description>Unique name of the script. Must be specified if src is not specified.</description>            
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>scriptTagWriterFactory</name>
+            <description>ScriptTagWriterFactory to use to output the markup for this tag.</description>            
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>au.com.sensis.mobile.web.component.core.tag.ScriptTagWriterFactory</type>
         </attribute>
     </tag>
 </taglib>

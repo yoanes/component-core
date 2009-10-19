@@ -12,68 +12,82 @@ import javax.servlet.jsp.tagext.TagExtraInfo;
 import javax.servlet.jsp.tagext.ValidationMessage;
 
 /**
- * Facade to a Volantis mcs:script tag that prevents duplicates from being output.
+ * Facade to a markup specific script tag. This facade uses a
+ * {@link ScriptTagWriterFactory} to determine which target markup dialect to
+ * output. The {@link ScriptTagWriterFactory} implementation used is the first
+ * of the following that is found to be non-null:
+ * <ol>
+ * <li>{@link #getScriptTagWriterFactory()}</li>
+ * <li>Value of the {@link #SCRIPT_WRITER_FACTORY_ATTRIBUTE_NAME} attribute
+ * found by calling {@link javax.servlet.jsp.JspContext#findAttribute(String)}.</li>
+ * <li>A built-in default, currently
+ * {@link VolantisDialect#getScriptTagWriterFactory()}.</li>
+ * </ol>
+ *
+ * This facade also prevents duplicate tags from being written in the current
+ * HTTP request. The unique id of each tag is governed by
+ * {@link ScriptTagWriter#getId()}.
  *
  * @author Adrian.Koh2@sensis.com.au
  */
 public class ScriptTag extends SimpleTagSupport {
 
     /**
-     * Attribute name use to store a map of (id, {@link McsScriptBean}) pairs.
+     * Attribute name used to store a map of ({@link ScriptTagWriter#getId()},
+     * {@link ScriptTagWriter}) pairs.
      */
-    public static final String MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME
-        = ScriptTag.class.getName() + ".mcsScriptBeanMap";
+    public static final String SCRIPT_WRITER_MAP_ATTRIBUTE_NAME =
+            ScriptTag.class.getName() + ".scriptWriterMap";
+
+    /**
+     * Attribute name used to lookup the application controlled default
+     * {@link ScriptTagWriterFactory} implementation.
+     */
+    public static final String SCRIPT_WRITER_FACTORY_ATTRIBUTE_NAME =
+            ScriptTag.class.getName() + ".scriptWriterFactory";
 
     private String src;
     private String type;
     private String name;
 
-    private McsScriptBeanFactory mcsScriptBeanFactory;
-
-    /**
-     * Default constructor.
-     */
-    public ScriptTag() {
-        setMcsScriptBeanFactory(new DefaultMcsScriptBeanFactory());
-    }
+    private ScriptTagWriterFactory scriptTagWriterFactory;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void doTag() throws JspException, IOException {
-        initMcsScriptBeanMapInJspContextIfRequired();
+        initScriptWriterMapInJspContextIfRequired();
 
-        final McsScriptBean mcsScriptBean =
-                getMcsScriptBeanFactory().createMcsScriptBean(getSrc(), getName(),
-                        getType());
+        final ScriptTagWriter scriptTagWriter =
+                findScriptTagWriterFactory().createScriptTagWriter(getSrc(),
+                        getName(), getType());
 
-        if (!getMcsScriptBeanMapFromJspContext().containsKey(
-                mcsScriptBean.getId())) {
-            getMcsScriptBeanMapFromJspContext().put(mcsScriptBean.getId(),
-                    mcsScriptBean);
-            mcsScriptBean
-                    .writeMcsScript(getJspContext().getOut(), getJspBody());
+        if (!getScriptTagWriterMapFromJspContext().containsKey(
+                scriptTagWriter.getId())) {
+            scriptTagWriter.writeScript(getJspContext().getOut(), getJspBody());
+            getScriptTagWriterMapFromJspContext().put(scriptTagWriter.getId(),
+                    scriptTagWriter);
 
         }
     }
 
-    private void initMcsScriptBeanMapInJspContextIfRequired() {
-        if (getMcsScriptBeanMapFromJspContext() == null) {
-            getJspContext().setAttribute(MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME,
-                    new HashMap<String, McsScriptBean>(),
+    private void initScriptWriterMapInJspContextIfRequired() {
+        if (getScriptTagWriterMapFromJspContext() == null) {
+            getJspContext().setAttribute(SCRIPT_WRITER_MAP_ATTRIBUTE_NAME,
+                    new HashMap<String, McsScriptTagWriter>(),
                     PageContext.REQUEST_SCOPE);
         }
     }
 
     /**
-     * @return Map of ids to {@link McsScriptBean}s obtained from the
+     * @return Map of ids to {@link McsScriptTagWriter}s obtained from the
      *         JspContext.
      */
     @SuppressWarnings("unchecked")
-    private Map<String, McsScriptBean> getMcsScriptBeanMapFromJspContext() {
-        return (Map<String, McsScriptBean>) getJspContext().getAttribute(
-                MCS_SCRIPT_BEAN_MAP_ATTRIBUTE_NAME, PageContext.REQUEST_SCOPE);
+    private Map<String, ScriptTagWriter> getScriptTagWriterMapFromJspContext() {
+        return (Map<String, ScriptTagWriter>) getJspContext().getAttribute(
+                SCRIPT_WRITER_MAP_ATTRIBUTE_NAME, PageContext.REQUEST_SCOPE);
     }
 
     /**
@@ -122,49 +136,47 @@ public class ScriptTag extends SimpleTagSupport {
     }
 
     /**
-     * @return the mcsScriptBeanFactory
+     * @return the scriptTagWriterFactory
      */
-    private McsScriptBeanFactory getMcsScriptBeanFactory() {
-        return mcsScriptBeanFactory;
+    public ScriptTagWriterFactory getScriptTagWriterFactory() {
+        return scriptTagWriterFactory;
     }
 
     /**
-     * @param mcsScriptBeanFactory {@link McsScriptBeanFactory} to set.
+     * NOTE: this method is private since the shorter
+     * {@link #setTagFactory(ScriptTagWriterFactory)} is exposed as a JSP tag
+     * attribute.
+     *
+     * @param scriptTagWriterFactory
+     *            {@link ScriptTagWriterFactory} to set.
      */
-    protected void setMcsScriptBeanFactory(final McsScriptBeanFactory mcsScriptBeanFactory) {
-        this.mcsScriptBeanFactory = mcsScriptBeanFactory;
+    public void setScriptTagWriterFactory(
+            final ScriptTagWriterFactory scriptTagWriterFactory) {
+        this.scriptTagWriterFactory = scriptTagWriterFactory;
     }
 
     /**
-     * Factory for {@link McsScriptBean}s to facilitate testing.
+     * @return ScriptTagWriterFactory to use to create a {@link ScriptTagWriter}
+     *         .
      */
-    public static interface McsScriptBeanFactory {
-        /**
-         * Create an {@link McsScriptBean}.
-         * @param src See {@link McsScriptBean}.
-         * @param name See {@link McsScriptBean}.
-         * @param type See {@link McsScriptBean}.
-         * @return a new {@link McsScriptBean}.
-         */
-        McsScriptBean createMcsScriptBean(final String src, final String name, final String type);
-    }
-
-    /**
-     * Default {@link McsScriptBeanFactory} implementation.
-     */
-    public static class DefaultMcsScriptBeanFactory implements McsScriptBeanFactory {
-
-        /**
-         * {@inheritDoc}
-         */
-        public McsScriptBean createMcsScriptBean(final String src, final String name,
-                final String type) {
-            return new McsScriptBean(src, name, type);
+    private ScriptTagWriterFactory findScriptTagWriterFactory() {
+        if (getScriptTagWriterFactory() != null) {
+            return getScriptTagWriterFactory();
+        } else if (findScriptTagWriterFactoryJspAttribute() != null) {
+            return findScriptTagWriterFactoryJspAttribute();
+        } else {
+            return VolantisDialect.getInstance().getScriptTagWriterFactory();
         }
     }
 
+    private ScriptTagWriterFactory findScriptTagWriterFactoryJspAttribute() {
+        return (ScriptTagWriterFactory) getJspContext().findAttribute(
+                SCRIPT_WRITER_FACTORY_ATTRIBUTE_NAME);
+    }
+
     /**
-     * {@link TagExtraInfo} implementation for validating the data set into the {@link ScriptTag}.
+     * {@link TagExtraInfo} implementation for validating the data set into the
+     * {@link ScriptTag}.
      */
     public static class ScriptTagExtraInfo extends TagExtraInfo {
 
@@ -175,20 +187,25 @@ public class ScriptTag extends SimpleTagSupport {
         public ValidationMessage[] validate(final TagData data) {
             final Object srcAttr = data.getAttribute("src");
             final Object nameAttr = data.getAttribute("name");
-            if ((srcAttr == null) && (nameAttr == null)) {
+            if (bothNullOrBothNotNull(srcAttr, nameAttr)) {
                 return new ValidationMessage[] { new ValidationMessage(data
                         .getId(),
                         "You must set either the src or name attributes but not both. src='"
                                 + srcAttr + "'; name='" + nameAttr + "'") };
-            } else if ((srcAttr != null) && (nameAttr != null)) {
-                return new ValidationMessage[] { new ValidationMessage(data
-                        .getId(),
-                        "You must set either the src or name attributes but not both. src='"
-                                + srcAttr + "'; name='" + nameAttr + "'") };
-
             } else {
                 return null;
             }
+        }
+
+        /**
+         * @param srcAttr
+         * @param nameAttr
+         * @return
+         */
+        private boolean bothNullOrBothNotNull(final Object srcAttr,
+                final Object nameAttr) {
+            return ((srcAttr == null) && (nameAttr == null))
+                    || ((srcAttr != null) && (nameAttr != null));
         }
 
     }

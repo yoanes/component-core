@@ -10,11 +10,11 @@ import org.junit.Test;
 import au.com.sensis.wireless.test.AbstractJUnit4TestCase;
 
 /**
- * Unit test {@link McsScriptBean}.
+ * Unit test {@link McsScriptTagWriter}.
  *
  * @author Adrian.Koh2@sensis.com.au
  */
-public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
+public class McsScriptTagWriterTestCase extends AbstractJUnit4TestCase {
 
     private static final String DEFAULT_SRC = "/comp/map/scripts/map-component.mscr";
     private static final String DEFAULT_NAME = "deviceInfo";
@@ -24,20 +24,20 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
     private JspFragment mockJspFragment;
 
     /**
-     * Test {@link McsScriptBean#getId()}.
+     * Test {@link McsScriptTagWriter#getId()}.
      *
      * @throws Exception Thrown if any error occurs.
      */
     @Test
     public void testGetIdWhenSrcIsNotBlank() throws Exception {
-       final McsScriptBean objectUnderTest
-           = new McsScriptBean(DEFAULT_SRC, DEFAULT_NAME, DEFAULT_TYPE);
+       final McsScriptTagWriter objectUnderTest
+           = new McsScriptTagWriter(DEFAULT_SRC, DEFAULT_NAME, DEFAULT_TYPE);
 
        Assert.assertEquals("id is wrong", DEFAULT_SRC, objectUnderTest.getId());
     }
 
     /**
-     * Test {@link McsScriptBean#getId()}.
+     * Test {@link McsScriptTagWriter#getId()}.
      *
      * @throws Exception
      *             Thrown if any error occurs.
@@ -47,23 +47,23 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
         final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
 
         for (final String testValue : testValues) {
-            final McsScriptBean objectUnderTest =
-                    new McsScriptBean(testValue, DEFAULT_NAME, DEFAULT_TYPE);
+            final McsScriptTagWriter objectUnderTest =
+                    new McsScriptTagWriter(testValue, DEFAULT_NAME, DEFAULT_TYPE);
             Assert.assertEquals("id is wrong for testValue: '" + testValue
                     + "'", DEFAULT_NAME, objectUnderTest.getId());
         }
     }
 
     /**
-     * Test {@link McsScriptBean#writeMcsScript(javax.servlet.jsp.JspWriter,
+     * Test {@link McsScriptTagWriter#writeScript(javax.servlet.jsp.JspWriter,
      * javax.servlet.jsp.tagext.JspFragment)}.
      *
      * @throws Exception Thrown if any error occurs.
      */
     @Test
     public void testWriteMcsScriptWhenSrcAndTypeAreNotBlank() throws Exception {
-       final McsScriptBean objectUnderTest
-           = new McsScriptBean(DEFAULT_SRC, DEFAULT_NAME, DEFAULT_TYPE);
+       final McsScriptTagWriter objectUnderTest
+           = new McsScriptTagWriter(DEFAULT_SRC, DEFAULT_NAME, DEFAULT_TYPE);
 
        getMockJspWriter().println("<mcs:script ");
        getMockJspWriter().println("type=\"" + DEFAULT_TYPE + "\" ");
@@ -73,12 +73,12 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
        getHelper().replay();
 
-       objectUnderTest.writeMcsScript(getMockJspWriter(), getMockJspFragment());
+       objectUnderTest.writeScript(getMockJspWriter(), getMockJspFragment());
     }
 
     /**
      * Test
-     * {@link McsScriptBean#writeMcsScript(javax.servlet.jsp.JspWriter,
+     * {@link McsScriptTagWriter#writeScript(javax.servlet.jsp.JspWriter,
      * javax.servlet.jsp.tagext.JspFragment)}.
      *
      * @throws Exception
@@ -91,8 +91,8 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
         for (final String testValue : testValues) {
 
-            final McsScriptBean objectUnderTest =
-                    new McsScriptBean(DEFAULT_SRC, DEFAULT_NAME, testValue);
+            final McsScriptTagWriter objectUnderTest =
+                    new McsScriptTagWriter(DEFAULT_SRC, DEFAULT_NAME, testValue);
 
             getMockJspWriter().println("<mcs:script ");
             getMockJspWriter().println("src=\"" + DEFAULT_SRC + "\"/>");
@@ -101,7 +101,7 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
             getHelper().replay();
 
-            objectUnderTest.writeMcsScript(getMockJspWriter(),
+            objectUnderTest.writeScript(getMockJspWriter(),
                     getMockJspFragment());
 
             // Reset mocks prior to next iteration.
@@ -112,7 +112,7 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
     /**
      * Test
-     * {@link McsScriptBean#writeMcsScript(javax.servlet.jsp.JspWriter,
+     * {@link McsScriptTagWriter#writeScript(javax.servlet.jsp.JspWriter,
      * javax.servlet.jsp.tagext.JspFragment)}.
      *
      * @throws Exception
@@ -125,8 +125,8 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
         for (final String testValue : testValues) {
 
-            final McsScriptBean objectUnderTest =
-                    new McsScriptBean(testValue, DEFAULT_NAME, DEFAULT_TYPE);
+            final McsScriptTagWriter objectUnderTest =
+                    new McsScriptTagWriter(testValue, DEFAULT_NAME, DEFAULT_TYPE);
 
             getMockJspWriter().println("<mcs:script ");
             getMockJspWriter().println("type=\"" + DEFAULT_TYPE + "\" ");
@@ -136,7 +136,7 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
             getHelper().replay();
 
-            objectUnderTest.writeMcsScript(getMockJspWriter(),
+            objectUnderTest.writeScript(getMockJspWriter(),
                     getMockJspFragment());
 
             // Reset mocks prior to next iteration.
@@ -147,7 +147,7 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
     /**
      * Test
-     * {@link McsScriptBean#writeMcsScript(javax.servlet.jsp.JspWriter,
+     * {@link McsScriptTagWriter#writeScript(javax.servlet.jsp.JspWriter,
      * javax.servlet.jsp.tagext.JspFragment)}.
      *
      * @throws Exception
@@ -160,8 +160,8 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
         for (final String testValue : testValues) {
 
-            final McsScriptBean objectUnderTest =
-                    new McsScriptBean(testValue, DEFAULT_NAME, testValue);
+            final McsScriptTagWriter objectUnderTest =
+                    new McsScriptTagWriter(testValue, DEFAULT_NAME, testValue);
 
             getMockJspWriter().println("<mcs:script ");
             getMockJspWriter().println(">");
@@ -170,7 +170,7 @@ public class McsScriptBeanTestCase extends AbstractJUnit4TestCase {
 
             getHelper().replay();
 
-            objectUnderTest.writeMcsScript(getMockJspWriter(),
+            objectUnderTest.writeScript(getMockJspWriter(),
                     getMockJspFragment());
 
             // Reset mocks prior to next iteration.
