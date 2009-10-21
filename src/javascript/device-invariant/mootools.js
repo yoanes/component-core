@@ -1,8 +1,4 @@
 /*
-Sensis: To minimise file size this MooTools file doesn't include the following components:
-	Element: 	Element.Dimensions
-	Utilities:	Cookie, Swiff
-
 Script: Core.js
 	MooTools - My Object Oriented JavaScript Tools.
 
@@ -21,8 +17,8 @@ Inspiration:
 */
 
 var MooTools = {
-	'version': '1.2.2',
-	'build': 'f0491d62fbb7e906789aa3733d6a67d43e5af7c9'
+	'version': '1.2.3',
+	'build': '4980aa0fb74d2f6eb80bcd9f5b8e1fd6fbb8f607'
 };
 
 var Native = function(options){
@@ -57,7 +53,8 @@ var Native = function(options){
 
 	object.alias = function(a1, a2, a3){
 		if (typeof a1 == 'string'){
-			if ((a1 = this.prototype[a1])) return add(this, a2, a1, a3);
+			var pa1 = this.prototype[a1];
+			if ((a1 = pa1)) return add(this, a2, a1, a3);
 		}
 		for (var a in a1) this.alias(a, a1[a], a2);
 		return this;
@@ -103,7 +100,7 @@ Native.typize = function(object, family){
 		'String': ["charAt", "charCodeAt", "concat", "indexOf", "lastIndexOf", "match", "replace", "search", "slice", "split", "substr", "substring", "toLowerCase", "toUpperCase", "valueOf"]
 	};
 	for (var g in generics){
-		for (var i = generics[g].length; i--;) Native.genericize(window[g], generics[g][i], true);
+		for (var i = generics[g].length; i--;) Native.genericize(natives[g], generics[g][i], true);
 	}
 })();
 
@@ -203,7 +200,7 @@ function $H(object){
 };
 
 function $lambda(value){
-	return (typeof value == 'function') ? value : function(){
+	return ($type(value) == 'function') ? value : function(){
 		return value;
 	};
 };
@@ -810,14 +807,14 @@ Hash.implement({
 	},
 
 	extend: function(properties){
-		Hash.each(properties, function(value, key){
+		Hash.each(properties || {}, function(value, key){
 			Hash.set(this, key, value);
 		}, this);
 		return this;
 	},
 
 	combine: function(properties){
-		Hash.each(properties, function(value, key){
+		Hash.each(properties || {}, function(value, key){
 			Hash.include(this, key, value);
 		}, this);
 		return this;
@@ -1313,7 +1310,7 @@ var Element = new Native({
 		var konstructor = Element.Constructors.get(tag);
 		if (konstructor) return konstructor(props);
 		if (typeof tag == 'string') return document.newElement(tag, props);
-		return $(tag).set(props);
+		return document.id(tag).set(props);
 	},
 
 	afterImplement: function(key, value){
@@ -1345,23 +1342,26 @@ var IFrame = new Native({
 	initialize: function(){
 		var params = Array.link(arguments, {properties: Object.type, iframe: $defined});
 		var props = params.properties || {};
-		var iframe = $(params.iframe) || false;
+		var iframe = document.id(params.iframe);
 		var onload = props.onload || $empty;
 		delete props.onload;
-		props.id = props.name = $pick(props.id, props.name, iframe.id, iframe.name, 'IFrame_' + $time());
+		props.id = props.name = $pick(props.id, props.name, iframe ? (iframe.id || iframe.name) : 'IFrame_' + $time());
 		iframe = new Element(iframe || 'iframe', props);
 		var onFrameLoad = function(){
 			var host = $try(function(){
 				return iframe.contentWindow.location.host;
 			});
-			if (host && host == window.location.host){
+			if (!host || host == window.location.host){
 				var win = new Window(iframe.contentWindow);
 				new Document(iframe.contentWindow.document);
 				$extend(win.Element.prototype, Element.Prototype);
 			}
 			onload.call(iframe.contentWindow, iframe.contentWindow.document);
 		};
-		(window.frames[props.id]) ? onFrameLoad() : iframe.addListener('load', onFrameLoad);
+		var contentWindow = $try(function(){
+			return iframe.contentWindow;
+		});
+		((contentWindow && contentWindow.document.body) || window.frames[props.id]) ? onFrameLoad() : iframe.addListener('load', onFrameLoad);
 		return iframe;
 	}
 
@@ -1375,7 +1375,7 @@ var Elements = new Native({
 		if (options.ddup || options.cash){
 			var uniques = {}, returned = [];
 			for (var i = 0, l = elements.length; i < l; i++){
-				var el = $.element(elements[i], !options.cash);
+				var el = document.id(elements[i], !options.cash);
 				if (options.ddup){
 					if (uniques[el.uid]) continue;
 					uniques[el.uid] = true;
@@ -1411,7 +1411,7 @@ Document.implement({
 			});
 			tag = '<' + tag + '>';
 		}
-		return $.element(this.createElement(tag)).set(props);
+		return document.id(this.createElement(tag)).set(props);
 	},
 
 	newTextNode: function(text){
@@ -1424,17 +1424,52 @@ Document.implement({
 
 	getWindow: function(){
 		return this.window;
-	}
+	},
+	
+	id: (function(){
+		
+		var types = {
+
+			string: function(id, nocash, doc){
+				id = doc.getElementById(id);
+				return (id) ? types.element(id, nocash) : null;
+			},
+			
+			element: function(el, nocash){
+				$uid(el);
+				if (!nocash && !el.$family && !(/^object|embed$/i).test(el.tagName)){
+					var proto = Element.Prototype;
+					for (var p in proto) el[p] = proto[p];
+				};
+				return el;
+			},
+			
+			object: function(obj, nocash, doc){
+				if (obj.toElement) return types.element(obj.toElement(doc), nocash);
+				return null;
+			}
+			
+		};
+
+		types.textnode = types.whitespace = types.window = types.document = $arguments(0);
+		
+		return function(el, nocash, doc){
+			if (el && el.$family && el.uid) return el;
+			var type = $type(el);
+			return (types[type]) ? types[type](el, nocash, doc || document) : null;
+		};
+
+	})()
 
 });
 
-Window.implement({
+if (window.$ == null) Window.implement({
+	$: function(el, nc){
+		return document.id(el, nc, this.document);
+	}
+});
 
-	$: function(el, nocash){
-		if (el && el.$family && el.uid) return el;
-		var type = $type(el);
-		return ($[type]) ? $[type](el, nocash, this.document) : null;
-	},
+Window.implement({
 
 	$$: function(selector){
 		if (arguments.length == 1 && typeof selector == 'string') return this.document.getElements(selector);
@@ -1460,31 +1495,10 @@ Window.implement({
 
 });
 
-$.string = function(id, nocash, doc){
-	id = doc.getElementById(id);
-	return (id) ? $.element(id, nocash) : null;
-};
-
-$.element = function(el, nocash){
-	$uid(el);
-	if (!nocash && !el.$family && !(/^object|embed$/i).test(el.tagName)){
-		var proto = Element.Prototype;
-		for (var p in proto) el[p] = proto[p];
-	};
-	return el;
-};
-
-$.object = function(obj, nocash, doc){
-	if (obj.toElement) return $.element(obj.toElement(doc), nocash);
-	return null;
-};
-
-$.textnode = $.whitespace = $.window = $.document = $arguments(0);
-
 Native.implement([Element, Document], {
 
 	getElement: function(selector, nocash){
-		return $(this.getElements(selector, true)[0] || null, nocash);
+		return document.id(this.getElements(selector, true)[0] || null, nocash);
 	},
 
 	getElements: function(tags, nocash){
@@ -1543,7 +1557,7 @@ var walk = function(element, walk, start, match, all, nocash){
 	var elements = [];
 	while (el){
 		if (el.nodeType == 1 && (!match || Element.match(el, match))){
-			if (!all) return $(el, nocash);
+			if (!all) return document.id(el, nocash);
 			elements.push(el);
 		}
 		el = el[walk];
@@ -1555,10 +1569,11 @@ var attributes = {
 	'html': 'innerHTML',
 	'class': 'className',
 	'for': 'htmlFor',
+	'defaultValue': 'defaultValue',
 	'text': (Browser.Engine.trident || (Browser.Engine.webkit && Browser.Engine.version < 420)) ? 'innerText' : 'textContent'
 };
 var bools = ['compact', 'nowrap', 'ismap', 'declare', 'noshade', 'checked', 'disabled', 'readonly', 'multiple', 'selected', 'noresize', 'defer'];
-var camels = ['value', 'accessKey', 'cellPadding', 'cellSpacing', 'colSpan', 'frameBorder', 'maxLength', 'readOnly', 'rowSpan', 'tabIndex', 'useMap'];
+var camels = ['value', 'type', 'defaultValue', 'accessKey', 'cellPadding', 'cellSpacing', 'colSpan', 'frameBorder', 'maxLength', 'readOnly', 'rowSpan', 'tabIndex', 'useMap'];
 
 bools = bools.associate(bools);
 
@@ -1595,12 +1610,12 @@ Hash.each(inserters, function(inserter, where){
 	where = where.capitalize();
 
 	Element.implement('inject' + where, function(el){
-		inserter(this, $(el, true));
+		inserter(this, document.id(el, true));
 		return this;
 	});
 
 	Element.implement('grab' + where, function(el){
-		inserter($(el, true), this);
+		inserter(document.id(el, true), this);
 		return this;
 	});
 
@@ -1686,7 +1701,7 @@ Element.implement({
 
 	adopt: function(){
 		Array.flatten(arguments).each(function(element){
-			element = $(element, true);
+			element = document.id(element, true);
 			if (element) this.appendChild(element);
 		}, this);
 		return this;
@@ -1697,23 +1712,23 @@ Element.implement({
 	},
 
 	grab: function(el, where){
-		inserters[where || 'bottom']($(el, true), this);
+		inserters[where || 'bottom'](document.id(el, true), this);
 		return this;
 	},
 
 	inject: function(el, where){
-		inserters[where || 'bottom'](this, $(el, true));
+		inserters[where || 'bottom'](this, document.id(el, true));
 		return this;
 	},
 
 	replaces: function(el){
-		el = $(el, true);
+		el = document.id(el, true);
 		el.parentNode.replaceChild(this, el);
 		return this;
 	},
 
 	wraps: function(el, where){
-		el = $(el, true);
+		el = document.id(el, true);
 		return this.replaces(el).grab(el, where);
 	},
 
@@ -1771,7 +1786,7 @@ Element.implement({
 		for (var parent = el.parentNode; parent != this; parent = parent.parentNode){
 			if (!parent) return null;
 		}
-		return $.element(el, nocash);
+		return document.id(el, nocash);
 	},
 
 	getSelected: function(){
@@ -1789,7 +1804,7 @@ Element.implement({
 	toQueryString: function(){
 		var queryString = [];
 		this.getElements('input, select, textarea', true).each(function(el){
-			if (!el.name || el.disabled) return;
+			if (!el.name || el.disabled || el.type == 'submit' || el.type == 'reset' || el.type == 'file') return;
 			var value = (el.tagName.toLowerCase() == 'select') ? Element.getSelected(el).map(function(opt){
 				return opt.value;
 			}) : ((el.type == 'radio' || el.type == 'checkbox') && !el.checked) ? null : el.value;
@@ -1824,7 +1839,7 @@ Element.implement({
 		}
 
 		clean(clone, this);
-		return $(clone);
+		return document.id(clone);
 	},
 
 	destroy: function(){
@@ -1846,7 +1861,7 @@ Element.implement({
 	},
 
 	hasChild: function(el){
-		el = $(el, true);
+		el = document.id(el, true);
 		if (!el) return false;
 		if (Browser.Engine.webkit && Browser.Engine.version < 420) return $A(this.getElementsByTagName(el.tagName)).contains(el);
 		return (this.contains) ? (this != el && this.contains(el)) : !!(this.compareDocumentPosition(el) & 16);
@@ -2068,7 +2083,7 @@ Native.implement([Element, Window, Document], {
 	},
 
 	cloneEvents: function(from, type){
-		from = $(from);
+		from = document.id(from);
 		var fevents = from.retrieve('events');
 		if (!fevents) return this;
 		if (!type){
@@ -2228,7 +2243,7 @@ Element.implement({
 
 	getStyles: function(){
 		var result = {};
-		Array.each(arguments, function(key){
+		Array.flatten(arguments).each(function(key){
 			result[key] = this.getStyle(key);
 		}, this);
 		return result;
@@ -2262,6 +2277,241 @@ Element.ShortStyles = {margin: {}, padding: {}, border: {}, borderWidth: {}, bor
 	Short.borderWidth[bdw] = Short[bd][bdw] = All[bdw] = '@px';
 	Short.borderStyle[bds] = Short[bd][bds] = All[bds] = '@';
 	Short.borderColor[bdc] = Short[bd][bdc] = All[bdc] = 'rgb(@, @, @)';
+});
+
+
+/*
+Script: Element.Dimensions.js
+	Contains methods to work with size, scroll, or positioning of Elements and the window object.
+
+License:
+	MIT-style license.
+
+Credits:
+	- Element positioning based on the [qooxdoo](http://qooxdoo.org/) code and smart browser fixes, [LGPL License](http://www.gnu.org/licenses/lgpl.html).
+	- Viewport dimensions based on [YUI](http://developer.yahoo.com/yui/) code, [BSD License](http://developer.yahoo.com/yui/license.html).
+*/
+
+(function(){
+
+Element.implement({
+
+	scrollTo: function(x, y){
+		if (isBody(this)){
+			this.getWindow().scrollTo(x, y);
+		} else {
+			this.scrollLeft = x;
+			this.scrollTop = y;
+		}
+		return this;
+	},
+
+	getSize: function(){
+		if (isBody(this)) return this.getWindow().getSize();
+		return {x: this.offsetWidth, y: this.offsetHeight};
+	},
+
+	getScrollSize: function(){
+		if (isBody(this)) return this.getWindow().getScrollSize();
+		return {x: this.scrollWidth, y: this.scrollHeight};
+	},
+
+	getScroll: function(){
+		if (isBody(this)) return this.getWindow().getScroll();
+		return {x: this.scrollLeft, y: this.scrollTop};
+	},
+
+	getScrolls: function(){
+		var element = this, position = {x: 0, y: 0};
+		while (element && !isBody(element)){
+			position.x += element.scrollLeft;
+			position.y += element.scrollTop;
+			element = element.parentNode;
+		}
+		return position;
+	},
+
+	getOffsetParent: function(){
+		var element = this;
+		if (isBody(element)) return null;
+		if (!Browser.Engine.trident) return element.offsetParent;
+		while ((element = element.parentNode) && !isBody(element)){
+			if (styleString(element, 'position') != 'static') return element;
+		}
+		return null;
+	},
+
+	getOffsets: function(){		
+		if (this.getBoundingClientRect){
+			var bound = this.getBoundingClientRect(),
+			html = document.id(this.getDocument().documentElement),
+			scroll = html.getScroll(),
+			isFixed = (styleString(this, 'position') == 'fixed');
+			return {
+				x: parseInt(bound.left, 10) + ((isFixed) ? 0 : scroll.x) - html.clientLeft,
+				y: parseInt(bound.top, 10) +  ((isFixed) ? 0 : scroll.y) - html.clientTop
+			};
+		}
+
+		var element = this, position = {x: 0, y: 0};
+		if (isBody(this)) return position;
+
+		while (element && !isBody(element)){
+			position.x += element.offsetLeft;
+			position.y += element.offsetTop;
+
+			if (Browser.Engine.gecko){
+				if (!borderBox(element)){
+					position.x += leftBorder(element);
+					position.y += topBorder(element);
+				}
+				var parent = element.parentNode;
+				if (parent && styleString(parent, 'overflow') != 'visible'){
+					position.x += leftBorder(parent);
+					position.y += topBorder(parent);
+				}
+			} else if (element != this && Browser.Engine.webkit){
+				position.x += leftBorder(element);
+				position.y += topBorder(element);
+			}
+
+			element = element.offsetParent;
+		}
+		if (Browser.Engine.gecko && !borderBox(this)){
+			position.x -= leftBorder(this);
+			position.y -= topBorder(this);
+		}
+		return position;
+	},
+
+	getPosition: function(relative){
+		if (isBody(this)) return {x: 0, y: 0};
+		var offset = this.getOffsets(), scroll = this.getScrolls();
+		var position = {x: offset.x - scroll.x, y: offset.y - scroll.y};
+		var relativePosition = (relative && (relative = document.id(relative))) ? relative.getPosition() : {x: 0, y: 0};
+		return {x: position.x - relativePosition.x, y: position.y - relativePosition.y};
+	},
+
+	getCoordinates: function(element){
+		if (isBody(this)) return this.getWindow().getCoordinates();
+		var position = this.getPosition(element), size = this.getSize();
+		var obj = {left: position.x, top: position.y, width: size.x, height: size.y};
+		obj.right = obj.left + obj.width;
+		obj.bottom = obj.top + obj.height;
+		return obj;
+	},
+
+	computePosition: function(obj){
+		return {left: obj.x - styleNumber(this, 'margin-left'), top: obj.y - styleNumber(this, 'margin-top')};
+	},
+
+	setPosition: function(obj){
+		return this.setStyles(this.computePosition(obj));
+	}
+
+});
+
+
+Native.implement([Document, Window], {
+
+	getSize: function(){
+		if (Browser.Engine.presto || Browser.Engine.webkit) {
+			var win = this.getWindow();
+			return {x: win.innerWidth, y: win.innerHeight};
+		}
+		var doc = getCompatElement(this);
+		return {x: doc.clientWidth, y: doc.clientHeight};
+	},
+
+	getScroll: function(){
+		var win = this.getWindow(), doc = getCompatElement(this);
+		return {x: win.pageXOffset || doc.scrollLeft, y: win.pageYOffset || doc.scrollTop};
+	},
+
+	getScrollSize: function(){
+		var doc = getCompatElement(this), min = this.getSize();
+		return {x: Math.max(doc.scrollWidth, min.x), y: Math.max(doc.scrollHeight, min.y)};
+	},
+
+	getPosition: function(){
+		return {x: 0, y: 0};
+	},
+
+	getCoordinates: function(){
+		var size = this.getSize();
+		return {top: 0, left: 0, bottom: size.y, right: size.x, height: size.y, width: size.x};
+	}
+
+});
+
+// private methods
+
+var styleString = Element.getComputedStyle;
+
+function styleNumber(element, style){
+	return styleString(element, style).toInt() || 0;
+};
+
+function borderBox(element){
+	return styleString(element, '-moz-box-sizing') == 'border-box';
+};
+
+function topBorder(element){
+	return styleNumber(element, 'border-top-width');
+};
+
+function leftBorder(element){
+	return styleNumber(element, 'border-left-width');
+};
+
+function isBody(element){
+	return (/^(?:body|html)$/i).test(element.tagName);
+};
+
+function getCompatElement(element){
+	var doc = element.getDocument();
+	return (!doc.compatMode || doc.compatMode == 'CSS1Compat') ? doc.html : doc.body;
+};
+
+})();
+
+//aliases
+Element.alias('setPosition', 'position'); //compatability
+
+Native.implement([Window, Document, Element], {
+
+	getHeight: function(){
+		return this.getSize().y;
+	},
+
+	getWidth: function(){
+		return this.getSize().x;
+	},
+
+	getScrollTop: function(){
+		return this.getScroll().y;
+	},
+
+	getScrollLeft: function(){
+		return this.getScroll().x;
+	},
+
+	getScrollHeight: function(){
+		return this.getScrollSize().y;
+	},
+
+	getScrollWidth: function(){
+		return this.getScrollSize().x;
+	},
+
+	getTop: function(){
+		return this.getPosition().y;
+	},
+
+	getLeft: function(){
+		return this.getPosition().x;
+	}
+
 });
 
 
@@ -2623,8 +2873,12 @@ Selectors.Pseudo = new Hash({
 		return Selectors.Pseudo['nth-child'].call(this, '2n', local);
 	},
 	
-	selected: function() {
+	selected: function(){
 		return this.selected;
+	},
+	
+	enabled: function(){
+		return (this.disabled === false);
 	}
 
 });
@@ -2659,8 +2913,8 @@ Element.Events.domready = {
 		var temp = document.createElement('div');
 		(function(){
 			($try(function(){
-				temp.doScroll('left');
-				return $(temp).inject(document.body).set('html', 'temp').dispose();
+				temp.doScroll(); // Technique by Diego Perini
+				return document.id(temp).inject(document.body).set('html', 'temp').dispose();
 			})) ? domready() : arguments.callee.delay(50);
 		})();
 	} else if (Browser.Engine.webkit && Browser.Engine.version < 525){
@@ -2699,7 +2953,7 @@ var JSON = new Hash({
 			case 'string':
 				return '"' + obj.replace(/[\x00-\x1f\\"]/g, JSON.$replaceChars) + '"';
 			case 'array':
-				return '[' + String(obj.map(JSON.encode).filter($defined)) + ']';
+				return '[' + String(obj.map(JSON.encode).clean()) + ']';
 			case 'object': case 'hash':
 				var string = [];
 				Hash.each(obj, function(value, key){
@@ -2728,6 +2982,175 @@ Native.implement([Hash, Array, String, Number], {
 	}
 
 });
+
+
+/*
+Script: Cookie.js
+	Class for creating, loading, and saving browser Cookies.
+
+License:
+	MIT-style license.
+
+Credits:
+	Based on the functions by Peter-Paul Koch (http://quirksmode.org).
+*/
+
+var Cookie = new Class({
+
+	Implements: Options,
+
+	options: {
+		path: false,
+		domain: false,
+		duration: false,
+		secure: false,
+		document: document
+	},
+
+	initialize: function(key, options){
+		this.key = key;
+		this.setOptions(options);
+	},
+
+	write: function(value){
+		value = encodeURIComponent(value);
+		if (this.options.domain) value += '; domain=' + this.options.domain;
+		if (this.options.path) value += '; path=' + this.options.path;
+		if (this.options.duration){
+			var date = new Date();
+			date.setTime(date.getTime() + this.options.duration * 24 * 60 * 60 * 1000);
+			value += '; expires=' + date.toGMTString();
+		}
+		if (this.options.secure) value += '; secure';
+		this.options.document.cookie = this.key + '=' + value;
+		return this;
+	},
+
+	read: function(){
+		var value = this.options.document.cookie.match('(?:^|;)\\s*' + this.key.escapeRegExp() + '=([^;]*)');
+		return (value) ? decodeURIComponent(value[1]) : null;
+	},
+
+	dispose: function(){
+		new Cookie(this.key, $merge(this.options, {duration: -1})).write('');
+		return this;
+	}
+
+});
+
+Cookie.write = function(key, value, options){
+	return new Cookie(key, options).write(value);
+};
+
+Cookie.read = function(key){
+	return new Cookie(key).read();
+};
+
+Cookie.dispose = function(key, options){
+	return new Cookie(key, options).dispose();
+};
+
+
+/*
+Script: Swiff.js
+	Wrapper for embedding SWF movies. Supports (and fixes) External Interface Communication.
+
+License:
+	MIT-style license.
+
+Credits:
+	Flash detection & Internet Explorer + Flash Player 9 fix inspired by SWFObject.
+*/
+
+var Swiff = new Class({
+
+	Implements: [Options],
+
+	options: {
+		id: null,
+		height: 1,
+		width: 1,
+		container: null,
+		properties: {},
+		params: {
+			quality: 'high',
+			allowScriptAccess: 'always',
+			wMode: 'transparent',
+			swLiveConnect: true
+		},
+		callBacks: {},
+		vars: {}
+	},
+
+	toElement: function(){
+		return this.object;
+	},
+
+	initialize: function(path, options){
+		this.instance = 'Swiff_' + $time();
+
+		this.setOptions(options);
+		options = this.options;
+		var id = this.id = options.id || this.instance;
+		var container = document.id(options.container);
+
+		Swiff.CallBacks[this.instance] = {};
+
+		var params = options.params, vars = options.vars, callBacks = options.callBacks;
+		var properties = $extend({height: options.height, width: options.width}, options.properties);
+
+		var self = this;
+
+		for (var callBack in callBacks){
+			Swiff.CallBacks[this.instance][callBack] = (function(option){
+				return function(){
+					return option.apply(self.object, arguments);
+				};
+			})(callBacks[callBack]);
+			vars[callBack] = 'Swiff.CallBacks.' + this.instance + '.' + callBack;
+		}
+
+		params.flashVars = Hash.toQueryString(vars);
+		if (Browser.Engine.trident){
+			properties.classid = 'clsid:D27CDB6E-AE6D-11cf-96B8-444553540000';
+			params.movie = path;
+		} else {
+			properties.type = 'application/x-shockwave-flash';
+			properties.data = path;
+		}
+		var build = '<object id="' + id + '"';
+		for (var property in properties) build += ' ' + property + '="' + properties[property] + '"';
+		build += '>';
+		for (var param in params){
+			if (params[param]) build += '<param name="' + param + '" value="' + params[param] + '" />';
+		}
+		build += '</object>';
+		this.object = ((container) ? container.empty() : new Element('div')).set('html', build).firstChild;
+	},
+
+	replaces: function(element){
+		element = document.id(element, true);
+		element.parentNode.replaceChild(this.toElement(), element);
+		return this;
+	},
+
+	inject: function(element){
+		document.id(element, true).appendChild(this.toElement());
+		return this;
+	},
+
+	remote: function(){
+		return Swiff.remote.apply(Swiff, [this.toElement()].extend(arguments));
+	}
+
+});
+
+Swiff.CallBacks = {};
+
+Swiff.remote = function(obj, fn){
+	var rs = obj.CallFunction('<invoke name="' + fn + '" returntype="javascript">' + __flash__argumentsToXML(arguments, 2) + '</invoke>');
+	return eval(rs);
+};
 
 
 /*
@@ -3010,7 +3433,7 @@ Fx.Tween = new Class({
 	Extends: Fx.CSS,
 
 	initialize: function(element, options){
-		this.element = this.subject = $(element);
+		this.element = this.subject = document.id(element);
 		this.parent(options);
 	},
 
@@ -3107,7 +3530,7 @@ Fx.Morph = new Class({
 	Extends: Fx.CSS,
 
 	initialize: function(element, options){
-		this.element = this.subject = $(element);
+		this.element = this.subject = document.id(element);
 		this.parent(options);
 	},
 
@@ -3315,6 +3738,7 @@ var Request = new Class({
 		$try(function(){
 			this.status = this.xhr.status;
 		}.bind(this));
+		this.xhr.onreadystatechange = $empty;
 		if (this.options.isSuccess.call(this, this.status)){
 			this.response = {text: this.xhr.responseText, xml: this.xhr.responseXML};
 			this.success(this.response.text, this.response.xml);
@@ -3322,7 +3746,6 @@ var Request = new Class({
 			this.response = {text: null, xml: null};
 			this.failure();
 		}
-		this.xhr.onreadystatechange = $empty;
 	},
 
 	isSuccess: function(){
@@ -3379,10 +3802,10 @@ var Request = new Class({
 
 		var old = this.options;
 		options = $extend({data: old.data, url: old.url, method: old.method}, options);
-		var data = options.data, url = options.url, method = options.method;
+		var data = options.data, url = options.url, method = options.method.toLowerCase();
 
 		switch ($type(data)){
-			case 'element': data = $(data).toQueryString(); break;
+			case 'element': data = document.id(data).toQueryString(); break;
 			case 'object': case 'hash': data = Hash.toQueryString(data);
 		}
 
@@ -3391,7 +3814,7 @@ var Request = new Class({
 			data = (data) ? format + '&' + data : format;
 		}
 
-		if (this.options.emulation && ['put', 'delete'].contains(method)){
+		if (this.options.emulation && !['get', 'post'].contains(method)){
 			var _method = '_method=' + method;
 			data = (data) ? _method + '&' + data : _method;
 			method = 'post';
@@ -3402,17 +3825,18 @@ var Request = new Class({
 			this.headers.set('Content-type', 'application/x-www-form-urlencoded' + encoding);
 		}
 
-		if(this.options.noCache) {
-			var noCache = "noCache=" + new Date().getTime();
+		if (this.options.noCache){
+			var noCache = 'noCache=' + new Date().getTime();
 			data = (data) ? noCache + '&' + data : noCache;
 		}
 
+		var trimPosition = url.lastIndexOf('/');
+		if (trimPosition > -1 && (trimPosition = url.indexOf('#')) > -1) url = url.substr(0, trimPosition);
 
 		if (data && method == 'get'){
 			url = url + (url.contains('?') ? '&' : '?') + data;
 			data = null;
 		}
-
 
 		this.xhr.open(method.toUpperCase(), url, this.options.async);
 
@@ -3450,13 +3874,44 @@ var methods = {};
 ['get', 'post', 'put', 'delete', 'GET', 'POST', 'PUT', 'DELETE'].each(function(method){
 	methods[method] = function(){
 		var params = Array.link(arguments, {url: String.type, data: $defined});
-		return this.send($extend(params, {method: method.toLowerCase()}));
+		return this.send($extend(params, {method: method}));
 	};
 });
 
 Request.implement(methods);
 
 })();
+
+Element.Properties.send = {
+
+	set: function(options){
+		var send = this.retrieve('send');
+		if (send) send.cancel();
+		return this.eliminate('send').store('send:options', $extend({
+			data: this, link: 'cancel', method: this.get('method') || 'post', url: this.get('action')
+		}, options));
+	},
+
+	get: function(options){
+		if (options || !this.retrieve('send')){
+			if (options || !this.retrieve('send:options')) this.set('send', options);
+			this.store('send', new Request(this.retrieve('send:options')));
+		}
+		return this.retrieve('send');
+	}
+
+};
+
+Element.implement({
+
+	send: function(url){
+		var sender = this.get('send');
+		sender.send({data: this, url: url || sender.options.url});
+		return this;
+	}
+
+});
+
 
 /*
 Script: Request.HTML.js
@@ -3515,34 +3970,14 @@ Request.HTML = new Class({
 		response.elements = temp.getElements('*');
 
 		if (options.filter) response.tree = response.elements.filter(options.filter);
-		if (options.update) $(options.update).empty().set('html', response.html);
-		else if (options.append) $(options.append).adopt(temp.getChildren());
+		if (options.update) document.id(options.update).empty().set('html', response.html);
+		else if (options.append) document.id(options.append).adopt(temp.getChildren());
 		if (options.evalScripts) $exec(response.javascript);
 
 		this.onSuccess(response.tree, response.elements, response.html, response.javascript);
 	}
 
 });
-
-Element.Properties.send = {
-
-	set: function(options){
-		var send = this.retrieve('send');
-		if (send) send.cancel();
-		return this.eliminate('send').store('send:options', $extend({
-			data: this, link: 'cancel', method: this.get('method') || 'post', url: this.get('action')
-		}, options));
-	},
-
-	get: function(options){
-		if (options || !this.retrieve('send')){
-			if (options || !this.retrieve('send:options')) this.set('send', options);
-			this.store('send', new Request(this.retrieve('send:options')));
-		}
-		return this.retrieve('send');
-	}
-
-};
 
 Element.Properties.load = {
 
@@ -3563,12 +3998,6 @@ Element.Properties.load = {
 };
 
 Element.implement({
-
-	send: function(url){
-		var sender = this.get('send');
-		sender.send({data: this, url: url || sender.options.url});
-		return this;
-	},
 
 	load: function(){
 		this.get('load').send(Array.link(arguments, {data: Object.type, url: String.type}));
