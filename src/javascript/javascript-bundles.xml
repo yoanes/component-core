@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bs:bundles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:bs="http://mobile.sensis.com.au/build-scripts"
+    xsi:schemaLocation="http://mobile.sensis.com.au/build-scripts au.com.sensis.mobile.bundles.xsd"
+    basename="core-component">
+    <bundle name="common" abstract="true">
+        <fileset dir="${src.javascript.dir}/device-invariant">
+            <include name="mootools.js" />
+        </fileset>
+        <fileset dir="${src.javascript.dir}/device-invariant">
+            <include name="**/*" />
+            <exclude name="mootools.js" />
+        </fileset>
+    </bundle>
+    <bundle name="master" parent="common">
+        <fileset dir="${src.javascript.dir}/device-variant/master">
+        </fileset>
+    </bundle>
+    <bundle name="apple" parent="common">
+        <fileset dir="${src.javascript.dir}/device-variant/apple">
+        </fileset>
+    </bundle>
+</bs:bundles>
