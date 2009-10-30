@@ -109,7 +109,8 @@
 
         <!-- SDP Common -->
         <dependency org="com.sensis" name="sdpCommon-logging" rev="0.5" conf="default"/>        
-        <dependency org="com.sensis" name="sdpCommon-web" rev="1.6-003" conf="showcase->default"/>
+        <!-- Validatable is in sdpCommon-web so we need it for all configurations.  -->
+        <dependency org="com.sensis" name="sdpCommon-web" rev="1.6-010" conf="default"/>
         <dependency org="com.sensis" name="sdpCommon-manager" rev="1.0-050" conf="showcase->default"/>
 
         <!-- EMS dependencies -->
