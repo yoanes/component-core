@@ -102,9 +102,7 @@ public class ClasspathResourceBundleLoaderTestCase extends AbstractResourceBundl
         } catch (final IOException e) {
             Assert.assertEquals("IOException has wrong message",
                     "Failed to load file from classpath: '" + fileResourcePath
-                            + "'. Only found URL: '" + null
-                            + "' but expected it to be a 'file:' or 'jar:' URL.", e
-                            .getMessage());
+                            + "'.", e.getMessage());
         }
     }
 

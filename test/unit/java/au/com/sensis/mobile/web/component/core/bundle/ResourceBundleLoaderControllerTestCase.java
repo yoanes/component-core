@@ -111,6 +111,10 @@ public class ResourceBundleLoaderControllerTestCase
             Assert.assertEquals("isBundleExploderRequested returned wrong value for testData: "
                     + testData, testData.isExpectedOutcome(), actualOutcome);
 
+            // Explicitly call verify since we are in a loop and can't rely on the inherited,
+            // automated verify call.
+            verify();
+
             // Reset mocks prior to next iteration.
             getHelper().reset();
             setReplayed(false);
@@ -145,13 +149,14 @@ public class ResourceBundleLoaderControllerTestCase
                 getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(false);
             }
 
-            final String resourceName = recordExtractResourceNameRequested();
 
             if (testData.isBundleExploderRequested()) {
                 getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(true);
                 recordBundleExploderRequested();
 
                 if (!testData.isBypassClientCacheRequested()) {
+                    final String resourceName = recordExtractResourceNameRequested();
+
                     EasyMock.expect(getMockResourceBundleLoader().getBundleExploderLastModified(
                             resourceName)).andReturn(testData.getExpectedOutcome());
                 }
@@ -160,6 +165,8 @@ public class ResourceBundleLoaderControllerTestCase
                 getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(false);
 
                 if (!testData.isBypassClientCacheRequested()) {
+                    final String resourceName = recordExtractResourceNameRequested();
+
                     EasyMock.expect(getMockResourceBundleLoader().getBundleLastModified(
                             resourceName)).andReturn(testData.getExpectedOutcome());
                 }
@@ -170,6 +177,10 @@ public class ResourceBundleLoaderControllerTestCase
             Assert.assertEquals("lastModified is wrong for testData: " + testData,
                     testData.getExpectedOutcome(),
                     getObjectUnderTest().getLastModified(getMockHttpServletRequest()));
+
+            // Explicitly call verify since we are in a loop and can't rely on the inherited,
+            // automated verify call.
+            verify();
 
             // Reset mocks prior to next iteration.
             getHelper().reset();

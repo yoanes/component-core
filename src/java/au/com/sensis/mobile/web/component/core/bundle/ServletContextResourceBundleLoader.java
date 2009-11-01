@@ -1,9 +1,9 @@
 package au.com.sensis.mobile.web.component.core.bundle;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.servlet.ServletContext;
 
@@ -60,14 +60,13 @@ public class ServletContextResourceBundleLoader extends AbstractResourceBundleLo
             throws IOException {
         final URL fileUrl = getServletContext().getResource(servletContextFileName);
 
-        if ((fileUrl != null) && "file".equals(fileUrl.getProtocol())) {
-            final File file = new File(fileUrl.getFile());
-            return file.lastModified();
+        if (fileUrl != null) {
+            final URLConnection fileURlConnection = fileUrl.openConnection();
+            return fileURlConnection.getLastModified();
         } else {
             throw new IOException(
                     "Failed to load file from servlet context: '" + servletContextFileName
-                            + "'. Only found URL: '" + fileUrl
-                            + "' but expected it to be a 'file:' URL.");
+                            + "'.");
         }
 
     }

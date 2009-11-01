@@ -106,8 +106,7 @@ public class ServletContextResourceBundleLoaderTestCase
         } catch (final IOException e) {
             Assert.assertEquals("IOException has wrong message",
                     "Failed to load file from servlet context: '" + fileResourcePath
-                            + "'. Only found URL: '" + null
-                            + "' but expected it to be a 'file:' URL.", e
+                            + "'.", e
                             .getMessage());
         }
     }

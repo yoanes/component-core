@@ -1,10 +1,9 @@
 package au.com.sensis.mobile.web.component.core.bundle;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 
 /**
@@ -41,18 +40,12 @@ public class ClasspathResourceBundleLoader
             throws IOException {
         final URL fileUrl = getClass().getResource(classpathFilename);
 
-        if ((fileUrl != null) && "file".equals(fileUrl.getProtocol())) {
-            final File file = new File(fileUrl.getFile());
-            return file.lastModified();
-        } else if ((fileUrl != null) && "jar".equals(fileUrl.getProtocol())) {
-            final JarURLConnection jarURLConnection =
-                    (JarURLConnection) fileUrl.openConnection();
-            return jarURLConnection.getLastModified();
+        if (fileUrl != null) {
+            final URLConnection fileURlConnection = fileUrl.openConnection();
+            return fileURlConnection.getLastModified();
         } else {
-            throw new IOException(
-                    "Failed to load file from classpath: '" + classpathFilename
-                            + "'. Only found URL: '" + fileUrl
-                            + "' but expected it to be a 'file:' or 'jar:' URL.");
+            throw new IOException("Failed to load file from classpath: '"
+                    + classpathFilename + "'.");
         }
     }
 }
