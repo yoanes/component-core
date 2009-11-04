@@ -8,26 +8,9 @@
                 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
                 
-    <!-- Load properties from mandatory file provided by this component.-->            
-    <bean id="core.component.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="location">
-            <value>classpath:/au/com/sensis/mobile/web/component/core/core-component.properties</value>
-        </property>
-        
-    </bean>                
+    <!-- ================================================================================================ -->
+    <!-- Handler mappings. -->                
     
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <!-- Default properties provided by this component. -->
-        <property name="properties" ref="core.component.properties"/>
-        <property name="placeholderPrefix" value="@{core.component."/>
-        
-        <!-- Optional properties provided by the client of this component. -->
-        <property name="location">
-            <value>classpath:/core-component.properties</value>
-        </property>
-        <property name="ignoreResourceNotFound" value="true"/>
-    </bean>
-
     <bean name="core.component.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <value>
@@ -36,6 +19,18 @@
             </value>
         </property>
     </bean>
+    
+    <!-- ================================================================================================ -->
+    <!-- Filters. -->
+    
+    <bean name="core.component.bundleExploderAndCacheBypassActivatonFilter" 
+        class="au.com.sensis.mobile.web.component.core.bundle.BundleExploderAndCacheBypassActivatonFilter"
+        init-method="validateState">
+        <property name="featureEnablementRegistry" ref="core.component.featureEnablementRegistry" />
+    </bean>
+                
+    <!-- ================================================================================================ -->                
+    <!-- Controllers. -->
     
     <bean id="core.component.abstractResourceBundleLoaderController" 
         class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoaderController"
@@ -65,6 +60,9 @@
         <property name="resourceNameRequestUriPrefix" value="/jsmember/"/>
     </bean>
     
+    <!-- ================================================================================================ -->
+    <!-- Support beans. -->
+    
     <bean name="core.component.abstractResourceBundleLoader" 
         class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoader" abstract="true"
         init-method="validateState">
@@ -78,12 +76,6 @@
         parent="core.component.abstractResourceBundleLoader"
         init-method="validateState"/>
         
-    <bean name="core.component.bundleExploderAndCacheBypassActivatonFilter" 
-        class="au.com.sensis.mobile.web.component.core.bundle.BundleExploderAndCacheBypassActivatonFilter"
-        init-method="validateState">
-        <property name="featureEnablementRegistry" ref="core.component.featureEnablementRegistry" />
-    </bean>
-    
     <bean name="core.component.featureEnablementRegistry"
         class="au.com.sensis.mobile.web.component.core.bundle.SimpleFeatureEnablementRegistryBean">
         <property name="bundleExplosionEnabled" value="@{core.component.bundleExplosionEnabled}"/>

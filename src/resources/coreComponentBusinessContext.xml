@@ -5,5 +5,55 @@
         xmlns:util="http://www.springframework.org/schema/util"
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+                
+    <!-- ================================================================================================ -->                
+    <!-- Load the global build vesrion properties. -->
+    
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="placeholderPrefix" value="@{global."/>
+        
+        <!-- 
+          - Ensure that this PropertyPlaceholderConfigurer is applied before any other PropertyPlaceholderConfigurer.
+          - Particularly important for the following scenario:
+          - 1. A PropertiesFactoryBean is configured to load a platform specific properties file 
+          -    (ie. the file name is parameterised by the @{global.platform} placeholder.
+          - 2. Another PropertyPlaceholderConfigurer depends on the aforementioned properties file. 
+          -->
+        <property name="order" value="0" />
+        
+        <property name="location">
+            <!--
+              - Load the host application's gloabl-version.properties so that we have access to the 
+              - build version information. 
+              -->
+            <value>classpath:/global-version.properties</value>
+        </property>
+    </bean>
+                
+    <!-- ================================================================================================ -->                
+    
+    <!-- Load properties from mandatory file provided by this component.-->            
+    <bean id="core.component.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="location">
+            <value>classpath:/au/com/sensis/mobile/web/component/core/core-component.properties</value>
+        </property>
+        
+    </bean>                
+    
+    <!-- Define PropertyPlaceholderConfigurer that merges the mandatory properties with optional properties. -->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <!-- Default properties provided by this component. -->
+        <property name="properties" ref="core.component.properties"/>
+        <property name="placeholderPrefix" value="@{core.component."/>
+        
+        <!-- Optional properties provided by the client of this component. -->
+        <property name="location">
+            <value>classpath:/core-component.properties</value>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+    
+    <!-- ================================================================================================ -->
+
 
 </beans>
