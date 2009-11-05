@@ -67,7 +67,8 @@
         <dependency org="com.volantis" name="com.volantis.mcs.servlet" rev="5.1.2" conf="showcase->default"/>
         
         <!-- Struts2 -->
-        <dependency org="org.apache" name="struts2-core" rev="2.0.11.2" conf="showcase->default"/>
+        <!-- default conf instead of showcase->default since we contain a fragment of sdpcommon at the moment. -->
+        <dependency org="org.apache" name="struts2-core" rev="2.0.11.2" conf="default"/>
         
         <!-- Tiles2 core -->
         <dependency org="org.apache" name="tiles-core" rev="2.0.6" conf="showcase->default"/>
