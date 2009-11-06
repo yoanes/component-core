@@ -20,15 +20,6 @@
         </property>
     </bean>
     
-    <!-- ================================================================================================ -->
-    <!-- Filters. -->
-    
-    <bean name="core.component.bundleExploderAndCacheBypassActivatonFilter" 
-        class="au.com.sensis.mobile.web.component.core.bundle.BundleExploderAndCacheBypassActivatonFilter"
-        init-method="validateState">
-        <property name="featureEnablementRegistry" ref="core.component.featureEnablementRegistry" />
-    </bean>
-                
     <!-- ================================================================================================ -->                
     <!-- Controllers. -->
     
@@ -60,25 +51,4 @@
         <property name="resourceNameRequestUriPrefix" value="/jsmember/"/>
     </bean>
     
-    <!-- ================================================================================================ -->
-    <!-- Support beans. -->
-    
-    <bean name="core.component.abstractResourceBundleLoader" 
-        class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoader" abstract="true"
-        init-method="validateState">
-        <property name="bundleBasePath" value="/js/bundles/" />
-        <property name="bundleExploderBasePath" value="/js/bundleExploders/" />
-        <property name="explodedBundleMemberBasePath" value="/js/explodedBundles/" />
-    </bean>
-    
-    <bean name="core.component.resourceBundleLoader" 
-        class="au.com.sensis.mobile.web.component.core.bundle.ClasspathResourceBundleLoader"
-        parent="core.component.abstractResourceBundleLoader"
-        init-method="validateState"/>
-        
-    <bean name="core.component.featureEnablementRegistry"
-        class="au.com.sensis.mobile.web.component.core.bundle.SimpleFeatureEnablementRegistryBean">
-        <property name="bundleExplosionEnabled" value="@{core.component.bundleExplosionEnabled}"/>
-        <property name="bypassClientCacheEnabled" value="@{core.component.bypassClientCacheEnabled}"/>
-    </bean>
 </beans>
