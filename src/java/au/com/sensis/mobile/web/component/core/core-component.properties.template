@@ -1,5 +1,0 @@
-# Template for the properties file that is by default used by this component.
-handler.mapping.url.prefix=**/core/
-context.root.component.prefix=/comp/core/
-bundleExplosionEnabled=false
-bypassClientCacheEnabled=false
