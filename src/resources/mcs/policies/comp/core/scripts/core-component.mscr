@@ -39,7 +39,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>core/js/core-component-master.js</relative>
+                    <relative>core/js/core-component-default.js</relative>
                 </url>
             </content>
         </variant>
@@ -87,7 +87,13 @@
             </meta-data>
             <content>
                 <url>
-                    <relative>mootools.js</relative>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/core/core-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>core/js/core-component-master.js</relative>
                 </url>
             </content>
         </variant>
@@ -108,7 +114,13 @@
             </meta-data>
             <content>
                 <url>
-                    <relative>mootools.js</relative>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/core/core-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>core/js/core-component-master.js</relative>
                 </url>
             </content>
         </variant> 
@@ -129,7 +141,13 @@
             </meta-data>
             <content>
                 <url>
-                    <relative>mootools.js</relative>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/core/core-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>core/js/core-component-master.js</relative>
                 </url>
             </content>
         </variant>                       

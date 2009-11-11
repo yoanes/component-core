@@ -12,8 +12,8 @@
             <exclude name="mootools.js" />
         </fileset>
     </bundle>
-    <bundle name="master" parent="common">
-        <fileset dir="${src.javascript.dir}/device-variant/master">
+    <bundle name="default" parent="common">
+        <fileset dir="${src.javascript.dir}/device-variant/default">
         </fileset>
     </bundle>
     <bundle name="apple" parent="common">
