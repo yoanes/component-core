@@ -13,11 +13,7 @@
         </fileset>
     </bundle>
     <bundle name="default" parent="common">
-        <fileset dir="${src.javascript.dir}/device-variant/default">
-        </fileset>
     </bundle>
     <bundle name="apple" parent="common">
-        <fileset dir="${src.javascript.dir}/device-variant/apple">
-        </fileset>
     </bundle>
 </bs:bundles>
