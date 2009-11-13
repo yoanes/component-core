@@ -146,6 +146,45 @@ public abstract class AbstractResourceBundleLoaderControllerTestCase
 
     }
 
+    @Test
+    public void testExtractResourceNameRequestedWhenContainsJSessionId() {
+        getObjectUnderTest().setResourceNameRequestUriPrefix(RESOURCE_NAME_REQUEST_URI_PREFIX);
+
+        final String resourceName = recordExtractResourceNameRequestedWithJSessionid();
+
+        replay();
+
+        Assert.assertEquals("wrong resource name extracted", resourceName,
+                getObjectUnderTest().extractResourceNameRequested(
+                        getMockHttpServletRequest()));
+
+    }
+
+    protected final String recordExtractResourceNameRequestedWithJSessionid() {
+        EasyMock.expect(getMockHttpServletRequest().getRequestURI()).andReturn(
+                "http://somewhere.com/comp/js/myresource.js"
+                        + ";jsessionid=4A166504B5F99F0D9970AA5734C63EA7")
+                .atLeastOnce();
+
+        return "myresource.js";
+
+    }
+
+    @Test
+    public void testExtractResourceNameRequestedWhenRequestUriIsNull() {
+        getObjectUnderTest().setResourceNameRequestUriPrefix(RESOURCE_NAME_REQUEST_URI_PREFIX);
+
+        EasyMock.expect(getMockHttpServletRequest().getRequestURI()).andReturn(
+                null);
+
+        replay();
+
+        Assert.assertEquals("wrong resource name extracted", StringUtils.EMPTY,
+                getObjectUnderTest().extractResourceNameRequested(
+                        getMockHttpServletRequest()));
+
+    }
+
     /**
      * @return the mockHttpServletRequest
      */
