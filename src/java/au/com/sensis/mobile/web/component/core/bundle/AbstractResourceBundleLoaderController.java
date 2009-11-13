@@ -27,7 +27,7 @@ import au.com.sensis.wireless.web.common.validation.ValidatableUtils;
 public abstract class AbstractResourceBundleLoaderController extends
         AbstractController implements LastModified, Validatable {
 
-    private static final String URL_EMBEDDED_JSESSIONID_PREFIX = ";jsessionid=";
+    private static final String URL_EMBEDDED_COOKIE_PREFIX = ";";
 
     /**
      * Name of the session attribute that requests that the <b>client</b> side
@@ -109,7 +109,7 @@ public abstract class AbstractResourceBundleLoaderController extends
                         getResourceNameRequestUriPrefix());
         return StringUtils.defaultString(
                 StringUtils.substringBefore(resourceRequested,
-                        URL_EMBEDDED_JSESSIONID_PREFIX));
+                        URL_EMBEDDED_COOKIE_PREFIX));
 
     }
 

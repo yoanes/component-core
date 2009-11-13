@@ -147,10 +147,10 @@ public abstract class AbstractResourceBundleLoaderControllerTestCase
     }
 
     @Test
-    public void testExtractResourceNameRequestedWhenContainsJSessionId() {
+    public void testExtractResourceNameRequestedWhenContainsUrlEncodedCookie() {
         getObjectUnderTest().setResourceNameRequestUriPrefix(RESOURCE_NAME_REQUEST_URI_PREFIX);
 
-        final String resourceName = recordExtractResourceNameRequestedWithJSessionid();
+        final String resourceName = recordExtractResourceNameRequestedWithUrlEncodedCookie();
 
         replay();
 
@@ -160,10 +160,10 @@ public abstract class AbstractResourceBundleLoaderControllerTestCase
 
     }
 
-    protected final String recordExtractResourceNameRequestedWithJSessionid() {
+    protected final String recordExtractResourceNameRequestedWithUrlEncodedCookie() {
         EasyMock.expect(getMockHttpServletRequest().getRequestURI()).andReturn(
                 "http://somewhere.com/comp/js/myresource.js"
-                        + ";jsessionid=4A166504B5F99F0D9970AA5734C63EA7")
+                        + ";mycookiename=mycookievalue")
                 .atLeastOnce();
 
         return "myresource.js";
