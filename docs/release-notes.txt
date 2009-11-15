@@ -1,10 +1,17 @@
+==== Version 1.0.3 (tag: core_v1_0_3) ====
+
+Deliverable from iteration 1.0.3 of the rockit Common UI project 
+(http://jira.sensis.com.au/browse/CUI). This iteration focused mainly 
+on testing the current framework by prototyping the networknav and
+map components and (locally) integrating them into WPM.
+
 ==== Version 1.0.1-001 (tag: not tagged yet) ====
 
 Next bleeding edge version on the way to 1.0.2 for the rockit 
 Common UI project. Changes summary:
 * ScriptTag is now abstracted away from Volantis.  
 
-==== Version 1.0.1 (tag: v1_0_1) ====
+==== Version 1.0.1 (tag: core_v1_0_1) ====
 
 Deliverable from iteration 1.0.1 of the rockit Common UI project 
 (http://jira.sensis.com.au/browse/CUI). This iteration focused mainly 
