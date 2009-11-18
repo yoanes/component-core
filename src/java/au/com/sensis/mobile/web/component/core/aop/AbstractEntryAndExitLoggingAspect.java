@@ -63,11 +63,13 @@ public abstract class AbstractEntryAndExitLoggingAspect implements Validatable {
         try {
             logJoinPointEntryIfInfoLoggingEnabled(proceedingJoinPoint);
 
-            return proceedingJoinPoint.proceed();
-
-        } finally {
+            final Object proceedingJoinPointReturnValue = proceedingJoinPoint.proceed();
 
             logJoinPointExitIfInfoLoggingEnabled(proceedingJoinPoint);
+
+            return proceedingJoinPointReturnValue;
+        } finally {
+
 
             if (getLogger().isDebugEnabled()) {
                 getLogger().debug("Popping NDC ...");

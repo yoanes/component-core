@@ -192,7 +192,7 @@ public class BaseEntryAndExitLoggingAspectTestCase extends
                                 EXPECTED_JOIN_POINT_ARG3 },
                         EXPECTED_PROCEED_RETURN_VALUE, expectedException));
 
-        setupForDoHandleLog4jNDC();
+        setupForDoHandleLog4jNDCWithNoExitLogging();
 
         replay();
 
@@ -222,6 +222,15 @@ public class BaseEntryAndExitLoggingAspectTestCase extends
         getMockLogger().info(
                 "Exiting: " + expectedJoinPointDescription());
 
+    }
+
+    protected final void setupForDoHandleLog4jNDCWithNoExitLogging() throws Throwable {
+        EasyMock.expect(getMockLogger().isInfoEnabled())
+        .andReturn(Boolean.TRUE);
+        getMockLogger().info(
+                "Entering: " + expectedJoinPointDescription());
+
+        recordGetSignatureDetails();
     }
 
     protected final void setupForDoHandleLog4jNDCWhenSignatureNull()
@@ -266,6 +275,8 @@ public class BaseEntryAndExitLoggingAspectTestCase extends
         Assert.assertEquals("NDC has wrong value during join point proceed",
                 EXPECTED_NDC_MESSAGE, getProceedingJoinPointStub()
                         .getActualNDCValue());
+        Assert.assertFalse("NDC message should no longer be on the stack",
+                EXPECTED_NDC_MESSAGE.equals(NDC.peek()));
     }
 
     private String expectedJoinPointDescription() {
