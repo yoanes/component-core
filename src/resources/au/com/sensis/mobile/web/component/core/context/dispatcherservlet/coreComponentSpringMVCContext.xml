@@ -18,6 +18,13 @@
                 @{core.component.handler.mapping.url.prefix}/jsmember/**/*=core.component.getJavaScriptBundleMember
             </value>
         </property>
+        <property name="interceptors">
+            <list>
+                <bean class="au.com.sensis.mobile.web.component.core.spring.EntryAndExitLoggingWebRequestInterceptor">
+                    <property name="ndcMessage" value="@{core.component.name}"/>
+                </bean>
+            </list>
+        </property>
     </bean>
     
     <!-- ================================================================================================ -->                
