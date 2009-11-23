@@ -33,22 +33,30 @@
     <!-- ================================================================================================ -->                
     
     <!-- Load properties from mandatory file provided by this component.-->            
-    <bean id="core.component.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
-        <property name="location">
-            <value>classpath:/au/com/sensis/mobile/web/component/core/core-component.properties</value>
+    <bean id="core.comp.properties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:/au/com/sensis/mobile/web/component/core/core-component.properties</value>
+                
+                <!-- Load a platform dependent environment properties file. -->
+                <value>classpath:/au/com/sensis/mobile/web/component/core/core-environment.properties.@{global.platform}</value>
+            </list>
         </property>
-        
     </bean>                
     
     <!-- Define PropertyPlaceholderConfigurer that merges the mandatory properties with optional properties. -->
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean class="au.com.sensis.mobile.web.component.core.spring.LazyPropertiesInjectingPropertyPlaceholderConfigurer">
         <!-- Default properties provided by this component. -->
-        <property name="properties" ref="core.component.properties"/>
-        <property name="placeholderPrefix" value="@{core.component."/>
+        <property name="propertiesBeanName" value="core.comp.properties"/>
         
-        <!-- Optional properties provided by the client of this component. -->
-        <property name="location">
-            <value>classpath:/core-component.properties</value>
+        <property name="placeholderPrefix" value="@{core."/>
+        
+        <!-- Optional properties provided by the client of this component to override the default properties. -->
+        <property name="locations">
+            <list>
+                <value>classpath:/core-component.properties</value>
+                <value>classpath:/core-environment.properties</value>
+            </list>
         </property>
         <property name="ignoreResourceNotFound" value="true"/>
     </bean>

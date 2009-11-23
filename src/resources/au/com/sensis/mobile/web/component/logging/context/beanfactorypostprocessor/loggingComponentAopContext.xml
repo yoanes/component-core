@@ -9,14 +9,14 @@
                 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
                 
     <!-- 
-      - Allow Spring to automatically proxy beans in the core component that contain @AspectJ annotations.
+      - Allow Spring to automatically proxy beans in the logging component that contain @AspectJ annotations.
       -->               
     <aop:aspectj-autoproxy>
-        <aop:include name="core.*" />
+        <aop:include name="logging.*" />
     </aop:aspectj-autoproxy>                
     
-    <bean id="core.comp.delegateEntryAndExitLoggingAspect" 
-        class="au.com.sensis.mobile.web.component.core.aop.DelegateEntryAndExitLoggingAspect">
-        <property name="ndcMessage" value="@{core.comp.name}" />
+    <bean id="logging.comp.delegateEntryAndExitLoggingAspect" 
+        class="au.com.sensis.mobile.web.component.logging.aop.DelegateEntryAndExitLoggingAspect">
+        <property name="ndcMessage" value="@{logging.comp.name}" />
     </bean>
 </beans>

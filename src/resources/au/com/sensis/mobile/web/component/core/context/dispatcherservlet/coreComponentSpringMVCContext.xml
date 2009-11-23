@@ -11,17 +11,17 @@
     <!-- ================================================================================================ -->
     <!-- Handler mappings. -->                
     
-    <bean name="core.component.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <bean name="core.comp.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <value>
-                @{core.component.handler.mapping.url.prefix}/js/**/*=core.component.getJavaScriptBundle
-                @{core.component.handler.mapping.url.prefix}/jsmember/**/*=core.component.getJavaScriptBundleMember
+                @{core.comp.handler.mapping.url.prefix}/js/**/*=core.comp.getJavaScriptBundle
+                @{core.comp.handler.mapping.url.prefix}/jsmember/**/*=core.comp.getJavaScriptBundleMember
             </value>
         </property>
         <property name="interceptors">
             <list>
-                <bean class="au.com.sensis.mobile.web.component.core.spring.EntryAndExitLoggingWebRequestInterceptor">
-                    <property name="ndcMessage" value="@{core.component.name}"/>
+                <bean class="au.com.sensis.mobile.web.component.logging.spring.EntryAndExitLoggingWebRequestInterceptor">
+                    <property name="ndcMessage" value="@{core.comp.name}"/>
                 </bean>
             </list>
         </property>
@@ -30,12 +30,12 @@
     <!-- ================================================================================================ -->                
     <!-- Controllers. -->
     
-    <bean id="core.component.abstractResourceBundleLoaderController" 
+    <bean id="core.comp.abstractResourceBundleLoaderController" 
         class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoaderController"
         abstract="true"
         init-method="validateState">
-        <property name="resourceBundleLoader" ref="core.component.resourceBundleLoader"/>
-        <property name="featureEnablementRegistry" ref="core.component.featureEnablementRegistry"/>
+        <property name="resourceBundleLoader" ref="core.comp.resourceBundleLoader"/>
+        <property name="featureEnablementRegistry" ref="core.comp.featureEnablementRegistry"/>
         
         <!--
           - Allow clients to use cached response for about 10 years so that they don't always have to 
@@ -45,15 +45,26 @@
         <!-- <property name="cacheSeconds" value="315360000"/>-->
     </bean>
     
-    <bean id="core.component.getJavaScriptBundle" class="au.com.sensis.mobile.web.component.core.bundle.ResourceBundleLoaderController"
-        parent="core.component.abstractResourceBundleLoaderController"
-        init-method="validateState">
+    <bean id="core.comp.abstractGetJavaScriptBundle" 
+        class="au.com.sensis.mobile.web.component.core.bundle.ResourceBundleLoaderController"
+        parent="core.comp.abstractResourceBundleLoaderController"
+        init-method="validateState"
+        abstract="true">
         <property name="resourceNameRequestUriPrefix" value="/js/"/>    
-        <property name="contextRootComponentPrefix" value="@{core.component.context.root.component.prefix}"/>
+        
+        <!-- Child beans are expected to set the contextRootComponentPrefix property. -->
+        <!-- <property name="contextRootComponentPrefix" value="@{core.comp.context.root.component.prefix}"/>-->
+    </bean>    
+    
+    <bean id="core.comp.getJavaScriptBundle" 
+        parent="core.comp.abstractGetJavaScriptBundle"
+        init-method="validateState">
+        <property name="contextRootComponentPrefix" value="@{core.comp.context.root.component.prefix}/@{core.comp.name}"/>
     </bean>
     
-    <bean id="core.component.getJavaScriptBundleMember" class="au.com.sensis.mobile.web.component.core.bundle.ExplodedBundleMemberResourceLoaderController"
-        parent="core.component.abstractResourceBundleLoaderController"
+    <bean id="core.comp.getJavaScriptBundleMember" 
+        class="au.com.sensis.mobile.web.component.core.bundle.ExplodedBundleMemberResourceLoaderController"
+        parent="core.comp.abstractResourceBundleLoaderController"
         init-method="validateState">
         <property name="resourceNameRequestUriPrefix" value="/jsmember/"/>
     </bean>

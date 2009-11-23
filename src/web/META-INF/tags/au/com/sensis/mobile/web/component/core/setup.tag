@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="core" uri="/au/com/sensis/mobile/web/component/core/core.tld"%>
+<%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/logging/logging.tld"%>
 
 <%--
   - Work around for Tomcat 5.0.28 to ensure that the JSP Expression Language is processed. 
@@ -8,8 +9,9 @@
   --%>
 <%@ tag isELIgnored="false" %>
 
-
 <%@ attribute name="baseCompMcsPath" required="true" type="java.lang.String"%>
+
+<logging:info logger="au.com.sensis.mobile.web.component.core" message="Entering setup.tag" />
 
 <core:script src="${baseCompMcsPath}/core/scripts/core-component.mscr"></core:script>
 
@@ -30,3 +32,5 @@
                       <pipeline:value-of expr="device:getPolicyValue('pixelsy')"/>)
     );
 </core:script>
+
+<logging:info logger="au.com.sensis.mobile.web.component.core" message="Exiting setup.tag" />

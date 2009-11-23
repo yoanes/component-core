@@ -2,8 +2,10 @@
 <bs:bundles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
     xmlns:bs="http://mobile.sensis.com.au/build-scripts"
     xsi:schemaLocation="http://mobile.sensis.com.au/build-scripts au.com.sensis.mobile.bundles.xsd"
-    basename="core-component">
-    <bundle name="common" abstract="true">
+    basename="">
+    
+    <!-- Bundles for the core-component proper. -->
+    <bundle name="core-component-common" abstract="true">
         <fileset dir="${src.javascript.dir}/device-invariant">
             <include name="mootools.js" />
         </fileset>
@@ -12,8 +14,26 @@
             <exclude name="mootools.js" />
         </fileset>
     </bundle>
-    <bundle name="default" parent="common">
+    <bundle name="core-component-default" parent="core-component-common">
     </bundle>
-    <bundle name="apple" parent="common">
+    <bundle name="core-component-apple" parent="core-component-common">
     </bundle>
+    
+    <!-- Bundles for the logging-component. -->
+    <bundle name="logging-component-apple">
+        <fileset dir="${src.javascript.dir}/device-variant/apple">
+            <include name="**/logger*.js" />        
+        </fileset>
+    </bundle>
+    <bundle name="logging-component-ie">
+        <fileset dir="${src.javascript.dir}/device-variant/ie">
+            <include name="**/logger*.js" />
+        </fileset>
+    </bundle>
+    <bundle name="logging-component-default">
+        <fileset dir="${src.javascript.dir}/device-variant/default">
+            <include name="**/logger*.js" />        
+        </fileset>
+    </bundle>
+    
 </bs:bundles>

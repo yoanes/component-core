@@ -1,4 +1,4 @@
-package au.com.sensis.mobile.web.component.core.aop;
+package au.com.sensis.mobile.web.component.logging.aop;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

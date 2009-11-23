@@ -11,7 +11,7 @@
     <!-- ================================================================================================ -->
     <!-- Resource Bundle Loaders. -->
     
-    <bean name="core.component.abstractResourceBundleLoader" 
+    <bean name="core.comp.abstractResourceBundleLoader" 
         class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoader" abstract="true"
         init-method="validateState">
         <property name="bundleBasePath" value="/js/bundles/" />
@@ -19,9 +19,9 @@
         <property name="explodedBundleMemberBasePath" value="/js/explodedBundles/" />
     </bean>
     
-    <bean name="core.component.resourceBundleLoader" 
+    <bean name="core.comp.resourceBundleLoader" 
         class="au.com.sensis.mobile.web.component.core.bundle.ClasspathResourceBundleLoader"
-        parent="core.component.abstractResourceBundleLoader"
+        parent="core.comp.abstractResourceBundleLoader"
         init-method="validateState"/>
     
 </beans>

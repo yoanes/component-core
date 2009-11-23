@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee web-jsptaglibrary_2_1.xsd"
+    version="2.1"
+>
+
+    <tlib-version>1.0</tlib-version>
+    <uri>/au/com/sensis/mobile/web/component/logging/logging.tld</uri>
+    <tag-file>
+        <name>setup</name>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/logging/setup.tag</path>
+    </tag-file>
+    <tag>
+        <name>jsLoggerEnabled</name>
+        <description>Sets a flag to indicate if the JavaScript Logger is enabled or not.</description>
+        <tag-class>au.com.sensis.mobile.web.component.logging.tag.JavaScriptLoggerEnabledTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <description>Name of the flag to set.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <variable>
+            <description>Flag to indicate if the JavaScript Logger is enabled or not.</description>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.Boolean</variable-class>
+            <declare>true</declare>
+            <scope>AT_END</scope>
+        </variable>
+    </tag>
+    <tag>
+        <name>info</name>
+        <description>Facade to log4j's info level logging.</description>
+        <tag-class>au.com.sensis.mobile.web.component.logging.tag.Log4jInfoTag</tag-class>
+        <tei-class>au.com.sensis.mobile.web.component.logging.tag.Log4jTag$Log4jTagExtraInfo</tei-class>        
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>message</name>
+            <description>Message to be logged.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <name>logger</name>
+            <description>Name of the logger that the message should be logged with.</description>            
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>debug</name>
+        <description>Facade to log4j's debug level logging.</description>
+        <tag-class>au.com.sensis.mobile.web.component.logging.tag.Log4jDebugTag</tag-class>
+        <tei-class>au.com.sensis.mobile.web.component.logging.tag.Log4jTag$Log4jTagExtraInfo</tei-class>        
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>message</name>
+            <description>Message to be logged.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Object</type>
+        </attribute>
+        <attribute>
+            <name>logger</name>
+            <description>Name of the logger that the message should be logged with.</description>            
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

@@ -1,9 +1,6 @@
-package au.com.sensis.mobile.web.component.core.aop;
+package au.com.sensis.mobile.web.component.logging.aop;
 
 import org.junit.Test;
-
-import au.com.sensis.mobile.web.component.logging.aop.AbstractEntryAndExitLoggingAspect;
-import au.com.sensis.mobile.web.component.logging.aop.BaseEntryAndExitLoggingAspectTestCase;
 
 /**
  * Unit test {@link DelegateEntryAndExitLoggingAspect}.

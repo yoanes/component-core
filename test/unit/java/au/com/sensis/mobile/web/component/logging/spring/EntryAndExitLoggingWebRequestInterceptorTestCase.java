@@ -1,4 +1,4 @@
-package au.com.sensis.mobile.web.component.core.spring;
+package au.com.sensis.mobile.web.component.logging.spring;
 
 import java.io.StringWriter;
 

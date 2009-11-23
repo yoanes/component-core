@@ -1,4 +1,4 @@
-package au.com.sensis.mobile.web.component.core.spring;
+package au.com.sensis.mobile.web.component.logging.spring;
 
 import org.apache.log4j.Logger;
 import org.springframework.ui.ModelMap;
