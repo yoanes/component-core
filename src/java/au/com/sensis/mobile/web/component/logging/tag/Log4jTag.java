@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public abstract class Log4jTag extends SimpleTagSupport {
 
     private String message;
-    private String logger;
+    private Logger logger;
 
     /**
      * {@link TagExtraInfo} implementation for validating the data set into the
@@ -47,8 +47,7 @@ public abstract class Log4jTag extends SimpleTagSupport {
      */
     @Override
     public final void doTag() throws JspException, IOException {
-        final Logger log4jLogger = Logger.getLogger(getLogger());
-        logMessageIfRequired(log4jLogger);
+        logMessageIfRequired(getLogger());
     }
 
     /**
@@ -78,14 +77,14 @@ public abstract class Log4jTag extends SimpleTagSupport {
     /**
      * @return the logger
      */
-    public final String getLogger() {
+    public Logger getLogger() {
         return logger;
     }
 
     /**
      * @param logger the logger to set
      */
-    public final void setLogger(final String logger) {
+    public void setLogger(final Logger logger) {
         this.logger = logger;
     }
 }

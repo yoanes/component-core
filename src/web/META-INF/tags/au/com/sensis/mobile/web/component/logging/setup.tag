@@ -14,12 +14,12 @@
 
 <logging:jsLoggerEnabled var="javascriptLoggerEnabled"/>
 
-<logging:info logger="au.com.sensis.mobile.web.component.logging" 
-    message="Entering setup.tag" />
+<logging:logger var="logger" name="au.com.sensis.mobile.web.component.logging" />
+<logging:info logger="${logger}" message="Entering setup.tag" />
 
 <c:choose>
     <c:when test="${javascriptLoggerEnabled}">
-        <logging:debug logger="au.com.sensis.mobile.web.component.logging" 
+        <logging:debug logger="${logger}" 
             message="javascriptLoggerEnabled is '${javascriptLoggerEnabled}'. Enabling JavaScript logger." />    
     
     	<%-- Setup components that we depend on. --%>
@@ -33,9 +33,9 @@
     
     </c:when>
     <c:otherwise>
-        <logging:debug logger="au.com.sensis.mobile.web.component.logging" 
+        <logging:debug logger="${logger}" 
             message="javascriptLoggerEnabled is '${javascriptLoggerEnabled}'. Disabling JavaScript logger." />
     </c:otherwise>
 </c:choose>
 
-<logging:info logger="au.com.sensis.mobile.web.component.logging" message="Exiting setup.tag" />
+<logging:info logger="${logger}" message="Exiting setup.tag" />

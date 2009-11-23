@@ -31,6 +31,31 @@
         </variable>
     </tag>
     <tag>
+        <name>logger</name>
+        <description>Sets a variable to a Logger for the given name.</description>
+        <tag-class>au.com.sensis.mobile.web.component.logging.tag.LoggerTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <description>Name of the variable to set.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>name</name>
+            <description>Name of the Logger, analogous to the names used by Log4j.</description>            
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <variable>
+            <description>Logger for the given name.</description>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>org.apache.log4j.Logger</variable-class>
+            <declare>true</declare>
+            <scope>AT_END</scope>
+        </variable>
+    </tag>
+    <tag>
         <name>info</name>
         <description>Facade to log4j's info level logging.</description>
         <tag-class>au.com.sensis.mobile.web.component.logging.tag.Log4jInfoTag</tag-class>
@@ -48,6 +73,7 @@
             <description>Name of the logger that the message should be logged with.</description>            
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
+            <type>org.apache.log4j.Logger</type>
         </attribute>
     </tag>
     <tag>
@@ -68,6 +94,7 @@
             <description>Name of the logger that the message should be logged with.</description>            
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
+            <type>org.apache.log4j.Logger</type>
         </attribute>
     </tag>
 </taglib>

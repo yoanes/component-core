@@ -56,7 +56,7 @@ public abstract class AbstractLog4jTagTestCase extends AbstractJUnit4TestCase {
 
         objectUnderTest = createObjectUnderTest();
         objectUnderTest.setMessage(MESSAGE);
-        objectUnderTest.setLogger(LOGGER);
+        objectUnderTest.setLogger(expectedLogger);
 
         log4jInfoExtraInfoUnderTest = new Log4jTagExtraInfo();
     }
@@ -68,7 +68,7 @@ public abstract class AbstractLog4jTagTestCase extends AbstractJUnit4TestCase {
     protected abstract Level getLogLevel();
 
     @Test
-    public void testDoTagWhenInfoLoggingEnabled() throws Throwable {
+    public void testDoTagWhenLoggingEnabled() throws Throwable {
         objectUnderTest.doTag();
 
         Assert.assertEquals("log message is wrong", getOutputLogLevel() + " : " + MESSAGE,
@@ -78,7 +78,7 @@ public abstract class AbstractLog4jTagTestCase extends AbstractJUnit4TestCase {
 
 
     @Test
-    public void testDoTagWhenInfoLoggingNotEnabled() throws Throwable {
+    public void testDoTagWhenLoggingNotEnabled() throws Throwable {
         expectedLogger.setLevel(Level.ERROR);
 
         objectUnderTest.doTag();
@@ -97,27 +97,27 @@ public abstract class AbstractLog4jTagTestCase extends AbstractJUnit4TestCase {
     @Test
     public void testLog4jInfoTagExtraInfoValidateWhenLoggerAttributeNull()
             throws Throwable {
-                EasyMock.expect(getMockTagData().getAttribute("logger"))
-                        .andReturn(null);
+        EasyMock.expect(getMockTagData().getAttribute("logger"))
+                .andReturn(null);
 
-                EasyMock.expect(getMockTagData().getId()).andReturn("tagDataId");
+        EasyMock.expect(getMockTagData().getId()).andReturn("tagDataId");
 
-                getHelper().replay();
+        getHelper().replay();
 
-                final ValidationMessage[] actualValidationMessages =
-                        getLog4jInfoExtraInfoUnderTest().validate(getMockTagData());
+        final ValidationMessage[] actualValidationMessages =
+                getLog4jInfoExtraInfoUnderTest().validate(getMockTagData());
 
-                Assert.assertEquals("Number of validation messages is wrong", 1,
-                        actualValidationMessages.length);
+        Assert.assertEquals("Number of validation messages is wrong", 1,
+                actualValidationMessages.length);
 
-                final ValidationMessage actualValidationMessage =
-                        actualValidationMessages[0];
-                final ValidationMessage expectedValidationMessage =
-                        new ValidationMessage("tagDataId",
-                                "The logger attribute must not be null.");
-                assertValidationMessagesEqual(expectedValidationMessage,
-                        actualValidationMessage);
-            }
+        final ValidationMessage actualValidationMessage =
+                actualValidationMessages[0];
+        final ValidationMessage expectedValidationMessage =
+                new ValidationMessage("tagDataId",
+                        "The logger attribute must not be null.");
+        assertValidationMessagesEqual(expectedValidationMessage,
+                actualValidationMessage);
+    }
 
     /**
      * Test {@link Log4jTagExtraInfo#validate(TagData)}.
@@ -126,19 +126,18 @@ public abstract class AbstractLog4jTagTestCase extends AbstractJUnit4TestCase {
      *             Thrown if any error occurs.
      */
     @Test
-    public void testLog4jInfoTagExtraInfoValidateWhenValid()
-            throws Throwable {
-                EasyMock.expect(getMockTagData().getAttribute("logger"))
-                        .andReturn("my logger name");
+    public void testLog4jInfoTagExtraInfoValidateWhenValid() throws Throwable {
+        EasyMock.expect(getMockTagData().getAttribute("logger")).andReturn(
+                expectedLogger);
 
-                getHelper().replay();
+        getHelper().replay();
 
-                final ValidationMessage[] actualValidationMessages =
-                        getLog4jInfoExtraInfoUnderTest().validate(getMockTagData());
+        final ValidationMessage[] actualValidationMessages =
+                getLog4jInfoExtraInfoUnderTest().validate(getMockTagData());
 
-                Assert.assertNull("Number of validation messages is wrong",
-                        actualValidationMessages);
-            }
+        Assert.assertNull("Number of validation messages is wrong",
+                actualValidationMessages);
+    }
 
     /**
      * @param actualValidationMessage

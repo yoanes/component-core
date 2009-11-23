@@ -11,7 +11,8 @@
 
 <%@ attribute name="baseCompMcsPath" required="true" type="java.lang.String"%>
 
-<logging:info logger="au.com.sensis.mobile.web.component.core" message="Entering setup.tag" />
+<logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
+<logging:info logger="${logger}" message="Entering setup.tag" />
 
 <core:script src="${baseCompMcsPath}/core/scripts/core-component.mscr"></core:script>
 
@@ -33,4 +34,4 @@
     );
 </core:script>
 
-<logging:info logger="au.com.sensis.mobile.web.component.core" message="Exiting setup.tag" />
+<logging:info logger="${logger}" message="Exiting setup.tag" />
