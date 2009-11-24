@@ -43,4 +43,17 @@
             <type>au.com.sensis.mobile.web.component.core.tag.ScriptTagWriterFactory</type>
         </attribute>
     </tag>
+    <tag>
+        <name>link</name>
+        <description>Facade to a link tag. Prevents duplicate tags from being written to the current request.</description>
+        <tag-class>au.com.sensis.mobile.web.component.core.tag.LinkTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>href</name>
+            <description>Analogous to the same attribute of the xhtml2 link element.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <dynamic-attributes>true</dynamic-attributes>
+    </tag>
 </taglib>
