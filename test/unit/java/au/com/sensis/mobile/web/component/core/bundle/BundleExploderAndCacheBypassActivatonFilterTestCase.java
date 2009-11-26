@@ -6,13 +6,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
 
 import au.com.sensis.wireless.test.AbstractJUnit4TestCase;
 
@@ -33,7 +33,7 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     private MockHttpServletRequest springMockHttpServletRequest;
     private MockHttpServletResponse springMockHttpServletResponse;
     private FilterChain mockFilterChain;
-    private HttpSession mockHttpSession;
+    private MockHttpSession mockHttpSession;
     private SimpleFeatureEnablementRegistryBean simpleFeatureEnablementRegistryBean;
     private FilterConfig mockFilterConfig;
 
@@ -51,6 +51,10 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
 
         setSpringMockHttpServletRequest(new MockHttpServletRequest());
         setSpringMockHttpServletResponse(new MockHttpServletResponse());
+
+        setMockHttpSession(new MockHttpSession());
+
+        getSpringMockHttpServletRequest().setSession(getMockHttpSession());
     }
 
     @Test
@@ -292,6 +296,67 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     }
 
     @Test
+    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsNoSession()
+        throws Throwable {
+        getSpringMockHttpServletRequest().setSession(null);
+
+        getObjectUnderTest().setBypassClientCacheInitialValue(true);
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
+
+        enableBundleExplosionAndBypassClientCacheFeatures();
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
+
+        replay();
+
+        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
+                getSpringMockHttpServletResponse(), getMockFilterChain());
+
+        assertBundleExploderSessionAttributeValue(Boolean.TRUE);
+        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
+    }
+
+    @Test
+    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsSessionExists()
+    throws Throwable {
+
+        getObjectUnderTest().setBypassClientCacheInitialValue(true);
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
+
+        enableBundleExplosionAndBypassClientCacheFeatures();
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
+
+        replay();
+
+        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
+                getSpringMockHttpServletResponse(), getMockFilterChain());
+
+        assertBundleExploderSessionAttributeValue(null);
+        assertBypassClientCacheSessionAttributeValue(null);
+    }
+
+    @Test
+    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsButDisabled()
+        throws Throwable {
+        getObjectUnderTest().setBypassClientCacheInitialValue(true);
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
+
+        replay();
+
+        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
+                getSpringMockHttpServletResponse(), getMockFilterChain());
+
+        assertBundleExploderSessionAttributeValue(null);
+        assertBypassClientCacheSessionAttributeValue(null);
+    }
+
+    @Test
     public void testDoFilterWhenBundleExplosionFeatureDisabledAndBypassClientCacheFeatureDisabled()
             throws Throwable {
         getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(
@@ -481,14 +546,14 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     /**
      * @return the mockHttpSession
      */
-    public HttpSession getMockHttpSession() {
+    public MockHttpSession getMockHttpSession() {
         return mockHttpSession;
     }
 
     /**
      * @param mockHttpSession the mockHttpSession to set
      */
-    public void setMockHttpSession(final HttpSession mockHttpSession) {
+    public void setMockHttpSession(final MockHttpSession mockHttpSession) {
         this.mockHttpSession = mockHttpSession;
     }
 

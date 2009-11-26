@@ -71,13 +71,13 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
      * Name of the request parameter that requests that the bundle exploder be
      * returned instead of the bundle itself.
      */
-    public static final String BUNDLE_EXPLODER_REQUEST_PARAM_NAME = "be";
+    public static final String BUNDLE_EXPLODER_REQUEST_PARAM_NAME = "jsbe";
 
     /**
      * Name of the request parameter that requests that the <b>client</b> side
      * cache be bypassed.
      */
-    public static final String BYPASS_CLIENT_CACHE_REQUEST_PARAM_NAME = "bc";
+    public static final String BYPASS_CLIENT_CACHE_REQUEST_PARAM_NAME = "jsbc";
 
     /**
      * Request parameter value that is interpreted as "true" by this class. All
@@ -86,6 +86,20 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
     public static final String BOOLEAN_TRUE_PARAM_VALUE = "1";
 
     private FeatureEnablementRegistry featureEnablementRegistry;
+
+    /**
+     * Initial value corresponding to {@link #BYPASS_CLIENT_CACHE_REQUEST_PARAM_NAME}.
+     * Only used if {@link FeatureEnablementRegistry#isBypassClientCacheEnabled()} is true.
+     * Defaults to false.
+     */
+    private boolean bypassClientCacheInitialValue = false;
+
+    /**
+     * Initial value corresponding to {@link #BUNDLE_EXPLODER_REQUEST_PARAM_NAME}.
+     * Only used if {@link FeatureEnablementRegistry#isBundleExplosionEnabled()} is true.
+     * Defaults to false.
+     */
+    private boolean bundleExplosionInitialValue = false;
 
     /**
      * {@inheritDoc}
@@ -126,7 +140,9 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
         final HttpServletRequest httpServletRequest =
                 (HttpServletRequest) servletRequest;
 
-        if (isBundleExploderRequestedNull(httpServletRequest)) {
+        if (isNewSession(httpServletRequest)) {
+            setInitialBundleExploderAndCacheBypassFlags(httpServletRequest);
+        } else if (isBundleExploderRequestedNull(httpServletRequest)) {
             handleRequestWhenBundleExploderRequestIsNull(httpServletRequest);
         } else if (isBundleExploderRequestedNonNullAndTrue(httpServletRequest)) {
             activateBundleExploderRequestInSession(httpServletRequest);
@@ -137,6 +153,25 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private void setInitialBundleExploderAndCacheBypassFlags(
+            final HttpServletRequest httpServletRequest) {
+        if (isBundleExplosionInitialValue()
+                && getFeatureEnablementRegistry().isBundleExplosionEnabled()) {
+            activateBundleExploderRequestInSession(httpServletRequest);
+            activateBypassClientCacheRequestInSession(httpServletRequest);
+        }
+
+        if (isBypassClientCacheInitialValue()
+                && getFeatureEnablementRegistry().isBypassClientCacheEnabled()) {
+            activateBypassClientCacheRequestInSession(httpServletRequest);
+        }
+
+    }
+
+    private boolean isNewSession(final HttpServletRequest httpServletRequest) {
+        return httpServletRequest.getSession().isNew();
     }
 
     /**
@@ -154,12 +189,12 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
     private void activateBypassClientCacheRequestInSession(
             final HttpServletRequest httpServletRequest) {
         if (getFeatureEnablementRegistry().isBypassClientCacheEnabled()) {
-            logger.info("Activating bundle client cache bypass.");
-            httpServletRequest
-                    .getSession()
-                    .setAttribute(
-                            AbstractResourceBundleLoaderController.BYPASS_CLIENT_CACHE_SESSION_KEY,
-                            Boolean.TRUE);
+        logger.info("Activating bundle client cache bypass.");
+        httpServletRequest
+                .getSession()
+                .setAttribute(
+                        AbstractResourceBundleLoaderController.BYPASS_CLIENT_CACHE_SESSION_KEY,
+                        Boolean.TRUE);
         } else {
             logger.warn(
                 "Support for bundle client cache bypass is disabled. Ignoring bypass request.");
@@ -168,6 +203,7 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
 
     private void deactivateBypassClientCacheRequestInSession(
             final HttpServletRequest httpServletRequest) {
+        logger.info("Deactivating bundle client cache bypass.");
         httpServletRequest
                 .getSession()
                 .setAttribute(
@@ -181,12 +217,12 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
     private void activateBundleExploderRequestInSession(
             final HttpServletRequest httpServletRequest) {
         if (getFeatureEnablementRegistry().isBundleExplosionEnabled()) {
-            logger.info("Activating bundle explosion.");
-            httpServletRequest
-                    .getSession()
-                    .setAttribute(
-                            ResourceBundleLoaderController.BUNDLE_EXPLODER_REQUEST_SESSION_KEY,
-                            Boolean.TRUE);
+        logger.info("Activating bundle explosion.");
+        httpServletRequest
+                .getSession()
+                .setAttribute(
+                        ResourceBundleLoaderController.BUNDLE_EXPLODER_REQUEST_SESSION_KEY,
+                        Boolean.TRUE);
         } else {
             logger.warn(
                 "Support for bundle explosion is disabled. Ignoring bundle explosion request.");
@@ -198,6 +234,7 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
      */
     private void deactivateBundleExploderRequestInSession(
             final HttpServletRequest httpServletRequest) {
+        logger.info("Deactivating bundle explosion.");
         httpServletRequest
                 .getSession()
                 .setAttribute(
@@ -261,4 +298,32 @@ public class BundleExploderAndCacheBypassActivatonFilter implements Filter,
         this.featureEnablementRegistry = featureEnablementRegistry;
     }
 
+    /**
+     * @return the bypassClientCacheInitialValue
+     */
+    public boolean isBypassClientCacheInitialValue() {
+        return bypassClientCacheInitialValue;
+    }
+
+    /**
+     * @param bypassClientCacheInitialValue the bypassClientCacheInitialValue to set
+     */
+    public void setBypassClientCacheInitialValue(
+            final boolean bypassClientCacheInitialValue) {
+        this.bypassClientCacheInitialValue = bypassClientCacheInitialValue;
+    }
+
+    /**
+     * @return the bundleExplosionInitialValue
+     */
+    public boolean isBundleExplosionInitialValue() {
+        return bundleExplosionInitialValue;
+    }
+
+    /**
+     * @param bundleExplosionInitialValue the bundleExplosionInitialValue to set
+     */
+    public void setBundleExplosionInitialValue(final boolean bundleExplosionInitialValue) {
+        this.bundleExplosionInitialValue = bundleExplosionInitialValue;
+    }
 }

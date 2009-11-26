@@ -1,7 +1,7 @@
 package au.com.sensis.mobile.web.component.core.bundle;
 
 /**
- * Registry of flags that indicate whether paritcular features are enabled/disabled.
+ * Registry of flags that indicate whether particular features are enabled/disabled.
  *
  * @author Adrian.Koh2@sensis.com.au
  */
