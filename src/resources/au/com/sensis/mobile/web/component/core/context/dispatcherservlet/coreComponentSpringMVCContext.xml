@@ -37,6 +37,8 @@
         <property name="resourceBundleLoader" ref="core.comp.resourceBundleLoader"/>
         <property name="featureEnablementRegistry" ref="core.comp.featureEnablementRegistry"/>
         
+        <property name="resourceNameRequestUriPrefix" value="@{core.env.context.root.component.prefix}"/>
+        
         <!--
           - Allow clients to use cached response for about 10 years so that they don't always have to 
           - re-validate the cached copy. This relies on new deployments serving up JS files from a new, unique URL.
@@ -50,10 +52,9 @@
         parent="core.comp.abstractResourceBundleLoaderController"
         init-method="validateState"
         abstract="true">
-        <property name="resourceNameRequestUriPrefix" value="/js/"/>    
-        
+            
         <!-- Child beans are expected to set the contextRootComponentPrefix property. -->
-        <!-- <property name="contextRootComponentPrefix" value="@{core.env.context.root.component.prefix}"/>-->
+        <!-- <property name="contextRootComponentPrefix" value="@{core.env.context.root.component.prefix}@{core.comp.name}"/>-->
     </bean>    
     
     <bean id="core.comp.getJavaScriptBundle" 
@@ -66,7 +67,6 @@
         class="au.com.sensis.mobile.web.component.core.bundle.ExplodedBundleMemberResourceLoaderController"
         parent="core.comp.abstractResourceBundleLoaderController"
         init-method="validateState">
-        <property name="resourceNameRequestUriPrefix" value="/jsmember/"/>
     </bean>
     
 </beans>

@@ -14,9 +14,14 @@
     <bean name="core.comp.abstractResourceBundleLoader" 
         class="au.com.sensis.mobile.web.component.core.bundle.AbstractResourceBundleLoader" abstract="true"
         init-method="validateState">
-        <property name="bundleBasePath" value="/js/bundles/" />
-        <property name="bundleExploderBasePath" value="/js/bundleExploders/" />
-        <property name="explodedBundleMemberBasePath" value="/js/explodedBundles/" />
+        
+        <property name="bundleNameRegex" value="(.*?)/js/(.*)" />
+        
+        <property name="bundleNameReplacement" value="/js/bundles/$1/$2" />
+        <property name="bundleExploderNameReplacement" value="/js/bundleExploders/$1/$2" />
+        
+        <property name="explodedBundleMemberNameRegex" value="(.*?)/jsmember/(.*)" />
+        <property name="explodedBundleMemberNameReplacement" value="/js/explodedBundles/$2" />
     </bean>
     
     <bean name="core.comp.resourceBundleLoader" 

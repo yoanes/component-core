@@ -96,7 +96,7 @@ public abstract class AbstractResourceBundleLoaderController extends
     /**
      * Extracts the resource name requested by extracting all text after
      * {@link #getResourceNameRequestUriPrefix()} from the
-     * {@link HttpServletRequest#getRequestURI()}.
+     * {@link HttpServletRequest#getRequestURI()} but before any embedded cookie.
      *
      * @param request
      *            {@link HttpServletRequest}

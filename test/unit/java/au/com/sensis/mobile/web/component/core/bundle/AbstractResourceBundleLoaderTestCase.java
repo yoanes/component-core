@@ -18,35 +18,64 @@ import au.com.sensis.wireless.web.common.validation.ValidatableTestUtils;
  */
 public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit4TestCase {
 
-    private static final String BUNDLE_BASE_PATH = "/js/bundles/";
-    private static final String BUNDLE_EXPLODER_BASE_PATH = "/js/bundleExploders/";
-    private static final String EXPLODED_BUNDLE_MEMBER_BASE_PATH = "/js/explodedBundles/";
-
     private static final long LAST_MODIFIED = 1234567890;
 
     private AbstractResourceBundleLoader objectUnderTest;
     private TestResourceBundleLoader localObjectUnderTest;
     private InputStream mockInputStream;
     private IOException ioException;
-    private static final String BUNDLE_NAME = "my bundle name";
+
+    private static final String BUNDLE_NAME_REGEX = "(.*?)/js/(.*)";
+    private static final String BUNDLE_NAME_REPLACEMENT = "/js/bundles/$1/$2";
+    private static final String BUNDLE_EXPLODER_NAME_REPLACEMENT
+        = "/js/bundleExploders/$1/$2";
+    private static final String EXPLODED_BUNDLE_MEMBER_NAME_REGEX = "(.*?)/jsmember/(.*)";
+    private static final String EXPLODED_BUNDLE_MEMBER_NAME_REPLACEMENT
+        = "/js/explodedBundles/$2";
+
+    private static final String BUNDLE_NAME
+        = "core/js/core-component-default.js";
+    private static final String EXPLODED_BUNDLE_MEMBER_NAME
+        = "core/jsmember/core/device-invariant/mootools.js";
+
+    private static final String EXPECTED_BUNDLE_LOAD_FILE_PATH
+        = "/js/bundles/core/core-component-default.js";
+    private static final String EXPECTED_BUNDLE_EXPLODER_LOAD_FILE_PATH
+        = "/js/bundleExploders/core/core-component-default.js";
+    private static final String EXPECTED_EXPLODED_BUNDLE_MEMBER_LOAD_FILE_PATH
+        = "/js/explodedBundles/core/device-invariant/mootools.js";
 
     /**
      * Setup test data.
      *
-     * @throws Exception Thrown if any error occurs.
+     * @throws Exception
+     *             Thrown if any error occurs.
      */
     @Before
     public final void baseSetUp() throws Exception {
         objectUnderTest = createObjectUnderTest();
-
-        objectUnderTest.setBundleBasePath(BUNDLE_BASE_PATH);
-        objectUnderTest.setExplodedBundleMemberBasePath(EXPLODED_BUNDLE_MEMBER_BASE_PATH);
-        objectUnderTest.setBundleExploderBasePath(BUNDLE_EXPLODER_BASE_PATH);
+        init(getObjectUnderTest());
 
         localObjectUnderTest =
-                new TestResourceBundleLoader(getMockInputStream(), LAST_MODIFIED, null);
+                new TestResourceBundleLoader(getMockInputStream(),
+                        LAST_MODIFIED);
+        init(getLocalObjectUnderTest());
 
         ioException = new IOException("test");
+    }
+
+    /**
+     *
+     */
+    private void init(final AbstractResourceBundleLoader abstractResourceBundleLoader) {
+        abstractResourceBundleLoader.setBundleNameRegex(BUNDLE_NAME_REGEX);
+        abstractResourceBundleLoader.setBundleNameReplacement(BUNDLE_NAME_REPLACEMENT);
+        abstractResourceBundleLoader
+                .setBundleExploderNameReplacement(BUNDLE_EXPLODER_NAME_REPLACEMENT);
+        abstractResourceBundleLoader
+            .setExplodedBundleMemberNameRegex(EXPLODED_BUNDLE_MEMBER_NAME_REGEX);
+        abstractResourceBundleLoader
+                .setExplodedBundleMemberNameReplacement(EXPLODED_BUNDLE_MEMBER_NAME_REPLACEMENT);
     }
 
     protected abstract AbstractResourceBundleLoader createObjectUnderTest();
@@ -61,69 +90,90 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
     }
 
     @Test
-    public void testValidateStateWhenBundleBasePathIsBlank() throws Throwable {
+    public void testValidateStateWhenBundleNameRegexBlank() throws Throwable {
         final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
         for (final String testValue : testValues) {
-            getObjectUnderTest().setBundleBasePath(testValue);
+            getObjectUnderTest().setBundleNameRegex(testValue);
             ValidatableTestUtils.testValidateStateWithCustomFailureMessage(
                     "Current testValue: '" + testValue + "'.",
-                    getObjectUnderTest(), "bundleBasePath");
+                    getObjectUnderTest(), "bundleNameRegex");
         }
     }
 
     @Test
-    public void testValidateStateWhenBundleExploderBasePathIsBlank() throws Throwable {
+    public void testValidateStateWhenBundleNameReplacementIsBlank() throws Throwable {
         final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
         for (final String testValue : testValues) {
-            getObjectUnderTest().setBundleExploderBasePath(testValue);
+            getObjectUnderTest().setBundleNameReplacement(testValue);
             ValidatableTestUtils.testValidateStateWithCustomFailureMessage(
                     "Current testValue: '" + testValue + "'.",
-                    getObjectUnderTest(), "bundleExploderBasePath");
+                    getObjectUnderTest(), "bundleNameReplacement");
         }
     }
 
     @Test
-    public void testValidateStateWhenExplodedBundleMemberBasePathIsBlank() throws Throwable {
+    public void testValidateStateWhenBundleExploderNameReplacementIsBlank() throws Throwable {
         final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
         for (final String testValue : testValues) {
-            getObjectUnderTest().setExplodedBundleMemberBasePath(testValue);
+            getObjectUnderTest().setBundleExploderNameReplacement(testValue);
             ValidatableTestUtils.testValidateStateWithCustomFailureMessage(
                     "Current testValue: '" + testValue + "'.",
-                    getObjectUnderTest(), "explodedBundleMemberBasePath");
+                    getObjectUnderTest(), "bundleExploderNameReplacement");
         }
     }
 
     @Test
-    public void testGetBundlePath() throws Throwable {
+    public void testValidateStateWhenExplodedBundleMemberNameRegexBlank() throws Throwable {
+        final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
+        for (final String testValue : testValues) {
+            getObjectUnderTest().setExplodedBundleMemberNameRegex(testValue);
+            ValidatableTestUtils.testValidateStateWithCustomFailureMessage(
+                    "Current testValue: '" + testValue + "'.",
+                    getObjectUnderTest(), "explodedBundleMemberNameRegex");
+        }
+    }
+
+    @Test
+    public void testValidateStateWhenExplodedBundleMemberNameReplacementIsBlank() throws Throwable {
+        final String[] testValues = { null, StringUtils.EMPTY, " ", "  " };
+        for (final String testValue : testValues) {
+            getObjectUnderTest().setExplodedBundleMemberNameReplacement(testValue);
+            ValidatableTestUtils.testValidateStateWithCustomFailureMessage(
+                    "Current testValue: '" + testValue + "'.",
+                    getObjectUnderTest(), "explodedBundleMemberNameReplacement");
+        }
+    }
+
+    @Test
+    public void testGetBundlePathWhenBundleNameIsNull() throws Throwable {
         Assert.assertEquals("getBundlePath() is wrong",
-                BUNDLE_BASE_PATH + BUNDLE_NAME, getObjectUnderTest()
-                        .getBundlePath(BUNDLE_NAME));
+                StringUtils.EMPTY, getObjectUnderTest()
+                        .getBundlePath(null));
     }
 
     @Test
-    public void testGetBundleExploderPath() throws Throwable {
+    public void testGetBundleExploderPathWhenBundleNameIsNull() throws Throwable {
         Assert.assertEquals("getBundleExploderPath() is wrong",
-                BUNDLE_EXPLODER_BASE_PATH + BUNDLE_NAME, getObjectUnderTest()
-                        .getBundleExploderPath(BUNDLE_NAME));
+                StringUtils.EMPTY, getObjectUnderTest()
+                        .getBundleExploderPath(null));
     }
 
     @Test
-    public void testGetExplodedBundleMemberPath() throws Throwable {
+    public void testGetExplodedBundleMemberPathWhenExplodedBundleMemberNameIsNull()
+        throws Throwable {
         Assert.assertEquals("getExplodedBundleMemberPath() is wrong",
-                EXPLODED_BUNDLE_MEMBER_BASE_PATH + BUNDLE_NAME,
-                getObjectUnderTest().getExplodedBundleMemberPath(BUNDLE_NAME));
+                StringUtils.EMPTY,
+                getObjectUnderTest().getExplodedBundleMemberPath(null));
     }
 
     @Test
     public void testLoadBundle() throws Throwable {
-        getLocalObjectUnderTest().setBundleBasePath(BUNDLE_BASE_PATH);
-
         final InputStream actualInputStream =
                 getLocalObjectUnderTest().loadBundle(BUNDLE_NAME);
 
         Assert.assertEquals(
                 "loadFile method was not delegated to with correct file path",
-                BUNDLE_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_BUNDLE_LOAD_FILE_PATH, getLocalObjectUnderTest()
                         .getActualLoadFilePath());
         Assert.assertSame("Wrong InputStream returned", mockInputStream,
                 actualInputStream);
@@ -131,14 +181,13 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testLoadBundleExploder() throws Throwable {
-        getLocalObjectUnderTest().setBundleExploderBasePath(BUNDLE_EXPLODER_BASE_PATH);
 
         final InputStream actualInputStream =
             getLocalObjectUnderTest().loadBundleExploder(BUNDLE_NAME);
 
         Assert.assertEquals(
                 "loadFile method was not delegated to with correct file path",
-                BUNDLE_EXPLODER_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_BUNDLE_EXPLODER_LOAD_FILE_PATH, getLocalObjectUnderTest()
                 .getActualLoadFilePath());
         Assert.assertSame("Wrong InputStream returned", mockInputStream,
                 actualInputStream);
@@ -146,14 +195,12 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testLoadExplodedBundleMember() throws Throwable {
-        getLocalObjectUnderTest().setExplodedBundleMemberBasePath(EXPLODED_BUNDLE_MEMBER_BASE_PATH);
-
         final InputStream actualInputStream =
-            getLocalObjectUnderTest().loadExplodedBundleMember(BUNDLE_NAME);
+            getLocalObjectUnderTest().loadExplodedBundleMember(EXPLODED_BUNDLE_MEMBER_NAME);
 
         Assert.assertEquals(
                 "loadFile method was not delegated to with correct file path",
-                EXPLODED_BUNDLE_MEMBER_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_EXPLODED_BUNDLE_MEMBER_LOAD_FILE_PATH, getLocalObjectUnderTest()
                 .getActualLoadFilePath());
         Assert.assertSame("Wrong InputStream returned", mockInputStream,
                 actualInputStream);
@@ -161,14 +208,12 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetBundleLastModified() throws Throwable {
-        getLocalObjectUnderTest().setBundleBasePath(BUNDLE_BASE_PATH);
-
         final long  actualLastModified =
                 getLocalObjectUnderTest().getBundleLastModified(BUNDLE_NAME);
 
         Assert.assertEquals(
                 "getFileLastModified method was not delegated to with correct file path",
-                BUNDLE_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_BUNDLE_LOAD_FILE_PATH, getLocalObjectUnderTest()
                         .getActualLoadFilePath());
         Assert.assertEquals("Last modified is wrong", LAST_MODIFIED,
                 actualLastModified);
@@ -176,11 +221,7 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetBundleLastModifiedWhenExceptionThrown() throws Throwable {
-        localObjectUnderTest =
-                new TestResourceBundleLoader(getMockInputStream(),
-                        LAST_MODIFIED, ioException);
-
-        getLocalObjectUnderTest().setBundleBasePath(BUNDLE_BASE_PATH);
+        getLocalObjectUnderTest().setIoExceptionToThrow(ioException);
 
         try {
             getLocalObjectUnderTest().getBundleLastModified(BUNDLE_NAME);
@@ -193,14 +234,12 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetBundleExploderLastModified() throws Throwable {
-        getLocalObjectUnderTest().setBundleExploderBasePath(BUNDLE_EXPLODER_BASE_PATH);
-
         final long  actualLastModified =
             getLocalObjectUnderTest().getBundleExploderLastModified(BUNDLE_NAME);
 
         Assert.assertEquals(
                 "getFileLastModified method was not delegated to with correct file path",
-                BUNDLE_EXPLODER_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_BUNDLE_EXPLODER_LOAD_FILE_PATH, getLocalObjectUnderTest()
                 .getActualLoadFilePath());
         Assert.assertEquals("Last modified is wrong", LAST_MODIFIED,
                 actualLastModified);
@@ -208,11 +247,7 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetBundleExploderLastModifiedWhenExceptionThrown() throws Throwable {
-        localObjectUnderTest =
-            new TestResourceBundleLoader(getMockInputStream(),
-                    LAST_MODIFIED, ioException);
-
-        getLocalObjectUnderTest().setBundleExploderBasePath(BUNDLE_EXPLODER_BASE_PATH);
+        getLocalObjectUnderTest().setIoExceptionToThrow(ioException);
 
         try {
             getLocalObjectUnderTest().getBundleExploderLastModified(BUNDLE_NAME);
@@ -225,14 +260,13 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetExplodedBundleMemberLastModified() throws Throwable {
-        getLocalObjectUnderTest().setExplodedBundleMemberBasePath(EXPLODED_BUNDLE_MEMBER_BASE_PATH);
-
         final long  actualLastModified =
-                getLocalObjectUnderTest().getExplodedBundleMemberLastModified(BUNDLE_NAME);
+                getLocalObjectUnderTest().getExplodedBundleMemberLastModified(
+                        EXPLODED_BUNDLE_MEMBER_NAME);
 
         Assert.assertEquals(
                 "getFileLastModified method was not delegated to with correct file path",
-                EXPLODED_BUNDLE_MEMBER_BASE_PATH + BUNDLE_NAME, getLocalObjectUnderTest()
+                EXPECTED_EXPLODED_BUNDLE_MEMBER_LOAD_FILE_PATH, getLocalObjectUnderTest()
                         .getActualLoadFilePath());
         Assert.assertEquals("Last modified is wrong", LAST_MODIFIED,
                 actualLastModified);
@@ -240,14 +274,11 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
     @Test
     public void testGetExplodedBundleMemberLastModifiedWhenExceptionThrown() throws Throwable {
-        localObjectUnderTest =
-                new TestResourceBundleLoader(getMockInputStream(),
-                        LAST_MODIFIED, ioException);
-
-        getLocalObjectUnderTest().setExplodedBundleMemberBasePath(EXPLODED_BUNDLE_MEMBER_BASE_PATH);
+        getLocalObjectUnderTest().setIoExceptionToThrow(ioException);
 
         try {
-            getLocalObjectUnderTest().getExplodedBundleMemberLastModified(BUNDLE_NAME);
+            getLocalObjectUnderTest().getExplodedBundleMemberLastModified(
+                    EXPLODED_BUNDLE_MEMBER_NAME);
             Assert.fail("IOException expected");
         } catch (final IOException e) {
             Assert.assertSame("IOException is wrong instance",
@@ -296,14 +327,13 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
 
         private final InputStream loadFileReturnValue;
         private final long lastModifiedReturnValue;
-        private final IOException ioExceptionToThrow;
+        private IOException ioExceptionToThrow;
 
         private TestResourceBundleLoader(final InputStream loadFileReturnValue,
-                final long lastModifiedReturnValue, final IOException ioExceptionToThrow) {
+                final long lastModifiedReturnValue) {
             super();
             this.loadFileReturnValue = loadFileReturnValue;
             this.lastModifiedReturnValue = lastModifiedReturnValue;
-            this.ioExceptionToThrow = ioExceptionToThrow;
         }
 
         @Override
@@ -328,6 +358,14 @@ public abstract class AbstractResourceBundleLoaderTestCase extends AbstractJUnit
                 actualLoadFilePath = filePath;
                 return lastModifiedReturnValue;
             }
+        }
+
+        /**
+         * @param ioExceptionToThrow the ioExceptionToThrow to set
+         */
+        private void setIoExceptionToThrow(
+                final IOException ioExceptionToThrow) {
+            this.ioExceptionToThrow = ioExceptionToThrow;
         }
 
     }
