@@ -6,6 +6,7 @@
 env.bundleExplosionEnabled=false
 
 # True if bypassing of the client cache support should be enabled.
+# If you enable bundle explosion, you usually want to enable this as well.
 env.bypassClientCacheEnabled=false
 
 # True if you want bundle explosion initially activated for each new session. 
