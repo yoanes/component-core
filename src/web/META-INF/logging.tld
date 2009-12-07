@@ -9,6 +9,7 @@
     <uri>/au/com/sensis/mobile/web/component/logging/logging.tld</uri>
     <tag-file>
         <name>setup</name>
+        <description>Setup the logging component. Must be called in the HTML head.</description>
         <path>/META-INF/tags/au/com/sensis/mobile/web/component/logging/setup.tag</path>
     </tag-file>
     <tag>
@@ -60,7 +61,7 @@
         <description>Facade to log4j's info level logging.</description>
         <tag-class>au.com.sensis.mobile.web.component.logging.tag.Log4jInfoTag</tag-class>
         <tei-class>au.com.sensis.mobile.web.component.logging.tag.Log4jTag$Log4jTagExtraInfo</tei-class>        
-        <body-content>scriptless</body-content>
+        <body-content>empty</body-content>
         <attribute>
             <name>message</name>
             <description>Message to be logged.</description>
@@ -81,7 +82,7 @@
         <description>Facade to log4j's debug level logging.</description>
         <tag-class>au.com.sensis.mobile.web.component.logging.tag.Log4jDebugTag</tag-class>
         <tei-class>au.com.sensis.mobile.web.component.logging.tag.Log4jTag$Log4jTagExtraInfo</tei-class>        
-        <body-content>scriptless</body-content>
+        <body-content>empty</body-content>
         <attribute>
             <name>message</name>
             <description>Message to be logged.</description>

@@ -9,12 +9,12 @@
   --%>
 <%@ tag isELIgnored="false" %>
 
-<%@ attribute name="baseCompMcsPath" required="true" type="java.lang.String"%>
-
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
 <logging:info logger="${logger}" message="Entering setup.tag" />
 
-<core:script src="${baseCompMcsPath}/core/scripts/core-component.mscr"></core:script>
+<core:compMcsBasePath var="compMcsBasePath" />
+
+<core:script src="${compMcsBasePath}/core/scripts/core-component.mscr"></core:script>
 
 <core:script name="deviceInfo" type="text/javascript">
     var Device = new McsDevice(

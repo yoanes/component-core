@@ -10,26 +10,25 @@
   --%>
 <%@ tag isELIgnored="false" %>
 
-<%@ attribute name="baseCompMcsPath" required="true" type="java.lang.String"%>
-
-<logging:jsLoggerEnabled var="javascriptLoggerEnabled"/>
-
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.logging" />
 <logging:info logger="${logger}" message="Entering setup.tag" />
 
+<core:compMcsBasePath var="compMcsBasePath" />
+
+<logging:jsLoggerEnabled var="javascriptLoggerEnabled"/>
 <c:choose>
     <c:when test="${javascriptLoggerEnabled}">
         <logging:debug logger="${logger}" 
             message="javascriptLoggerEnabled is '${javascriptLoggerEnabled}'. Enabling JavaScript logger." />    
     
     	<%-- Setup components that we depend on. --%>
-    	<core:setup baseCompMcsPath="${baseCompMcsPath}"/>
+    	<core:setup />
     
     	<%-- Themes for current component. --%>
     	<%-- NOTE: none required --%>
     
     	<%-- Scripts for current component. --%>
-    	<core:script src="${baseCompMcsPath}/logging/scripts/logging-component.mscr"></core:script>
+    	<core:script src="${compMcsBasePath}/logging/scripts/logging-component.mscr"></core:script>
     
     </c:when>
     <c:otherwise>

@@ -9,6 +9,8 @@
     <uri>/au/com/sensis/mobile/web/component/core/core.tld</uri>
     <tag-file>
         <name>setup</name>
+        <description>Setup the core component. Must be called in the HTML head.</description>
+        <body-content>empty</body-content>
         <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/setup.tag</path>
     </tag-file>
     <tag>
@@ -56,4 +58,10 @@
         </attribute>
         <dynamic-attributes>true</dynamic-attributes>
     </tag>
+    <tag-file>
+        <name>compMcsBasePath</name>
+        <description>Exposes a variable containing the MCS policies base path for components, such as "/comp".</description>
+        <body-content>empty</body-content>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/compMcsBasePath.tag</path>
+    </tag-file>
 </taglib>
