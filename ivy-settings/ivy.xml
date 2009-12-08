@@ -48,6 +48,7 @@
     <publications>
         <artifact name="core-component" type="jar" ext="jar" conf="default"/>
         <artifact name="core-component-test" type="jar" ext="jar" conf="test"/>
+        <artifact name="core-component-src" type="source" ext="zip" conf="default"/>
     </publications>
 
     <dependencies>
