@@ -1,13 +1,8 @@
+<%@ tag body-content="empty" isELIgnored="false" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="core" uri="/au/com/sensis/mobile/web/component/core/core.tld"%>
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/logging/logging.tld"%>
-
-<%--
-  - Work around for Tomcat 5.0.28 to ensure that the JSP Expression Language is processed. 
-  - Configuring this in web.xml using a jsp-property-group didn't seem to work (not sure why).
-  - Should also work with Tomcat 6. 
-  --%>
-<%@ tag isELIgnored="false" %>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
 <logging:info logger="${logger}" message="Entering setup.tag" />
