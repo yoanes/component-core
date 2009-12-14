@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <!-- ======================================================================================= -->
+    <!-- Base Layout                                                                             -->
+    <!-- ======================================================================================= -->
+
+    <definition name="core.component.showcase.base" extends="testbed.base">
+
+        <put-attribute name="title" value="core-component-showcase"/>
+    </definition>
+    
+    <!-- ======================================================================================= -->
+    <!-- Core Home.                                                                              -->
+    <!-- ======================================================================================= -->
+    
+    <definition name="core.component.showcase.home" extends="core.component.showcase.base">
+
+    </definition>
+    
+
+</tiles-definitions>

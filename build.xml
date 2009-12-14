@@ -18,7 +18,7 @@
 <!--	<ant antfile="build-bootstrap.xml"/>-->
 	
 	<!-- ==================================================================================== -->
-	<!-- Import shared build scripts (so showcase required for this component). --> 
-    <import file="shared-build-scripts/src/toplevel/build-component.xml" />
+	<!-- Import shared build scripts. --> 
+    <import file="shared-build-scripts/src/toplevel/build-component-with-showcase-support.xml" />
 	
 </project>
