@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 
-<project name="core-component">
+<project name="wl-core-component">
 
     <description>Builds the core-component.</description>
 
