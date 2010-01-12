@@ -1,3 +1,7 @@
+==== Version 1.0.7 (tag: core_v1_0_7) ====
+
+Added custom autoIncId JSP tag, implemented by the AutoIncIdTag class.
+
 ==== Version 1.0.6 (tag: core_v1_0_6) ====
 
 Deliverable from iteration 1.0.6 (and 1.0.5 since I skipped that tag) 

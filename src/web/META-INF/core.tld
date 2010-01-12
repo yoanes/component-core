@@ -61,5 +61,30 @@
         <name>compMcsBasePath</name>
         <description>Exposes a variable containing the MCS policies base path for components, such as "/comp".</description>
         <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/compMcsBasePath.tag</path>
-    </tag-file>
+    </tag-file>    
+    <tag>
+        <name>autoIncId</name>
+        <description>Auto increments an identifier with a given prefix and sets it into a variable with the given name. Each call progresses through suffixes of 0, 1, ..., 9, 10, 11 ... etc.</description>
+        <tag-class>au.com.sensis.mobile.web.component.core.tag.AutoIncIdTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <description>Name of the variable to set the result into.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>prefix</name>
+            <description>Prefix for the generated identifier.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <variable>
+            <description>Variable to set the result into.</description>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <declare>true</declare>
+            <scope>AT_END</scope>
+        </variable>
+    </tag>
 </taglib>
