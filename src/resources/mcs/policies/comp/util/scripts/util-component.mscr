@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<variable-policy
-    xmlns="http://www.volantis.com/xmlns/2006/02/marlin-lpdm"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.volantis.com/xmlns/2006/02/marlin-lpdm http://www.volantis.com/schema/2006/02/marlin-lpdm.xsd">
-
+<variable-policy xmlns="http://www.volantis.com/xmlns/2006/02/marlin-lpdm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rpdm="http://www.volantis.com/xmlns/2006/02/marlin-rpdm" xmlns:struct="http://www.volantis.com/xmlns/2005/10/ThemeStruct" xsi:schemaLocation="http://www.volantis.com/xmlns/2006/02/marlin-lpdm http://www.volantis.com/schema/2006/02/marlin-lpdm.xsd">
     <type>script</type>
+    <categorization-scheme/>
     <variants>
         <variant>
             <type>null</type>
@@ -28,6 +25,7 @@
                         <device>BlackBerry-9000</device>                        
                         <device>BlackBerry-9000-4_6</device>                        
                         <device>LG-TU500</device>                                            
+                        <device>Apple</device>                                            
                     </devices>
                 </targeted>
             </selection>
@@ -41,38 +39,11 @@
                 <url>
                     <base>
                         <policy-reference>
-                            <name>/comp/core/core-scripts.mgrp</name>
+                            <name>/comp/util/util-scripts.mgrp</name>
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>core/js/core-component-default.js</relative>
-                </url>
-            </content>
-        </variant>
-        <variant>
-            <type>script</type>
-            <selection>
-                <targeted>
-                    <devices>
-                        <device>Apple</device>
-                    </devices>
-                </targeted>
-            </selection>
-            <meta-data>
-                <script>
-                    <encoding>javascript</encoding>
-                    <character-set>utf-8</character-set>
-                </script>
-            </meta-data>
-            <content>
-                <url>
-                    <base>
-                        <policy-reference>
-                            <name>/comp/core/core-scripts.mgrp</name>
-                            <type>base-url</type>
-                        </policy-reference>
-                    </base>
-                    <relative>core/js/core-component-apple.js</relative>
+                    <relative>util/js/util-component-default.js</relative>
                 </url>
             </content>
         </variant>

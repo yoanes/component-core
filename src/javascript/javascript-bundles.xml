@@ -39,4 +39,13 @@
         </bundle>
     </bundles>
     
+    <!-- Bundles for the util-component. -->    
+    <bundles basename="util-component" subpackage="util">
+        <bundle name="default">
+            <fileset dir="${src.javascript.dir}/util/device-invariant">
+                <include name="utils.js" />        
+            </fileset>
+        </bundle>
+    </bundles>
+    
 </bs:bundlesConfig>

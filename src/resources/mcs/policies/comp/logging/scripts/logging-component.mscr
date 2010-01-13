@@ -19,6 +19,12 @@
                 <targeted>
                     <devices>
                         <device>PC-Win32</device>
+                        <device>Nokia-N95</device>
+                        <device>Nokia-6120c</device>                     
+                        <device>Nokia-E51-1</device>                           
+                        <device>BlackBerry-9000</device>                        
+                        <device>BlackBerry-9000-4_6</device>                        
+                        <device>LG-TU500</device>                                            
                     </devices>
                 </targeted>
             </selection>
