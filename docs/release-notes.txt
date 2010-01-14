@@ -1,3 +1,12 @@
+==== Version 1.0.9 (tag: core_v1_0_9) ====
+
+ReportingUtilities JavaScript class: "to" method now always
+sets the "xrw=xhr" request parameter. Some phones like the Nokia 
+6120 do not allow request headers to be set
+so mootools fails to set the 'X-Requested-With header' to 'XMLHttpRequest' (and
+the browser itself doesn't set this). So we always set an additional request
+parameter corresponding to the header. This allows server side code to detect AJAX requests.  
+
 ==== Version 1.0.8 (tag: core_v1_0_8) ====
 
 Added new util subcomponent to serve up Yoanes' utils.js. Widened the list 

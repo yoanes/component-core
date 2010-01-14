@@ -78,16 +78,15 @@ var ReportingUtilities = new Class({
 				onComplete: function() {}
 			});
 			
-			var extraParams = null;
+			// Some phones like the Nokia 6120 do not allow request headers to be set
+			// so mootools fails to set the 'X-Requested-With header' to 'XMLHttpRequest' (and
+			// the browser itself doesn't set this). So we always set an additional request
+			// parameter corresponding to the header. This allows server side code to detect AJAX requests.
+			var extraParams = 'xrw=xhr';
 			
 			if($defined(optionalParams)){ 
-				extraParams = new String();
-				var first = true;
 				for(var param in optionalParams) {
-					if(!first) extraParams += '&';
-					else first = false;
-					
-					extraParams += param + '=' + optionalParams[param];
+					extraParams += '&' + param + '=' + optionalParams[param];
 				}
 			}
 			
