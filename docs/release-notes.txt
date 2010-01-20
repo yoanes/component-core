@@ -1,3 +1,7 @@
+==== Version 1.0.10 (tag: core_v1_0_10) ====
+
+Added Android-OS to MCS mscr policies.
+
 ==== Version 1.0.9 (tag: core_v1_0_9) ====
 
 ReportingUtilities JavaScript class: "to" method now always

@@ -18,6 +18,7 @@
             <selection>
                 <targeted>
                     <devices>
+                        <device>Android-OS</device>
                         <device>PC-Win32</device>
                         <device>Nokia-N95</device>
                         <device>Nokia-6120c</device>                     

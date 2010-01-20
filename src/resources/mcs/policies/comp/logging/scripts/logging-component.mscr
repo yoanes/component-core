@@ -52,6 +52,7 @@
                 <targeted>
                     <devices>
                         <device>Apple</device>
+                        <device>Android-OS</device>
                         <device>GT-I8000T-Opera9</device>
                         <device>HTC-Diamond-Opera9</device>
                         <device>HTC-TouchHD</device>
