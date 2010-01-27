@@ -4,29 +4,11 @@
     <categorization-scheme/>
     <variants>
         <variant>
-            <type>null</type>
-            <selection>
-                <targeted>
-                    <devices>
-                        <device>Master</device>
-                    </devices>
-                </targeted>
-            </selection>
-        </variant>
-        <variant>
             <type>script</type>
             <selection>
                 <targeted>
                     <devices>
-                        <device>Android-OS</device>
-                        <device>PC-Win32</device>
-                        <device>Nokia-N95</device>
-                        <device>Nokia-6120c</device>                     
-                        <device>Nokia-E51-1</device>                           
-                        <device>BlackBerry-9000</device>                        
-                        <device>BlackBerry-9000-4_6</device>                        
-                        <device>LG-TU500</device>                                            
-                        <device>Apple</device>                                            
+                        <device>Master</device>
                     </devices>
                 </targeted>
             </selection>

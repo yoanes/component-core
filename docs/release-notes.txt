@@ -1,3 +1,9 @@
+==== Version 1.0.11 (tag: core_v1_0_11) ====
+
+Volantis policies configured so that JavaScript will be served up to all devices.
+This is in preparation for someone to test targeted devices against components, the findings
+of which will serve to refine the Volantis policies.
+
 ==== Version 1.0.10 (tag: core_v1_0_10) ====
 
 Added Android-OS to MCS mscr policies.

@@ -7,28 +7,11 @@
     <type>script</type>
     <variants>
         <variant>
-            <type>null</type>
-            <selection>
-                <targeted>
-                    <devices>
-                        <device>Master</device>
-                    </devices>
-                </targeted>
-            </selection>
-        </variant>
-        <variant>
             <type>script</type>
             <selection>
                 <targeted>
                     <devices>
-                        <device>Android-OS</device>                                            
-                        <device>PC-Win32</device>
-                        <device>Nokia-N95</device>
-                        <device>Nokia-6120c</device>                     
-                        <device>Nokia-E51-1</device>                           
-                        <device>BlackBerry-9000</device>                        
-                        <device>BlackBerry-9000-4_6</device>                        
-                        <device>LG-TU500</device>                                            
+                        <device>Master</device>                                            
                     </devices>
                 </targeted>
             </selection>
@@ -47,33 +30,6 @@
                         </policy-reference>
                     </base>
                     <relative>core/js/core-component-default.js</relative>
-                </url>
-            </content>
-        </variant>
-        <variant>
-            <type>script</type>
-            <selection>
-                <targeted>
-                    <devices>
-                        <device>Apple</device>
-                    </devices>
-                </targeted>
-            </selection>
-            <meta-data>
-                <script>
-                    <encoding>javascript</encoding>
-                    <character-set>utf-8</character-set>
-                </script>
-            </meta-data>
-            <content>
-                <url>
-                    <base>
-                        <policy-reference>
-                            <name>/comp/core/core-scripts.mgrp</name>
-                            <type>base-url</type>
-                        </policy-reference>
-                    </base>
-                    <relative>core/js/core-component-apple.js</relative>
                 </url>
             </content>
         </variant>
