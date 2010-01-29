@@ -1,3 +1,11 @@
+==== Version 1.0.13 (tag: core_v1_0_13) ====
+
+AbstractDeviceConfigRegistry now implements the DeviceConfigRegistry 
+interface to facilitate mocking by unit tests. AbstractDeviceConfigRegistry
+follows a pattern of marking all non-private methods as final unless
+they are intended to be overridden, so mocking an instance of the abstract
+class using the EasyMock class extension will not work.. 
+
 ==== Version 1.0.12 (tag: core_v1_0_12) ====
 
 Added au.com.sensis.mobile.web.component.core.device.xsd and now

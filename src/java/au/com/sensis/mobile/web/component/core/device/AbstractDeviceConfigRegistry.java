@@ -27,7 +27,8 @@ import au.com.sensis.wireless.common.volantis.devicerepository.api.Device;
  *            {@link DeviceConfigType} extension for the specific configuration
  *            data.
  */
-public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType> {
+public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType>
+    implements DeviceConfigRegistry<D> {
 
     private static Logger logger =
             Logger.getLogger(AbstractDeviceConfigRegistry.class);
@@ -121,11 +122,7 @@ public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType> {
     }
 
     /**
-     * Get the configuration for the given device.
-     *
-     * @param device
-     *            Device to get the configuration from.
-     * @return configuration for the given device.
+     * {@inheritDoc}
      */
     public final D getDeviceConfig(final Device device) {
         final D deviceConfig = getDeviceConfigMap().get(device.getName());
