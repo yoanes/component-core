@@ -61,8 +61,8 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
     @Test
     public void testGetDeviceConfigWhenFound() throws Throwable {
 
-        final DeviceConfigsType expectedDeviceConfigsType =
-                setupForObjectUnderTestConstruction();
+        final DeviceConfigsType expectedDeviceConfigsType = createValidDeviceConfigsType();
+        setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
 
         EasyMock.expect(getMockDevice().getName()).andReturn(DEVICE_ID1);
 
@@ -83,7 +83,8 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
     @Test
     public void testGetDeviceConfigWhenNotFound() throws Throwable {
 
-        setupForObjectUnderTestConstruction();
+        final DeviceConfigsType expectedDeviceConfigsType = createValidDeviceConfigsType();
+        setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
 
         EasyMock.expect(getMockDevice().getName()).andReturn(DEVICE_ID2);
 
@@ -101,12 +102,106 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
 
     }
 
+    @Test
+    public void testConstructionWhenDeviceConfigContainsDuplicateDeviceId()
+            throws Throwable {
+        final DeviceConfigsType expectedDeviceConfigsType =
+                createDeviceConfigsTypeContainingDuplicateId();
+        setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
+
+        replay();
+
+        try {
+            new DeviceConfigRegistry(DEVICE_CONFIG_FILE, getMockXmlBinder(),
+                    createDefaultDeviceConfig());
+            Assert.fail("DeviceConfigRegistryException expected");
+        } catch (final DeviceConfigRegistryException e) {
+            Assert.assertEquals("DeviceConfigRegistryException has wrong message",
+                    "Device config for '" + DEVICE_CONFIG_FILE
+                            + "' contains a duplicate entry for device id '"
+                            + DEVICE_ID1 + "'", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConstructionWhenDeviceConfigFileUnmarshallsToWrongType()
+            throws Throwable {
+
+        final String expectedDeviceConfigsType = "wrong type";
+        setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
+
+        replay();
+
+        try {
+            new DeviceConfigRegistry(DEVICE_CONFIG_FILE, getMockXmlBinder(),
+                    createDefaultDeviceConfig());
+            Assert.fail("DeviceConfigRegistryException expected");
+        } catch (final DeviceConfigRegistryException e) {
+            Assert.assertEquals(
+                    "DeviceConfigRegistryException has wrong message",
+                    "Expected resource to marshall to a DeviceConfigsType but it did not. "
+                            + "Resource: '" + DEVICE_CONFIG_FILE + "'", e
+                            .getMessage());
+        }
+    }
+
+    @Test
+    public void testConstructionWhenRuntimeExceptionCaught() throws Throwable {
+
+        final URL deviceConfigUrl =
+                TestAbstractDeviceConfigRegistryTestCase.class
+                        .getResource(DEVICE_CONFIG_FILE);
+
+        Assert.assertNotNull("Could not load test file from classpath: "
+                + DEVICE_CONFIG_FILE, deviceConfigUrl);
+
+        final String expectedDeviceConfigString =
+                IOUtils.toString(TestAbstractDeviceConfigRegistryTestCase.class
+                        .getResourceAsStream(DEVICE_CONFIG_FILE));
+
+        EasyMock.expect(
+                getMockXmlBinder().unmarshall(expectedDeviceConfigString))
+                .andThrow(new RuntimeException("test"));
+
+        replay();
+
+        try {
+            new DeviceConfigRegistry(DEVICE_CONFIG_FILE, getMockXmlBinder(),
+                    createDefaultDeviceConfig());
+            Assert.fail("DeviceConfigRegistryException expected");
+        } catch (final DeviceConfigRegistryException e) {
+            Assert.assertEquals(
+                    "DeviceConfigRegistryException has wrong message",
+                    "Could not load resource from classpath: '"
+                            + DEVICE_CONFIG_FILE + "'", e
+                            .getMessage());
+        }
+    }
+
+    @Test
+    public void testConstructionWhenDeviceConfigFileNotFoundOnClasspath() throws Throwable {
+
+        replay();
+
+        try {
+            new DeviceConfigRegistry("you cannot find this file", getMockXmlBinder(),
+                    createDefaultDeviceConfig());
+            Assert.fail("DeviceConfigRegistryException expected");
+        } catch (final DeviceConfigRegistryException e) {
+            Assert.assertEquals(
+                    "DeviceConfigRegistryException has wrong message",
+                    "Could not find resource on classpath: 'you cannot find this file'"
+                    , e.getMessage());
+        }
+    }
+
     /**
      * @return
      * @throws URISyntaxException
      * @throws IOException
      */
-    private DeviceConfigsType setupForObjectUnderTestConstruction()
+    private void setupForObjectUnderTestConstruction(
+            final Object expecteDeviceConfigsType)
             throws URISyntaxException, IOException {
         final URL deviceConfigUrl =
                 TestAbstractDeviceConfigRegistryTestCase.class
@@ -119,20 +214,29 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
                 IOUtils.toString(TestAbstractDeviceConfigRegistryTestCase.class
                         .getResourceAsStream(DEVICE_CONFIG_FILE));
 
-        final DeviceConfigsType expecteDeviceConfigsType = createDeviceConfigsType();
         EasyMock.expect(getMockXmlBinder().unmarshall(expectedDeviceConfigString))
                 .andReturn(expecteDeviceConfigsType);
-        return expecteDeviceConfigsType;
     }
 
-    /**
-     *
-     */
-    private DeviceConfigsType createDeviceConfigsType() {
+    private DeviceConfigsType createValidDeviceConfigsType() {
         final DeviceConfigsType deviceConfigsType = new DeviceConfigsType();
         final DeviceConfig deviceConfig = new DeviceConfig();
         deviceConfig.setDeviceId(DEVICE_ID1);
         deviceConfigsType.getDeviceConfig().add(deviceConfig);
+        return deviceConfigsType;
+    }
+
+    private DeviceConfigsType createDeviceConfigsTypeContainingDuplicateId() {
+        final DeviceConfigsType deviceConfigsType = new DeviceConfigsType();
+
+        DeviceConfig deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(DEVICE_ID1);
+        deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
+        deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(DEVICE_ID1);
+        deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
         return deviceConfigsType;
     }
 
@@ -153,6 +257,13 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
      * {@link DeviceConfigType} extension for testing.
      */
     public static class DeviceConfig extends DeviceConfigType {
+
+    }
+
+    /**
+     * {@link DeviceConfigType} extension for testing.
+     */
+    public static class DeviceConfigWrongType extends DeviceConfigType {
 
     }
 

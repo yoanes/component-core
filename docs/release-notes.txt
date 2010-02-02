@@ -1,3 +1,9 @@
+==== Version 1.0.14 (tag: core_v1_0_14) ====
+
+AbstractDeviceConfigRegistry is now a bit more robust. Throws a DeviceConfigRegistryException
+if the device config contains a duplicate device id. AbstractDeviceConfigRegistry also now
+exclusively throws DeviceConfigRegistryExceptions instead of the generic RuntimeException.
+
 ==== Version 1.0.13 (tag: core_v1_0_13) ====
 
 AbstractDeviceConfigRegistry now implements the DeviceConfigRegistry 

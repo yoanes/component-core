@@ -66,8 +66,7 @@ public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType>
     private void loadAndCacheDeviceConfigXmlFile() {
         InputStream deviceConfigInputStream = null;
         try {
-            deviceConfigInputStream =
-                    getClass().getResourceAsStream(getDeviceConfigClasspath());
+            deviceConfigInputStream = getNonNullDeviceConfigInputStreamFromClasspath();
             final String xmlFile = IOUtils.toString(deviceConfigInputStream);
 
             final DeviceConfigsType deviceConfigsType =
@@ -75,12 +74,15 @@ public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType>
 
             initDeviceConfigMap(deviceConfigsType);
         } catch (final ClassCastException e) {
-            throw new RuntimeException(
+            throw new DeviceConfigRegistryException(
                     "Expected resource to marshall to a DeviceConfigsType but it did not. "
                             + "Resource: '" + getDeviceConfigClasspath() + "'",
                     e);
+        } catch (final DeviceConfigRegistryException e) {
+            // Prevent our own exceptions from being caught by the catchall below.
+            throw e;
         } catch (final Exception e) {
-            throw new RuntimeException(
+            throw new DeviceConfigRegistryException(
                     "Could not load resource from classpath: '"
                             + getDeviceConfigClasspath() + "'", e);
         } finally {
@@ -91,16 +93,36 @@ public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType>
 
     }
 
+    /**
+     * @return
+     */
+    private InputStream getNonNullDeviceConfigInputStreamFromClasspath() {
+        final InputStream deviceConfigInputStream =
+                getClass().getResourceAsStream(getDeviceConfigClasspath());
+        if (deviceConfigInputStream == null) {
+            throw new DeviceConfigRegistryException(
+                    "Could not find resource on classpath: '"
+                            + getDeviceConfigClasspath() + "'");
+        }
+        return deviceConfigInputStream;
+    }
+
     private void initDeviceConfigMap(final DeviceConfigsType deviceConfigsType) {
         setDeviceConfigMap(new HashMap<String, D>());
 
         for (final DeviceConfigType deviceConfig : deviceConfigsType
                 .getDeviceConfig()) {
+            if (getDeviceConfigMap().get(deviceConfig.getDeviceId()) != null) {
+                throw new DeviceConfigRegistryException("Device config for '"
+                        + getDeviceConfigClasspath()
+                        + "' contains a duplicate entry for device id '"
+                        + deviceConfig.getDeviceId() + "'");
+            }
             try {
                 getDeviceConfigMap().put(deviceConfig.getDeviceId(),
                         (D) deviceConfig);
             } catch (final ClassCastException e) {
-                throw new RuntimeException(
+                throw new DeviceConfigRegistryException(
                         "Loaded DeviceConfig is of the wrong type: "
                                 + deviceConfig.getClass(), e);
             }

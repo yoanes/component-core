@@ -19,7 +19,8 @@ public interface DeviceConfigRegistry<D extends DeviceConfigType> {
      * @param device
      *            Device to get the configuration from.
      * @return configuration for the given device.
+     * @throws DeviceConfigRegistryException Thrown if any error occurs.
      */
-    D getDeviceConfig(final Device device);
+    D getDeviceConfig(final Device device) throws DeviceConfigRegistryException;
 
 }
