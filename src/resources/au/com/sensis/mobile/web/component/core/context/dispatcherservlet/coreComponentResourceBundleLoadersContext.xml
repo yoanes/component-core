@@ -24,9 +24,30 @@
         <property name="explodedBundleMemberNameReplacement" value="/js/explodedBundles/$2" />
     </bean>
     
-    <bean name="core.comp.resourceBundleLoader" 
-        class="au.com.sensis.mobile.web.component.core.bundle.ClasspathResourceBundleLoader"
-        parent="core.comp.abstractResourceBundleLoader"
-        init-method="validateState"/>
+    <bean name="core.comp.resourceBundleLoader" class="au.com.sensis.mobile.web.component.core.bundle.ChainedResourceBundleLoader">
+        <constructor-arg index="0">
+            <list>
+
+                <!-- For a production app, this resource loader will find everything we need. -->
+                <bean class="au.com.sensis.mobile.web.component.core.bundle.ClasspathResourceBundleLoader"
+                    parent="core.comp.abstractResourceBundleLoader"
+                    init-method="validateState" />
+                 
+                 <!-- 
+                   - For a showcase app that has been deployed with an exploded component JAR, this resource
+                   - will find the exploded resources (the first loader above will fail). 
+                   -->
+                <bean class="au.com.sensis.mobile.web.component.core.bundle.ServletContextResourceBundleLoader"
+                    parent="core.comp.abstractResourceBundleLoader"
+                    init-method="validateState">
+                    <property name="servletContextPathPrefix" value="/WEB-INF/"/>    
+                    <property name="servletContext">
+                        <bean class="org.springframework.web.context.support.ServletContextFactoryBean"/>
+                    </property>    
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+     
     
 </beans>

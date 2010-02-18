@@ -7,6 +7,7 @@ import java.net.URL;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,6 +21,8 @@ import org.junit.Test;
 public class ServletContextResourceBundleLoaderTestCase
     extends AbstractResourceBundleLoaderTestCase {
 
+    private static final String DEFAULT_PREFIX = "/WEB-INF/classes/";
+
     private ServletContext mockServletContext;
 
     /**
@@ -32,41 +35,65 @@ public class ServletContextResourceBundleLoaderTestCase
     public void setUp() throws Exception {
         ((ServletContextResourceBundleLoader) getObjectUnderTest())
                 .setServletContext(getMockServletContext());
+        ((ServletContextResourceBundleLoader) getObjectUnderTest())
+                .setServletContextPathPrefix(DEFAULT_PREFIX);
     }
 
     @Test
     public void testLoadFileWhenSuccessful() throws Throwable {
+        final String requestedFilePath = "au/com/sensis/resourceThatExists.xml";
+        final String[] testPathPrefixes =
+                { null, StringUtils.EMPTY, "/WEB-INF/classes/" };
+        final String[] expectedResourcePath =
+            { requestedFilePath, requestedFilePath,
+                "/WEB-INF/classes/" + requestedFilePath};
 
-        EasyMock.expect(
-                getMockServletContext().getResourceAsStream(
-                        "/WEB-INF/resourceThatExists.xml")).andReturn(
-                getMockInputStream());
+        for (int i = 0; i < testPathPrefixes.length; i++) {
 
-        replay();
+            ((ServletContextResourceBundleLoader) getObjectUnderTest())
+                    .setServletContextPathPrefix(testPathPrefixes[i]);
 
-        final InputStream actualInputStream =
-                getObjectUnderTest()
-                        .loadFile("/WEB-INF/resourceThatExists.xml");
-        Assert.assertSame("actualInputStream is wrong", getMockInputStream(),
-                actualInputStream);
+            EasyMock.expect(
+                    getMockServletContext().getResourceAsStream(
+                            expectedResourcePath[i])).andReturn(
+                    getMockInputStream());
+
+            replay();
+
+            final InputStream actualInputStream =
+                    getObjectUnderTest().loadFile(
+                            requestedFilePath);
+            Assert.assertSame("actualInputStream is wrong for test " + i,
+                    getMockInputStream(), actualInputStream);
+
+            verify();
+
+            // Reset mocks prior to next iteration.
+            setReplayed(false);
+            reset();
+        }
     }
 
     @Test
     public void testLoadFileWhenUnsuccessful() throws Throwable {
 
-        final String filePath = "/I don't exist";
-        EasyMock.expect(getMockServletContext().getResourceAsStream(filePath))
-                .andReturn(null);
+        final String fileResourcePath = "/I don't exist";
+        EasyMock.expect(
+                getMockServletContext().getResourceAsStream(
+                        DEFAULT_PREFIX + fileResourcePath)).andReturn(null);
 
         replay();
 
         try {
-            getObjectUnderTest().loadFile(filePath);
+            getObjectUnderTest().loadFile(fileResourcePath);
             Assert.fail("IOException expected.");
         } catch (final IOException e) {
             Assert.assertEquals("IOException has wrong message",
-                    "Failed to load file from servlet context: '" + filePath + "'", e
-                            .getMessage());
+                    "Failed to load file from servlet context: '"
+                            + DEFAULT_PREFIX + fileResourcePath
+                            + "'. Prefix is '" + DEFAULT_PREFIX
+                            + "'. Requested file is '" + fileResourcePath
+                            + "'.", e.getMessage());
         }
     }
 
@@ -82,18 +109,36 @@ public class ServletContextResourceBundleLoaderTestCase
                 + expectedResourceUrl,
                 "file", expectedResourceUrl.getProtocol());
 
-        final String requestedFilePath = "/WEB-INF/resourceThatExists.xml";
-        EasyMock.expect(
-                getMockServletContext().getResource(
-                        "/WEB-INF/resourceThatExists.xml")).andReturn(
-                expectedResourceUrl);
 
-        replay();
+        final String requestedFilePath = "au/com/sensis/resourceThatExists.xml";
+        final String[] testPathPrefixes =
+                { null, StringUtils.EMPTY, "/WEB-INF/classes/" };
+        final String[] expectedResourcePath =
+            { requestedFilePath, requestedFilePath,
+                "/WEB-INF/classes/" + requestedFilePath};
 
-        final File expectedFile = new File(expectedResourceUrl.getFile());
+        for (int i = 0; i < testPathPrefixes.length; i++) {
 
-        Assert.assertEquals("getFileLastModified time is wrong", expectedFile.lastModified(),
-                getObjectUnderTest().getFileLastModified(requestedFilePath));
+            ((ServletContextResourceBundleLoader) getObjectUnderTest())
+                .setServletContextPathPrefix(testPathPrefixes[i]);
+
+            EasyMock.expect(
+                    getMockServletContext().getResource(
+                            expectedResourcePath[i])).andReturn(
+                    expectedResourceUrl);
+
+            replay();
+
+            final File expectedFile = new File(expectedResourceUrl.getFile());
+
+            Assert.assertEquals("getFileLastModified time is wrong for test " + i,
+                    expectedFile.lastModified(),
+                    getObjectUnderTest().getFileLastModified(requestedFilePath));
+
+            // Reset mocks prior to next iteration.
+            setReplayed(false);
+            reset();
+        }
     }
 
     @Test
@@ -105,9 +150,11 @@ public class ServletContextResourceBundleLoaderTestCase
             Assert.fail("IOException expected.");
         } catch (final IOException e) {
             Assert.assertEquals("IOException has wrong message",
-                    "Failed to load file from servlet context: '" + fileResourcePath
-                            + "'.", e
-                            .getMessage());
+                    "Failed to load file from servlet context: '"
+                            + DEFAULT_PREFIX + fileResourcePath
+                            + "'. Prefix is '" + DEFAULT_PREFIX
+                            + "'. Requested file is '" + fileResourcePath
+                            + "'.", e.getMessage());
         }
     }
 

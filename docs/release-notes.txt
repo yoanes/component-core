@@ -1,3 +1,16 @@
+==== Version 1.0.17 (tag: core_v1_0_17) ====
+
+Fixes "CUI-79: Component Showcase Deployed with expanded jar - Hotswapped JavaScript files are ignored by Tomcat".
+
+ServletContextResourceBundleLoader enhanced to support an injected path prefix. 
+
+coreComponentResourceBundleLoadersContext.xml now configures core.comp.resourceBundleLoader
+to be a ChainedResourceBundleLoader by default that contains a chain of
+ClasspathResourceBundleLoader followed by a ServletContextResourceBundleLoader . Allows JavaScript
+to be looked up under the classpath first, then if this fails, looked up in an JAR expanded location (WEB-INF/). 
+This allows for hot deploy of JavaScript, unlike the ClasspathResourceBundleLoader which is susceptible to class 
+loader caching (eg. in Tomcat).
+
 ==== Version 1.0.16 (tag: core_v1_0_16) ====
 
 Added XmlHttpRequestDetector. New coreComponentUtilContext.xml defines a XmlHttpRequestDetector bean

@@ -7,6 +7,8 @@ import java.net.URLConnection;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  * {@link AbstractResourceBundleLoader} that loads resource bundles from from
@@ -19,22 +21,36 @@ public class ServletContextResourceBundleLoader extends AbstractResourceBundleLo
 
     private ServletContext servletContext;
 
+    private String servletContextPathPrefix;
+
     /**
      * {@inheritDoc}
      */
     @Override
     protected InputStream loadFile(final String servletContextFileName)
-        throws IOException {
+            throws IOException {
         final InputStream loadedFileInputStream =
-                getServletContext().getResourceAsStream(servletContextFileName);
+                getServletContext().getResourceAsStream(
+                        getFullServletContextFilePath(servletContextFileName));
 
         if (loadedFileInputStream != null) {
             return loadedFileInputStream;
         } else {
-            throw new IOException(
-                    "Failed to load file from servlet context: '"
-                            + servletContextFileName + "'");
+            throw new IOException("Failed to load file from servlet context: '"
+                    + getFullServletContextFilePath(servletContextFileName)
+                    + "'. Prefix is '" + getServletContextPathPrefix()
+                    + "'. Requested file is '" + servletContextFileName + "'.");
         }
+    }
+
+    private String getFullServletContextFilePath(
+            final String servletContextFileName) {
+        if (StringUtils.isNotBlank(getServletContextPathPrefix())) {
+            return getServletContextPathPrefix() + servletContextFileName;
+        } else {
+            return servletContextFileName;
+        }
+
     }
 
     /**
@@ -58,16 +74,33 @@ public class ServletContextResourceBundleLoader extends AbstractResourceBundleLo
     @Override
     protected long getFileLastModified(final String servletContextFileName)
             throws IOException {
-        final URL fileUrl = getServletContext().getResource(servletContextFileName);
+        final URL fileUrl =
+                getServletContext().getResource(
+                        getFullServletContextFilePath(servletContextFileName));
 
         if (fileUrl != null) {
             final URLConnection fileURlConnection = fileUrl.openConnection();
             return fileURlConnection.getLastModified();
         } else {
-            throw new IOException(
-                    "Failed to load file from servlet context: '" + servletContextFileName
-                            + "'.");
+            throw new IOException("Failed to load file from servlet context: '"
+                    + getFullServletContextFilePath(servletContextFileName)
+                    + "'. Prefix is '" + getServletContextPathPrefix()
+                    + "'. Requested file is '" + servletContextFileName + "'.");
         }
 
+    }
+
+    /**
+     * @return the servletContextPathPrefix
+     */
+    private String getServletContextPathPrefix() {
+        return servletContextPathPrefix;
+    }
+
+    /**
+     * @param servletContextPathPrefix the servletContextPathPrefix to set
+     */
+    public void setServletContextPathPrefix(final String servletContextPathPrefix) {
+        this.servletContextPathPrefix = servletContextPathPrefix;
     }
 }
