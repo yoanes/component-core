@@ -9,6 +9,7 @@
 
 <core:compMcsBasePath var="compMcsBasePath" />
 
+<core:script src="${compMcsBasePath}/core/scripts/viewport.mscr"></core:script>
 <core:script src="${compMcsBasePath}/core/scripts/core-component.mscr"></core:script>
 
 <core:script name="deviceInfo" type="text/javascript">
