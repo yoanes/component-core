@@ -3,11 +3,11 @@
 ########################################################
 
 # True if bundle explosion support should be enabled.
-env.bundleExplosionEnabled=true
+env.bundleExplosionEnabled=false
 
 # True if bypassing of the client cache support should be enabled.
 # If you enable bundle explosion, you usually want to enable this as well.
-env.bypassClientCacheEnabled=true
+env.bypassClientCacheEnabled=false
 
 # True if you want bundle explosion initially activated for each new session. 
 # Only honoured if env.bundleExplosionEnabled=true. 

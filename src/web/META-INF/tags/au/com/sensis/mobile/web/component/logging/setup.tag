@@ -6,7 +6,7 @@
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/logging/logging.tld"%>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.logging" />
-<logging:info logger="${logger}" message="Entering setup.tag" />
+<logging:debug logger="${logger}" message="Entering setup.tag" />
 
 <core:compMcsBasePath var="compMcsBasePath" />
 
@@ -32,4 +32,4 @@
     </c:otherwise>
 </c:choose>
 
-<logging:info logger="${logger}" message="Exiting setup.tag" />
+<logging:debug logger="${logger}" message="Exiting setup.tag" />

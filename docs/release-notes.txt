@@ -1,3 +1,13 @@
+==== Version 1.0.18 (tag: core_v1_0_18) ====
+
+Fixed:
+- CUI-133 Auto Complete - refactor JavaScript EMS interface out of map component
+    - Created new ems sub-component and created tag files and MCS policies for it. Moved EMS
+      related MCS policies from the map component into here.
+    
+Other changes:    
+- Entry and exit logging in tag files now occurs at debug level instead of info level.
+
 ==== Version 1.0.17 (tag: core_v1_0_17) ====
 
 Fixes "CUI-79: Component Showcase Deployed with expanded jar - Hotswapped JavaScript files are ignored by Tomcat".

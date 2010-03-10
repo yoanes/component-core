@@ -5,11 +5,13 @@
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/logging/logging.tld"%>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
-<logging:info logger="${logger}" message="Entering setup.tag" />
+<logging:debug logger="${logger}" message="Entering setup.tag" />
 
 <core:compMcsBasePath var="compMcsBasePath" />
 
-<core:script src="${compMcsBasePath}/core/scripts/viewport.mscr"></core:script>
+<%-- TODO: add back if you decide that we do need this.--%>
+<%--<core:script src="${compMcsBasePath}/core/scripts/viewport.mscr"></core:script>--%>
+
 <core:script src="${compMcsBasePath}/core/scripts/core-component.mscr"></core:script>
 
 <core:script name="deviceInfo" type="text/javascript">
@@ -30,4 +32,4 @@
     );
 </core:script>
 
-<logging:info logger="${logger}" message="Exiting setup.tag" />
+<logging:debug logger="${logger}" message="Exiting setup.tag" />
