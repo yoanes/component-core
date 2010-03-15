@@ -3,6 +3,7 @@ package au.com.sensis.mobile.web.component.core.device;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
@@ -147,12 +148,28 @@ public abstract class AbstractDeviceConfigRegistry<D extends DeviceConfigType>
      * {@inheritDoc}
      */
     public final D getDeviceConfig(final Device device) {
-        final D deviceConfig = getDeviceConfigMap().get(device.getName());
-        if (deviceConfig != null) {
-            return deviceConfig;
-        } else {
-            return getDefaultDeviceConfig();
+        final Iterator<String> deviceNameHierarchyIterator =
+                device.getDeviceNameHierarchyIterator();
+        while (deviceNameHierarchyIterator.hasNext()) {
+            final String currentDeviceName = deviceNameHierarchyIterator.next();
+            final D deviceConfig = getDeviceConfigMap().get(currentDeviceName);
+            if (deviceConfig != null) {
+                if (logger.isDebugEnabled()) {
+                    logger
+                            .debug("Returning config for device: '"
+                                    + device.getName()
+                                    + "'. Actual config name matched (possibly a parent device): '"
+                                    + currentDeviceName + "'");
+                }
+                return deviceConfig;
+            }
         }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("No config found for device or its parents: '" + device.getName()
+                    + "'");
+        }
+        return getDefaultDeviceConfig();
     }
 
     private D getDefaultDeviceConfig() {

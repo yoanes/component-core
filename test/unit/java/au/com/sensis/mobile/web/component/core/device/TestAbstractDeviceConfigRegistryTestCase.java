@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
 
 import org.apache.commons.io.IOUtils;
 import org.easymock.EasyMock;
@@ -28,8 +30,12 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
     private static final String DEVICE_CONFIG_FILE
         = "/au/com/sensis/mobile/web/component/core/device/test-device-config.xml";
 
-    private static final String DEVICE_ID1 = "device1";
-    private static final String DEVICE_ID2 = "device2";
+    private static final String LEAF_NODE_DEVICE_ID1 = "device1";
+    private static final String PARENT_DEVICE_ID1 = "parentDevice2";
+    private static final String LEAF_NODE_DEVICE_ID2 = "device2";
+    private static final String DEVICE_ID_NOT_FOUND = "notFoundId";
+    private static final String DEVICE_ID_NOT_FOUND_PARENT = "parentNotFoundId";
+    private static final String DEFAULT_DEVICE_ID = "defaultDevice";
 
     private XMLBinder mockXmlBinder;
 
@@ -54,17 +60,23 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
 
     private DeviceConfig createDefaultDeviceConfig() {
         final DeviceConfig deviceConfig = new DeviceConfig();
-        deviceConfig.setDeviceId(DEVICE_ID2);
+        deviceConfig.setDeviceId(DEFAULT_DEVICE_ID);
         return deviceConfig;
     }
 
     @Test
     public void testGetDeviceConfigWhenFound() throws Throwable {
 
-        final DeviceConfigsType expectedDeviceConfigsType = createValidDeviceConfigsType();
+        final DeviceConfigsType expectedDeviceConfigsType
+            = createValidDeviceConfigsTypeContainingOnlyLeafNodes();
         setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
 
-        EasyMock.expect(getMockDevice().getName()).andReturn(DEVICE_ID1);
+        EasyMock.expect(getMockDevice().getDeviceNameHierarchyIterator()).andReturn(
+                createValidDeviceNameHierarchyIterator()).atLeastOnce();
+
+        // Expectation to cover off potential debug logging.
+        EasyMock.expect(getMockDevice().getName()).andReturn(
+                LEAF_NODE_DEVICE_ID1).anyTimes();
 
         replay();
 
@@ -75,18 +87,57 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
 
         final DeviceConfig actualDeviceConfig =
                 getObjectUnderTest().getDeviceConfig(getMockDevice());
-        Assert.assertSame("message", expectedDeviceConfigsType.getDeviceConfig().get(0),
+        Assert.assertSame("message", expectedDeviceConfigsType.getDeviceConfig().get(1),
                 actualDeviceConfig);
 
     }
 
     @Test
-    public void testGetDeviceConfigWhenNotFound() throws Throwable {
+    public void testGetDeviceConfigWhenParentFound() throws Throwable {
 
-        final DeviceConfigsType expectedDeviceConfigsType = createValidDeviceConfigsType();
+        final DeviceConfigsType expectedDeviceConfigsType
+            = createValidDeviceConfigsTypeContainingParentId();
         setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
 
-        EasyMock.expect(getMockDevice().getName()).andReturn(DEVICE_ID2);
+        EasyMock.expect(getMockDevice().getDeviceNameHierarchyIterator()).andReturn(
+                createValidDeviceNameHierarchyIterator()).atLeastOnce();
+
+        // Expectation to cover off potential debug logging.
+        EasyMock.expect(getMockDevice().getName()).andReturn(
+                LEAF_NODE_DEVICE_ID1).anyTimes();
+
+        replay();
+
+        // Due to the constructor invoking mocks, we must instantiate
+        // the object under test in this method instead of in the setup method.
+        setObjectUnderTest(new DeviceConfigRegistry(DEVICE_CONFIG_FILE,
+                getMockXmlBinder(), createDefaultDeviceConfig()));
+
+        final DeviceConfig actualDeviceConfig =
+            getObjectUnderTest().getDeviceConfig(getMockDevice());
+        Assert.assertSame("message", expectedDeviceConfigsType.getDeviceConfig().get(0),
+                actualDeviceConfig);
+
+    }
+
+    private Iterator<String> createValidDeviceNameHierarchyIterator() {
+        return Arrays.asList(LEAF_NODE_DEVICE_ID1, PARENT_DEVICE_ID1).iterator();
+    }
+
+    @Test
+    public void testGetDeviceConfigWhenNotFound() throws Throwable {
+
+        final DeviceConfigsType expectedDeviceConfigsType
+            = createValidDeviceConfigsTypeContainingOnlyLeafNodes();
+        setupForObjectUnderTestConstruction(expectedDeviceConfigsType);
+
+        EasyMock.expect(getMockDevice().getDeviceNameHierarchyIterator()).andReturn(
+                Arrays.asList(DEVICE_ID_NOT_FOUND, DEVICE_ID_NOT_FOUND_PARENT).iterator())
+                    .atLeastOnce();
+
+        // Expectation to cover off potential debug logging.
+        EasyMock.expect(getMockDevice().getName()).andReturn(
+                DEVICE_ID_NOT_FOUND).anyTimes();
 
         replay();
 
@@ -119,7 +170,7 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
             Assert.assertEquals("DeviceConfigRegistryException has wrong message",
                     "Device config for '" + DEVICE_CONFIG_FILE
                             + "' contains a duplicate entry for device id '"
-                            + DEVICE_ID1 + "'", e.getMessage());
+                            + LEAF_NODE_DEVICE_ID1 + "'", e.getMessage());
         }
     }
 
@@ -218,11 +269,31 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
                 .andReturn(expecteDeviceConfigsType);
     }
 
-    private DeviceConfigsType createValidDeviceConfigsType() {
+    private DeviceConfigsType createValidDeviceConfigsTypeContainingOnlyLeafNodes() {
         final DeviceConfigsType deviceConfigsType = new DeviceConfigsType();
-        final DeviceConfig deviceConfig = new DeviceConfig();
-        deviceConfig.setDeviceId(DEVICE_ID1);
+
+        DeviceConfig deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(LEAF_NODE_DEVICE_ID2);
         deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
+        deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(LEAF_NODE_DEVICE_ID1);
+        deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
+        return deviceConfigsType;
+    }
+
+    private DeviceConfigsType createValidDeviceConfigsTypeContainingParentId() {
+        final DeviceConfigsType deviceConfigsType = new DeviceConfigsType();
+
+        DeviceConfig deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(PARENT_DEVICE_ID1);
+        deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
+        deviceConfig = new DeviceConfig();
+        deviceConfig.setDeviceId(LEAF_NODE_DEVICE_ID2);
+        deviceConfigsType.getDeviceConfig().add(deviceConfig);
+
         return deviceConfigsType;
     }
 
@@ -230,11 +301,11 @@ public class TestAbstractDeviceConfigRegistryTestCase extends
         final DeviceConfigsType deviceConfigsType = new DeviceConfigsType();
 
         DeviceConfig deviceConfig = new DeviceConfig();
-        deviceConfig.setDeviceId(DEVICE_ID1);
+        deviceConfig.setDeviceId(LEAF_NODE_DEVICE_ID1);
         deviceConfigsType.getDeviceConfig().add(deviceConfig);
 
         deviceConfig = new DeviceConfig();
-        deviceConfig.setDeviceId(DEVICE_ID1);
+        deviceConfig.setDeviceId(LEAF_NODE_DEVICE_ID1);
         deviceConfigsType.getDeviceConfig().add(deviceConfig);
 
         return deviceConfigsType;

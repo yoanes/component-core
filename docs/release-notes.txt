@@ -1,3 +1,11 @@
+==== Version 1.0.19 (tag: core_v1_0_19) ====
+
+AbstractDeviceConfigRegistry.getDeviceConfig will now try to look up parent/fallback device
+names in the config until a match is found. This allows the config to defince ids for
+generic device categories like "Apple" instead of specific device names like "Apple-iphone".
+
+Now depends on sdpCommon-volantis 0.6-007 explicitly.
+
 ==== Version 1.0.18 (tag: core_v1_0_18) ====
 
 Fixed:
