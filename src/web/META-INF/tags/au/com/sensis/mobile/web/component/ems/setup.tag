@@ -11,8 +11,6 @@
 <core:compMcsBasePath var="compMcsBasePath" />
 
 <%-- Scripts for current component. --%>
-<%-- TODO: Openlayers to be removed after EMS prod drop on 12 Mar 2010. --%>
-<core:script src="${compMcsBasePath}/ems/scripts/OpenLayers.mscr"></core:script>
 <core:script src="${compMcsBasePath}/ems/scripts/EMS.mscr"></core:script>
 <core:script src="${compMcsBasePath}/ems/scripts/CommMode.mscr"></core:script>
 
