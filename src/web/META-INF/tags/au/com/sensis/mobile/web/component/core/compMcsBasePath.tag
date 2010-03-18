@@ -16,7 +16,7 @@
     description="Variable in which to store the MCS policies base path for components." %>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
-<logging:info logger="${logger}" message="Entering compMcsBasePath.tag" />
+<logging:debug logger="${logger}" message="Entering compMcsBasePath.tag" />
 
 <%-- Set the default resource bundle for the current tag file. --%>    
 <fmt:setBundle basename="au.com.sensis.mobile.web.component.core.core-component" />    
@@ -34,4 +34,4 @@
     <fmt:message key="comp.mcs.base.path"></fmt:message>
 </c:set>
 
-<logging:info logger="${logger}" message="Exiting compMcsBasePath.tag" />
+<logging:debug logger="${logger}" message="Exiting compMcsBasePath.tag" />
