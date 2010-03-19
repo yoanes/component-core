@@ -1,3 +1,7 @@
+==== Version 1.0.22 (tag: core_v1_0_22) ====
+
+JavaScript logger no longer enabled in sandpit-test environment.
+
 ==== Version 1.0.21 (tag: core_v1_0_21) ====
 
 compMcsBasePath.tag updated to log entry and exit at debug level instead of info level. 
