@@ -1,3 +1,28 @@
+==== Version 1.0.24 (tag: core_v1_0_24) ====
+
+All Volantis mscr files made as general as possible. ie. serve up JavaScript to the "Master"
+variant if possible. Components that depend on the core setup tags (eg. core:setup, ems:setup etc.)
+should check their own device-config.xml to determine whether or not to actually invoke
+the core setup tags. Example from the map component:
+
+<c:if test="${not empty map && map.mapImageRetrievalDeferredToClient}">
+    <%-- Setup components that we depend on. --%>
+    <core:setup />
+    <ems:setup />
+    <util:setup />
+    <logging:setup />
+
+    .
+    .
+    .
+</c:if>
+
+This solution is required due to:
+1. Each component has a different set of devices that they wish to target.
+2. If we were to configure the core component's mscr files to target the superset of devices
+   required by all components, it may result in some devices being served JavaScript that they
+   shouldn't be.  
+
 ==== Version 1.0.23 (tag: core_v1_0_23) ====
 
 Implemented:
