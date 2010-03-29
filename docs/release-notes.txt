@@ -1,3 +1,52 @@
+==== Version 1.0.23 (tag: core_v1_0_23) ====
+
+Implemented:
+- CUI-167: Core component - device-config.xml to support configuration of device OS versions
+    - au.com.sensis.mobile.web.component.core.device.xsd modified to support the following 
+      matching algorithm:
+      1. The Device's name is matched against the IdentifiedDeviceConfig elements (using
+         a Map style lookup).
+      2. If an IdentifiedDeviceConfig is found, the Device's userAgent is matched against
+         each UserAgentDeviceConfig's regular expressionn in the IdentifiedDeviceConfig.
+      3. If a UserAgentDeviceConfig is matched, return its AbstractDeviceConfig. Otherwise
+         return the IdentifiedDeviceConfig's AbstractDeviceConfig.
+      4. If no IdentifiedDeviceConfig was matched, return the defaultDeviceConfig
+         defined in your device-config.xml.
+         
+Upgrade Notes:
+- AbstractDeviceConfigRegistry constructor no longer accepts a defaultDeviceConfig.
+  The default is now configured in device-config.xml.
+- au.com.sensis.mobile.web.component.core.device.xsd has changed. This means you must:
+
+  a) Delete the following files from your component project:
+  
+    src/resources/xjb/generated/*.xjb 
+
+  b) Manually get the following files from the core component project and
+     and copy them to the corresponding paths in your component project.
+  
+    b.1) src/resources/au/com/sensis/mobile/web/component/core/device/au.com.sensis.mobile.web.component.core.device.xsd
+    
+    b.2) src/resources/xjb/generated/au.com.sensis.mobile.web.component.core.device.xjb
+     
+  c) Run the following target in your component project:
+  
+    ant device-config-xjc
+    
+  d) In Eclipse, refresh the paths in your component project that corresponds to the following paths:
+  
+    d.1) src/java/au/com/sensis/mobile/web/component/core/device/generated
+    
+    d:2) src/resources/xjb/generated/
+    
+     These generated files should be committed to your project.
+    
+- Update your device-config.xml XSD file (eg. au.com.sensis.mobile.web.component.map.device.xsd) to 
+  conform to the new core XSD. In particular, DeviceConfig has been renamed to AbstractDeviceConfig.    
+- Update your device-config.xml to conform to the new schema.
+- Now depends on sdpCommon-volantis 0.6-008 so make sure you don't have old libs lying around
+  after an ivy resolve.
+
 ==== Version 1.0.22 (tag: core_v1_0_22) ====
 
 JavaScript logger no longer enabled in sandpit-test environment.
