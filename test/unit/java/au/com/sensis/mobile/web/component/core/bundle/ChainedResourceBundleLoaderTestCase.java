@@ -24,7 +24,7 @@ public class ChainedResourceBundleLoaderTestCase extends AbstractJUnit4TestCase 
     private static final String LOADER_FAILED_WILL_TRY_NEXT_MSG =
             "ResourceBundleLoader at index 0 threw an exception for requested bundle '"
                     + BUNDLE_NAME
-                    + "'. Will try next ResourceBundleLoader in the chain.";
+                    + "'. Message is 'test'. Will try next ResourceBundleLoader in the chain.";
     private static final String LAST_LOADER_FAILED =
             "The last ResourceBundleLoader in the chain (index 1) threw an exception "
                     + "for requested bundle '" + BUNDLE_NAME + "'. Aborting.";
@@ -486,7 +486,7 @@ public class ChainedResourceBundleLoaderTestCase extends AbstractJUnit4TestCase 
                 getMockLogger(ChainedResourceBundleLoader.class).isEnabledFor(
                         Level.WARN)).andReturn(Boolean.TRUE).atLeastOnce();
         getMockLogger(ChainedResourceBundleLoader.class).warn(
-                LOADER_FAILED_WILL_TRY_NEXT_MSG, getExpectedException());
+                LOADER_FAILED_WILL_TRY_NEXT_MSG);
     }
 
     private void recordeGetBundleExploderLastModifiedSuccess(

@@ -1,3 +1,13 @@
+==== Version 1.0.26 (tag: core_v1_0_26) ====
+
+ChainedResourceBundleLoader no longer logs the exception stack trace when an intermediate
+ResourceBundleLoader fails to load the requested resource. This eliminates frequent, expected
+stack traces from being logged in dev environments. This is a low risk measure for prod 
+since these exceptions should _never_, _ever_ happen in prod.
+
+Upgrade notes:
+- The upgrade should be transparent.
+
 ==== Version 1.0.25 (tag: core_v1_0_25) ====
 
 Fixes:

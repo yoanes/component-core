@@ -136,11 +136,15 @@ public class ChainedResourceBundleLoader implements ResourceBundleLoader {
 
     private void logIntermediateResourceBundleLoaderFailedMessage(
             final String bundleName, final int i, final Exception e) {
-        logger.warn("ResourceBundleLoader at index " + i + " threw an "
-                + "exception for requested bundle '"
-                + bundleName
-                + "'. Will try next ResourceBundleLoader "
-                + "in the chain.", e);
+        if (logger.isEnabledFor(Level.WARN)) {
+            // NOTE: do not pass the exception to the logger as this exception
+            // is expected to occur frequently in dev but NEVER in prod.
+            logger.warn("ResourceBundleLoader at index " + i + " threw an "
+                    + "exception for requested bundle '" + bundleName
+                    + "'. Message is '" + e.getMessage()
+                    + "'. Will try next ResourceBundleLoader "
+                    + "in the chain.");
+        }
     }
 
     /**
@@ -196,10 +200,8 @@ public class ChainedResourceBundleLoader implements ResourceBundleLoader {
                                     resourceName, i, e);
                     throw ioException;
                 } else {
-                    if (logger.isEnabledFor(Level.WARN)) {
-                        logIntermediateResourceBundleLoaderFailedMessage(
-                                resourceName, i, e);
-                    }
+                    logIntermediateResourceBundleLoaderFailedMessage(
+                            resourceName, i, e);
                     ++i;
                 }
             }
