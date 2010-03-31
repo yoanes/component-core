@@ -34,7 +34,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>core/js/core-component-default.js</relative>
+                    <relative>core/js/core-component-default-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>

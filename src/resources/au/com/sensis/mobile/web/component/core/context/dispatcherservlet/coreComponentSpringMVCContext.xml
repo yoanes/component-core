@@ -40,11 +40,20 @@
         <property name="resourceNameRequestUriPrefix" value="@{core.env.context.root.component.prefix}"/>
         
         <!--
-          - Allow clients to use cached response for about 10 years so that they don't always have to 
-          - re-validate the cached copy. This relies on new deployments serving up JS files from a new, unique URL.
-          - This in turn affects all Volantis *.mscr files.  
+          - Allow clients to use a cached response for about 1 year so that they don't always have to 
+          - re-validate the cached copy. Note that you should not set to a value greater
+          - than a year. See http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.21 
+          -
+          - NOTE: This depends on a feature of the shared build scripts (added in wl-build-scripts 1.0.10)
+          - which generates JavaScript bundles that include the build version in their bundle names.
+          - This ensures that new deployments will serve up JS files from a new, unique URL (and thus
+          - caching older versions indefinitely will be safe).
+          - Also note that we rely on each component's mscr file to include a project version token
+          - in JavaScript file names. eg:
+          - 
+          - <relative>map/js/map-component-iphone-@project.version.complete@.js</relative>  
           -->
-        <!-- <property name="cacheSeconds" value="315360000"/>-->
+        <property name="cacheSeconds" value="31536000"/>
     </bean>
     
     <bean id="core.comp.abstractGetJavaScriptBundle" 
@@ -67,6 +76,12 @@
         class="au.com.sensis.mobile.web.component.core.bundle.ExplodedBundleMemberResourceLoaderController"
         parent="core.comp.abstractResourceBundleLoaderController"
         init-method="validateState">
+        
+        <!-- 
+          - Clients should not cache bundle members since the names of these files do not include
+          - the component version number.
+          -->
+        <property name="cacheSeconds" value="-1"/>
     </bean>
     
 </beans>

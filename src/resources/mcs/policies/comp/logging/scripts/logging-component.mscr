@@ -31,7 +31,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>logging/js/logging-component-default.js</relative>
+                    <relative>logging/js/logging-component-default-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>
@@ -65,7 +65,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>logging/js/logging-component-apple.js</relative>
+                    <relative>logging/js/logging-component-apple-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>
@@ -98,7 +98,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>logging/js/logging-component-ie.js</relative>
+                    <relative>logging/js/logging-component-ie-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>

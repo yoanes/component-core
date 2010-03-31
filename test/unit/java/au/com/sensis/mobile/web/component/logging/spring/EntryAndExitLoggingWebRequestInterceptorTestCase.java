@@ -55,7 +55,7 @@ public class EntryAndExitLoggingWebRequestInterceptorTestCase extends AbstractJU
 
         expectedLogger = Logger.getLogger(EntryAndExitLoggingWebRequestInterceptor.class);
         expectedLogger.addAppender(writerAppender);
-        expectedLogger.setLevel(Level.INFO);
+        expectedLogger.setLevel(Level.DEBUG);
 
         final MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         mockHttpServletRequest.setRequestURI(EXPECTED_REQUEST_URI);
@@ -101,17 +101,17 @@ public class EntryAndExitLoggingWebRequestInterceptorTestCase extends AbstractJU
     }
 
     @Test
-    public void testPreHandleWhenInfoLoggingEnabled() throws Throwable {
+    public void testPreHandleWhenDebugLoggingEnabled() throws Throwable {
         objectUnderTest.preHandle(getWebRequest());
 
         Assert.assertEquals("Log message is wrong",
-                "INFO {" + EXPECTED_NDC_MESSAGE + "} : Entering uri="
+                "DEBUG {" + EXPECTED_NDC_MESSAGE + "} : Entering uri="
                         + EXPECTED_REQUEST_URI, stringWriter.toString());
     }
 
     @Test
-    public void testPreHandleWhenInfoLoggingDisabled() throws Throwable {
-        expectedLogger.setLevel(Level.ERROR);
+    public void testPreHandleWhenDefugLoggingDisabled() throws Throwable {
+        expectedLogger.setLevel(Level.INFO);
         objectUnderTest.preHandle(getWebRequest());
 
         Assert.assertEquals("Log message is wrong",
@@ -119,20 +119,20 @@ public class EntryAndExitLoggingWebRequestInterceptorTestCase extends AbstractJU
     }
 
     @Test
-    public void testPostHandleWhenInfoLoggingEnabled() throws Throwable {
+    public void testPostHandleWhenDebugLoggingEnabled() throws Throwable {
         // Ensure the NDC is set up as per the real workflow of the interceptor.
         NDC.push(EXPECTED_NDC_MESSAGE);
 
         objectUnderTest.postHandle(webRequest, new ModelMap());
 
-        Assert.assertEquals("Log message is wrong", "INFO {"
+        Assert.assertEquals("Log message is wrong", "DEBUG {"
                 + EXPECTED_NDC_MESSAGE + "} : Exiting uri="
                 + EXPECTED_REQUEST_URI, stringWriter.toString());
     }
 
     @Test
-    public void testPostHandleWhenInfoLoggingDisabled() throws Throwable {
-        expectedLogger.setLevel(Level.ERROR);
+    public void testPostHandleWhenDebugLoggingDisabled() throws Throwable {
+        expectedLogger.setLevel(Level.INFO);
         objectUnderTest.postHandle(getWebRequest(), new ModelMap());
 
         Assert.assertEquals("Log message is wrong",

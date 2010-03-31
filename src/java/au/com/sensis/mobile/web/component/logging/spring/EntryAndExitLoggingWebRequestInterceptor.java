@@ -70,8 +70,8 @@ public class EntryAndExitLoggingWebRequestInterceptor extends
     @Override
     public void postHandle(final WebRequest request, final ModelMap model)
             throws Exception {
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Exiting " + request.getDescription(false));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Exiting " + request.getDescription(false));
         }
 
         super.postHandle(request, model);
@@ -87,8 +87,8 @@ public class EntryAndExitLoggingWebRequestInterceptor extends
     public void preHandle(final WebRequest request) throws Exception {
         super.preHandle(request);
 
-        if (LOGGER.isInfoEnabled()) {
-            LOGGER.info("Entering " + request.getDescription(false));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Entering " + request.getDescription(false));
         }
 
     }

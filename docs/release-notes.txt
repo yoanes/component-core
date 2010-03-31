@@ -1,3 +1,18 @@
+==== Version 1.0.25 (tag: core_v1_0_25) ====
+
+Fixes:
+- CUI-171: JavaScript Serving - possible caching issue
+    - Now depends on wl-build-scripts 1.0.10.
+    - All mscr files include the @project.version.complete@ token
+      in JavaScript file names.
+    - core.comp.abstractResourceBundleLoaderController Spring bean now configured
+      to make clients cache the returned file indefinitely. core.comp.getJavaScriptBundleMember 
+      Spring bean still uses the default Spring semantics (ie. do not generate cache headers).
+- EntryAndExitLoggingWebRequestInterceptor now only logs at debug level, not info level.      
+
+Upgrade notes:
+- Now depends on wl-build-scripts 1.0.10.
+
 ==== Version 1.0.24 (tag: core_v1_0_24) ====
 
 All Volantis mscr files made as general as possible. ie. serve up JavaScript to the "Master"

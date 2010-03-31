@@ -31,7 +31,7 @@
                             <type>base-url</type>
                         </policy-reference>
                     </base>
-                    <relative>util/js/util-component-default.js</relative>
+                    <relative>util/js/util-component-default-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>
