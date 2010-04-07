@@ -20,9 +20,15 @@
                 </script>
             </meta-data>
             <content>
-                <embedded>
-                    <data>document.write('&lt;meta name="viewport" content="width=470, initial-scale=0.5"/>');</data>
-                </embedded>
+                <url>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/deviceport/deviceport-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>deviceport/js/deviceport-component-htcTouchHD-@project.version.complete@.js</relative>
+                </url>
             </content>
         </variant>
         <variant>
@@ -41,9 +47,15 @@
                 </script>
             </meta-data>
             <content>
-                <embedded>
-                    <data>document.write('&lt;meta name="viewport" content="width=325, user-scalable=no, initial-scale=1.0"/>');</data>
-                </embedded>
+                <url>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/deviceport/deviceport-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>deviceport/js/deviceport-component-htcDiamond-@project.version.complete@.js</relative>
+                </url>
             </content>
         </variant>
         <variant>
@@ -55,6 +67,33 @@
                     </devices>
                 </targeted>
             </selection>
+        </variant>
+        <variant>
+            <type>script</type>
+            <selection>
+                <targeted>
+                    <devices>
+                        <device>Apple</device>
+                    </devices>
+                </targeted>
+            </selection>
+            <meta-data>
+                <script>
+                    <encoding>javascript</encoding>
+                    <character-set>utf-8</character-set>
+                </script>
+            </meta-data>
+            <content>
+                <url>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/deviceport/deviceport-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>deviceport/js/deviceport-component-apple-@project.version.complete@.js</relative>
+                </url>
+            </content>
         </variant>
     </variants>
 </variable-policy>
