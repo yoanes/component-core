@@ -5,7 +5,7 @@
 <%@ taglib prefix="core" uri="/au/com/sensis/mobile/web/component/core/core.tld"%>
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/logging/logging.tld"%>
 
-<logging:logger var="logger" name="au.com.sensis.mobile.web.component.deviceport" />
+<logging:logger var="logger" name="au.com.sensis.mobile.web.component.util" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
 <core:compMcsBasePath var="compMcsBasePath" />
