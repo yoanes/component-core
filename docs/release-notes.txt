@@ -1,3 +1,7 @@
+==== Version 1.0.27 (tag: core_v1_0_27) ====
+
+add a deviceport subpackage to the core to solve the viewport and phonelink issue.
+
 ==== Version 1.0.26 (tag: core_v1_0_26) ====
 
 ChainedResourceBundleLoader no longer logs the exception stack trace when an intermediate
