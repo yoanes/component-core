@@ -48,4 +48,20 @@
         </bundle>
     </bundles>
     
+    <!--  Bundles for the deviceport -->
+    <bundles basename="deviceport-component" subpackage="deviceport">
+        <bundle name="apple">
+            <fileset dir="${src.javascript.dir}/util/device-variant/apple">     
+            </fileset>
+        </bundle>
+        <bundle name="htcDiamond">
+            <fileset dir="${src.javascript.dir}/util/device-variant/htcDiamond">     
+            </fileset>
+        </bundle>
+        <bundle name="htcTouchHD">
+            <fileset dir="${src.javascript.dir}/util/device-variant/htcTouchHD">     
+            </fileset>
+        </bundle>
+    </bundles>
+    
 </bs:bundlesConfig>
