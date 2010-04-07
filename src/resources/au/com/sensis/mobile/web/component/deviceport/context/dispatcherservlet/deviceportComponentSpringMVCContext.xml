@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+
+    <!-- ================================================================================================ -->
+    <!-- Handler mappings. -->                
+                
+    <bean name="deviceport.comp.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="mappings">
+            <value>
+                @{deviceport.comp.handler.mapping.url.prefix}/js/**/*=deviceport.comp.getJavaScriptBundle
+                @{deviceport.comp.handler.mapping.url.prefix}/jsmember/**/*=core.comp.getJavaScriptBundleMember
+            </value>
+        </property>
+        <property name="interceptors">
+            <list>
+                <bean class="au.com.sensis.mobile.web.component.logging.spring.EntryAndExitLoggingWebRequestInterceptor">
+                    <property name="ndcMessage" value="@{deviceport.comp.name}"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- ================================================================================================ -->                
+    <!-- Controllers. -->
+    
+    <bean id="deviceport.comp.getJavaScriptBundle"
+        parent="core.comp.abstractGetJavaScriptBundle"
+        init-method="validateState">
+        <property name="contextRootComponentPrefix" value="@{core.env.context.root.component.prefix}@{deviceport.comp.name}/"/>
+    </bean>
+</beans>
