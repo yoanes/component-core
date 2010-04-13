@@ -62,6 +62,10 @@
             <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcTouchHD">     
             </fileset>
         </bundle>
+        <bundle name="htcDesire">
+            <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcDesire">     
+            </fileset>
+        </bundle>
     </bundles>
     
 </bs:bundlesConfig>
