@@ -87,4 +87,36 @@
             <scope>AT_END</scope>
         </variable>
     </tag>
+    <tag>
+        <name>deviceConfig</name>
+        <description>Gets an AbstractDeviceConfigRegistry Spring bean from the root WebApplicationContext, gets a DeviceConfig from it and sets this into a variable with the given name.</description>
+        <tag-class>au.com.sensis.mobile.web.component.core.tag.DeviceConfigTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>var</name>
+            <description>Name of the variable to set the DeviceConfig into.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>device</name>
+            <description>Device of the current user.</description>
+            <type>au.com.sensis.wireless.common.volantis.devicerepository.api.Device</type>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>registryBeanName</name>
+            <description>Name of the AbstractDeviceConfigRegistry Spring bean to get the device config from.</description>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <variable>
+            <description>Variable to set the result into.</description>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>au.com.sensis.mobile.web.component.core.device.generated.AbstractDeviceConfig</variable-class>
+            <declare>true</declare>
+            <scope>AT_END</scope>
+        </variable>
+    </tag>
 </taglib>
