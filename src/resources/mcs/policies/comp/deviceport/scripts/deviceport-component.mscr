@@ -102,6 +102,7 @@
                     <devices>
                         <device>HTC-A8183</device>
                         <device>HTC-Desire</device>
+                        <device>SonyEricsson-X10</device>
                     </devices>
                 </targeted>
             </selection>
