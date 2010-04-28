@@ -11,4 +11,7 @@ metaFormat.setAttribute('content', 'telephone=no');
 document.getElementsByTagName('head')[0].appendChild(metaFormat);
 
 /* hide the address bar */
-window.addEventListener('load', function() { window.scroll(0, 1); }, true);
+window.addEventListener('load', function() { 
+	window.scroll(0, 1); 
+	document.getElementsByTagName('body')[0].style['-webkit-text-size-adjust'] = 'none';
+}, true);
