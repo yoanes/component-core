@@ -10,6 +10,7 @@
                         <device>HTC-Diamond2</device>
                         <device>HTC-T7381</device>
                         <device>HTC-TouchHD</device>
+                        <device>HTC-TouchHD2</device>
                     </devices>
                 </targeted>
             </selection>
