@@ -15,8 +15,18 @@
             </fileset>
         </bundle>
         <bundle name="default" parent="common">
+        	<fileset dir="${src.javascript.dir}/core/device-variant/default">
+            </fileset>
         </bundle>
         <bundle name="apple" parent="common">
+        </bundle>
+        <bundle name="nokiaS60" parent="common">
+        	<fileset dir="${src.javascript.dir}/core/device-variant/nokiaS60">
+            </fileset>
+        </bundle>
+        <bundle name="samsungC5220" parent="common">
+        	<fileset dir="${src.javascript.dir}/core/device-variant/samsungC5220">
+            </fileset>
         </bundle>
     </bundles>
 
