@@ -80,9 +80,9 @@ var ReportingUtilities = new Class({
 			if($defined(optionalParams)){ 
 				var extraParams = null;
 				for(var param in optionalParams) {
-					if(extraParams == null)  
-						extraParams += (lUrl.contains('?') ? '&' : '?');
-					else extraParams += '&';
+					if(extraParams != null) {
+						extraParams += '&';
+					}
 					extraParams += param + '=' + optionalParams[param];
 				}
 			}
