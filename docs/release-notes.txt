@@ -11,7 +11,8 @@ Fixed:
     - Added new JsonLeadingAndTrailingWhitespaceTrimmingFilter exposed as a Spring bean
       with name of core.comp.jsonLeadingAndTrailingWhitespaceTrimmingFilter. 
       Webapps can insert this filter into their Filter chain to trim leading and trailing
-      spaces from JSON responses. The filter should be added to web.xml like so:
+      spaces from JSON responses. This is especially useful if you are producing
+      your JSON responses via JSPs. The filter should be added to web.xml like so:
       
     <filter>
         <filter-name>jsonLeadingAndTrailingWhitespaceTrimmingFilter</filter-name>
