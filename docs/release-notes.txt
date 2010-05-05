@@ -25,8 +25,6 @@ Fixed:
         <url-pattern>/*</url-pattern>
     </filter-mapping>
       
-- YMB-1769 Support for HTC Touch HD2      
-
 ==== Version 1.0.29 (tag: core_v1_0_29) ====
 
 Added deviceConfig tag to allow a component's JSPs to access the DeviceConfig for the 
