@@ -77,8 +77,8 @@ var ReportingUtilities = new Class({
 				onComplete: function() {}
 			});
 			
+			var extraParams = null;
 			if($defined(optionalParams)){ 
-				var extraParams = null;
 				for(var param in optionalParams) {
 					if(extraParams != null) {
 						extraParams += '&';
