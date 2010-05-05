@@ -17,6 +17,11 @@
         <property name="bypassClientCacheInitialValue" value="@{core.env.bypassClientCacheInitialValue}" />
     </bean>
     
+    <bean name="core.comp.jsonLeadingAndTrailingWhitespaceTrimmingFilter" 
+        class="au.com.sensis.mobile.web.component.core.util.JsonLeadingAndTrailingWhitespaceTrimmingFilter">
+        <property name="xmlHttpRequestDetector" ref="core.comp.xmlHttpRequestDetector" />
+    </bean>
+    
     <!-- ================================================================================================ -->
 
 
