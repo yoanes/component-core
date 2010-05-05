@@ -1,3 +1,9 @@
+==== Version 1.0.31 (tag: core_v1_0_31) ====
+
+Added mootools specialisations for some devices.
+Removed unneeded sensis-widgets.js.
+Futher device port tweaks.
+
 ==== Version 1.0.30 (tag: core_v1_0_30) ====
 
 Fixed:
