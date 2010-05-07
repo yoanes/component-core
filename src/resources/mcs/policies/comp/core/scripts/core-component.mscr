@@ -35,6 +35,9 @@
                 <targeted>
                     <devices>
                         <device>Nokia-6120c</device>
+                        <device>Nokia-6720c</device>
+                        <device>Nokia-E51</device>
+                        <device>Nokia-E71</device>
                         <device>Nokia-N85</device>
                         <device>Nokia-N95</device>
                         <device>Nokia-N96</device>

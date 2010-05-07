@@ -1,3 +1,16 @@
+==== Version 1.0.33 (tag: core_v1_0_33) ====
+
+Fixed:
+- CUI-239 Create an Intermediate Map component
+    - Also enabled the following devices to receive the nokiaS60 JavaScript from the core component.
+    
+        <device>Nokia-6720c</device>
+        <device>Nokia-E51</device>
+        <device>Nokia-E71</device>
+        
+Upgrade notes:
+- redeploy your policies.        
+
 ==== Version 1.0.32 (tag: core_v1_0_32) ====
 ReportingUtilities fix
 
