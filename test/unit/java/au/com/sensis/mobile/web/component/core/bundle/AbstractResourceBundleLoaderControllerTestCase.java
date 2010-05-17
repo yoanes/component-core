@@ -4,8 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import junitx.util.PrivateAccessor;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.easymock.EasyMock;
@@ -54,59 +52,6 @@ public abstract class AbstractResourceBundleLoaderControllerTestCase
 
     protected AbstractResourceBundleLoaderController getObjectUnderTest() {
         return objectUnderTest;
-    }
-
-    @Test
-    public void testIsBypassClientCacheRequested() throws Throwable {
-        for (final BypassClientCacheRequestedTestData testData : BypassClientCacheRequestedTestData
-                .getIsBundleExploderRequestedTestData()) {
-
-
-            getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(
-                    testData.isAllowBypassClientCacheRequestParam());
-
-            if (testData.isAllowBypassClientCacheRequestParam()) {
-                if (testData.isBypassClientCacheRequestParamSet()) {
-                    recordBypassClientCacheRequested();
-                } else {
-                    recordBypassClientCacheNotRequested();
-
-                }
-            }
-
-            replay();
-
-            final Boolean actualOutcome = (Boolean) PrivateAccessor.invoke(getObjectUnderTest(),
-                    "isByassClientCacheRequested", new Class [] {HttpServletRequest.class},
-                    new Object [] {getMockHttpServletRequest()});
-
-            Assert.assertEquals("isByassClientCacheRequested returned wrong value for testData: "
-                    + testData, testData.isExpectedOutcome(), actualOutcome);
-
-            // Reset mocks prior to next iteration.
-            getHelper().reset();
-            setReplayed(false);
-        }
-    }
-
-    protected final void recordBypassClientCacheNotRequested() {
-        EasyMock.expect(
-                getMockHttpServletRequest().getSession()).andReturn(getMockHttpSession());
-        EasyMock.expect(
-                getMockHttpSession().getAttribute(
-                        AbstractResourceBundleLoaderController
-                            .BYPASS_CLIENT_CACHE_SESSION_KEY))
-                .andReturn(Boolean.FALSE).atLeastOnce();
-    }
-
-    protected final void recordBypassClientCacheRequested() {
-        EasyMock.expect(
-                getMockHttpServletRequest().getSession()).andReturn(getMockHttpSession());
-        EasyMock.expect(
-                getMockHttpSession().getAttribute(
-                        AbstractResourceBundleLoaderController
-                            .BYPASS_CLIENT_CACHE_SESSION_KEY))
-                .andReturn(Boolean.TRUE).atLeastOnce();
     }
 
     @Test

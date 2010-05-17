@@ -22,6 +22,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
 public class ResourceBundleLoaderControllerTestCase
     extends AbstractResourceBundleLoaderControllerTestCase {
 
+    private static final long LAST_MODIFIED = 10039375;
+
     @Override
     protected ResourceBundleLoaderController createObjectUnderTest() {
         return new ResourceBundleLoaderController();
@@ -140,54 +142,43 @@ public class ResourceBundleLoaderControllerTestCase
     }
 
     @Test
-    public void testGetLastModified() throws Throwable {
-        for (final LastModifiedTestData testData : LastModifiedTestData.getLastModifiedTestData()) {
-            if (testData.isBypassClientCacheRequested()) {
-                getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(true);
-                recordBypassClientCacheRequested();
-            } else {
-                getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(false);
-            }
+    public void testGetLastModifiedWhenBundleExploderRequestedAndLastModifiedTimeKnown()
+            throws Throwable {
+        getSimpleFeatureEnablementRegistryBean()
+                .setBundleExplosionEnabled(true);
+        recordBundleExploderRequested();
 
+        final String resourceName = recordExtractResourceNameRequested();
 
-            if (testData.isBundleExploderRequested()) {
-                getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(true);
-                recordBundleExploderRequested();
+        EasyMock.expect(
+                getMockResourceBundleLoader().getBundleExploderLastModified(
+                        resourceName)).andReturn(LAST_MODIFIED);
 
-                if (!testData.isBypassClientCacheRequested()) {
-                    final String resourceName = recordExtractResourceNameRequested();
+        replay();
 
-                    EasyMock.expect(getMockResourceBundleLoader().getBundleExploderLastModified(
-                            resourceName)).andReturn(testData.getExpectedOutcome());
-                }
+        Assert.assertEquals("lastModified is wrong", LAST_MODIFIED,
+                getObjectUnderTest().getLastModified(
+                        getMockHttpServletRequest()));
 
-            } else {
-                getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(false);
+    }
 
-                if (!testData.isBypassClientCacheRequested()) {
-                    final String resourceName = recordExtractResourceNameRequested();
+    @Test
+    public void testGetLastModifiedWhenBundleExploderNotRequestedAndLastModifiedTimeKnown()
+            throws Throwable {
+        getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(
+                false);
 
-                    EasyMock.expect(getMockResourceBundleLoader().getBundleLastModified(
-                            resourceName)).andReturn(testData.getExpectedOutcome());
-                }
-            }
+        final String resourceName = recordExtractResourceNameRequested();
 
-            replay();
+        EasyMock.expect(
+                getMockResourceBundleLoader().getBundleLastModified(
+                        resourceName)).andReturn(LAST_MODIFIED);
 
-            Assert.assertEquals("lastModified is wrong for testData: " + testData,
-                    testData.getExpectedOutcome(),
-                    getObjectUnderTest().getLastModified(getMockHttpServletRequest()));
+        replay();
 
-            // Explicitly call verify since we are in a loop and can't rely on the inherited,
-            // automated verify call.
-            verify();
-
-            // Reset mocks prior to next iteration.
-            getHelper().reset();
-            setReplayed(false);
-
-        }
-
+        Assert.assertEquals("lastModified is wrong", LAST_MODIFIED,
+                getObjectUnderTest().getLastModified(
+                        getMockHttpServletRequest()));
     }
 
     private static final class BundleExploderRequestedTestData {
@@ -243,59 +234,6 @@ public class ResourceBundleLoaderControllerTestCase
                 .append(isAllowBundleExploderRequestParam())
                 .append(isBundleExploderRequestParamSet())
                 .append(isExpectedOutcome()).toString();
-        }
-    }
-    private static final class LastModifiedTestData {
-
-        private static final long LAST_MODIFIED = 10039375;
-        private final boolean bypassClientCacheRequested;
-        private final boolean bundleExploderRequested;
-        private final long expectedOutcome;
-
-
-        private LastModifiedTestData(final boolean bypassClientCacheRequested,
-                final boolean bundleExploderRequested, final long expectedOutcome) {
-            super();
-            this.bypassClientCacheRequested = bypassClientCacheRequested;
-            this.bundleExploderRequested = bundleExploderRequested;
-            this.expectedOutcome = expectedOutcome;
-        }
-
-        private static LastModifiedTestData
-            [] getLastModifiedTestData() {
-            return new LastModifiedTestData [] {
-                    new LastModifiedTestData(true, true, -1),
-                    new LastModifiedTestData(true, false, -1),
-                    new LastModifiedTestData(false, true, LAST_MODIFIED),
-                    new LastModifiedTestData(false, false, LAST_MODIFIED)
-            };
-        }
-
-        /**
-         * @return the expectedOutcome
-         */
-        public long getExpectedOutcome() {
-            return expectedOutcome;
-        }
-
-        /**
-         * @return the bypassClientCacheRequested
-         */
-        public boolean isBypassClientCacheRequested() {
-            return bypassClientCacheRequested;
-        }
-
-        /**
-         * @return the bundleExploderRequested
-         */
-        public boolean isBundleExploderRequested() {
-            return bundleExploderRequested;
-        }
-
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this)
-            .append(getExpectedOutcome()).toString();
         }
     }
 }

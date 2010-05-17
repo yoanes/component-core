@@ -11,7 +11,6 @@
     <bean name="core.comp.featureEnablementRegistry"
         class="au.com.sensis.mobile.web.component.core.bundle.SimpleFeatureEnablementRegistryBean">
         <property name="bundleExplosionEnabled" value="@{core.env.bundleExplosionEnabled}"/>
-        <property name="bypassClientCacheEnabled" value="@{core.env.bypassClientCacheEnabled}"/>
     </bean>
     
     <!-- ================================================================================================ -->

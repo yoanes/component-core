@@ -3,7 +3,6 @@ package au.com.sensis.mobile.web.component.core.bundle;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,6 +16,8 @@ import org.springframework.mock.web.MockHttpServletResponse;
  */
 public class ExplodedBundleMemberResourceLoaderControllerTestCase
     extends AbstractResourceBundleLoaderControllerTestCase {
+
+    private static final long LAST_MODIFIED = 10039375;
 
     @Override
     protected ExplodedBundleMemberResourceLoaderController createObjectUnderTest() {
@@ -54,77 +55,16 @@ public class ExplodedBundleMemberResourceLoaderControllerTestCase
     @Test
     public void testGetLastModified() throws Throwable {
 
-        for (final LastModifiedTestData testData : LastModifiedTestData.getLastModifiedTestData()) {
-            if (testData.isBypassClientCacheRequested()) {
-                getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(true);
-                recordBypassClientCacheRequested();
+        final String resourceName = recordExtractResourceNameRequested();
+        EasyMock.expect(
+                getMockResourceBundleLoader()
+                        .getExplodedBundleMemberLastModified(resourceName))
+                .andReturn(LAST_MODIFIED);
 
-            } else {
-                getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(false);
+        replay();
 
-                final String resourceName = recordExtractResourceNameRequested();
-                EasyMock.expect(getMockResourceBundleLoader().getExplodedBundleMemberLastModified(
-                        resourceName)).andReturn(testData.getExpectedOutcome());
-            }
-
-
-            replay();
-
-            Assert.assertEquals("lastModified is wrong for testData: " + testData,
-                    testData.getExpectedOutcome(),
-                    getObjectUnderTest().getLastModified(getMockHttpServletRequest()));
-
-            // Explicitly call verify since we are in a loop and can't rely on the inherited,
-            // automated verify call.
-            verify();
-
-            // Reset mocks prior to next iteration.
-            getHelper().reset();
-            setReplayed(false);
-
-        }
-    }
-
-    private static final class LastModifiedTestData {
-
-        private static final long LAST_MODIFIED = 10039375;
-        private final boolean bypassClientCacheRequested;
-        private final long expectedOutcome;
-
-
-        private LastModifiedTestData(final boolean bypassClientCacheRequested,
-                final long expectedOutcome) {
-            super();
-            this.bypassClientCacheRequested = bypassClientCacheRequested;
-            this.expectedOutcome = expectedOutcome;
-        }
-
-        private static LastModifiedTestData
-            [] getLastModifiedTestData() {
-            return new LastModifiedTestData [] {
-                    new LastModifiedTestData(true, -1),
-                    new LastModifiedTestData(false, LAST_MODIFIED)
-            };
-        }
-
-        /**
-         * @return the expectedOutcome
-         */
-        public long getExpectedOutcome() {
-            return expectedOutcome;
-        }
-
-        /**
-         * @return the bypassClientCacheRequested
-         */
-        public boolean isBypassClientCacheRequested() {
-            return bypassClientCacheRequested;
-        }
-
-        @Override
-        public String toString() {
-            return new ToStringBuilder(this)
-            .append(getExpectedOutcome()).toString();
-        }
+        Assert.assertEquals("lastModified is wrong", LAST_MODIFIED,
+                getObjectUnderTest().getLastModified(
+                        getMockHttpServletRequest()));
     }
 }

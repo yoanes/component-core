@@ -17,14 +17,14 @@ import org.springframework.mock.web.MockHttpSession;
 import au.com.sensis.wireless.test.AbstractJUnit4TestCase;
 
 /**
- * Unit test {@link BundleExploderAndCacheBypassActivatonFilter}.
+ * Unit test {@link BundleExploderActivatonFilter}.
  *
  * @author Adrian.Koh2@sensis.com.au
  */
 public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
         AbstractJUnit4TestCase {
 
-    private BundleExploderAndCacheBypassActivatonFilter objectUnderTest;
+    private BundleExploderActivatonFilter objectUnderTest;
 
     private ServletRequest mockServletRequest;
     private ServletResponse mockServletResponse;
@@ -44,7 +44,7 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
      */
     @Before
     public void setUp() throws Exception {
-        objectUnderTest = new BundleExploderAndCacheBypassActivatonFilter();
+        objectUnderTest = new BundleExploderActivatonFilter();
 
         setSimpleFeatureEnablementRegistryBean(new SimpleFeatureEnablementRegistryBean());
         objectUnderTest.setFeatureEnablementRegistry(getSimpleFeatureEnablementRegistryBean());
@@ -110,9 +110,9 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     }
 
     @Test
-    public void testDoFilterWhenBundleExploderRequestIsNullAndBypassClientCacheIsNull()
+    public void testDoFilterWhenBundleExploderRequestIsNullAndFeatureEnabled()
         throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
+        enableBundleExplosionFeature();
 
         getMockFilterChain().doFilter(
                 getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
@@ -123,14 +123,6 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(null);
-    }
-
-    private void assertBypassClientCacheSessionAttributeValue(final Object expectedAttributeValue) {
-        Assert.assertEquals("bypass client cache session attribute is wrong",
-                expectedAttributeValue,
-                getSpringMockHttpServletRequest().getSession().getAttribute(
-                        AbstractResourceBundleLoaderController.BYPASS_CLIENT_CACHE_SESSION_KEY));
     }
 
     private void assertBundleExploderSessionAttributeValue(final Object expectedAttributeValue) {
@@ -140,9 +132,9 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     }
 
     @Test
-    public void testDoFilterWhenBundleExploderRequestIsTrueAndBypassClientCacheIsNull()
+    public void testDoFilterWhenBundleExploderRequestIsTrueAndFeatureEnabled()
         throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
+        enableBundleExplosionFeature();
 
         recordBundleExploderRequestParamTrue();
 
@@ -155,13 +147,12 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(Boolean.TRUE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
     }
 
     @Test
-    public void testDoFilterWhenBundleExploderRequestIsFalseAndBypassClientCacheIsNull()
+    public void testDoFilterWhenBundleExploderRequestIsFalseAndFeatureEnabled()
             throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
+        enableBundleExplosionFeature();
 
         recordBundleExploderRequestParamFalse();
 
@@ -174,198 +165,16 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(Boolean.FALSE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
 
     }
 
     @Test
-    public void testDoFilterWhenBundleExploderRequestIsNullAndBypassClientCacheIsTrue()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamNull();
-        recordBypassClientCacheRequestParamTrue();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestIsNullAndBypassClientCacheIsFalse()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamNull();
-        recordBypassClientCacheRequestParamFalse();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(Boolean.FALSE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestIsTrueAndBypassClientCacheIsTrue()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamTrue();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(Boolean.TRUE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestIsTrueAndBypassClientCacheIsFalse()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamTrue();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(Boolean.TRUE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestIsFalseAndBypassClientCacheIsTrue()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamFalse();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(Boolean.FALSE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestIsFalseAndBypassClientCacheIsFalse()
-            throws Throwable {
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        recordBundleExploderRequestParamFalse();
-
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(Boolean.FALSE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsNoSession()
-        throws Throwable {
-        getSpringMockHttpServletRequest().setSession(null);
-
-        getObjectUnderTest().setBypassClientCacheInitialValue(true);
-        getObjectUnderTest().setBundleExplosionInitialValue(true);
-
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        getMockFilterChain().doFilter(
-                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(Boolean.TRUE);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsSessionExists()
-    throws Throwable {
-
-        getObjectUnderTest().setBypassClientCacheInitialValue(true);
-        getObjectUnderTest().setBundleExplosionInitialValue(true);
-
-        enableBundleExplosionAndBypassClientCacheFeatures();
-
-        getMockFilterChain().doFilter(
-                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(null);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExploderRequestAndBypassClientCacheTrueDefaultsButDisabled()
-        throws Throwable {
-        getObjectUnderTest().setBypassClientCacheInitialValue(true);
-        getObjectUnderTest().setBundleExplosionInitialValue(true);
-
-        getMockFilterChain().doFilter(
-                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
-
-        replay();
-
-        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse(), getMockFilterChain());
-
-        assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(null);
-    }
-
-    @Test
-    public void testDoFilterWhenBundleExplosionFeatureDisabledAndBypassClientCacheFeatureDisabled()
+    public void testDoFilterWhenBundleExploderRequestIsTrueButFeatureDisabled()
             throws Throwable {
         getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(
                 false);
-        getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(
-                false);
 
         recordBundleExploderRequestParamTrue();
-        recordBypassClientCacheRequestParamTrue();
 
         getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
                 getSpringMockHttpServletResponse());
@@ -376,22 +185,19 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(null);
     }
 
     @Test
-    public void testDoFilterWhenBundleExplosionFeatureEnabledAndBypassClientCacheFeatureDisabled()
-            throws Throwable {
-        getSimpleFeatureEnablementRegistryBean()
-                .setBundleExplosionEnabled(true);
-        getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(
-                false);
+    public void testDoFilterWhenBundleExploderRequestTrueDefaultButNoSession()
+        throws Throwable {
+        getSpringMockHttpServletRequest().setSession(null);
 
-        recordBundleExploderRequestParamTrue();
-        recordBypassClientCacheRequestParamTrue();
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
 
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
+        enableBundleExplosionFeature();
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
 
         replay();
 
@@ -399,22 +205,18 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(Boolean.TRUE);
-        assertBypassClientCacheSessionAttributeValue(null);
     }
 
     @Test
-    public void testDoFilterWhenBundleExplosionFeatureDisabledAndBypassClientCacheFeatureEnabled()
-    throws Throwable {
-        getSimpleFeatureEnablementRegistryBean()
-            .setBundleExplosionEnabled(false);
-        getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(
-                true);
+    public void testDoFilterWhenBundleExploderRequestTrueDefaultAndSessionExists()
+        throws Throwable {
 
-        recordBundleExploderRequestParamTrue();
-        recordBypassClientCacheRequestParamTrue();
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
 
-        getMockFilterChain().doFilter(getSpringMockHttpServletRequest(),
-                getSpringMockHttpServletResponse());
+        enableBundleExplosionFeature();
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
 
         replay();
 
@@ -422,47 +224,42 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
                 getSpringMockHttpServletResponse(), getMockFilterChain());
 
         assertBundleExploderSessionAttributeValue(null);
-        assertBypassClientCacheSessionAttributeValue(Boolean.TRUE);
     }
 
-    private void recordBundleExploderRequestParamNull() {
-        getSpringMockHttpServletRequest()
-            .setParameter(
-                    BundleExploderAndCacheBypassActivatonFilter.BUNDLE_EXPLODER_REQUEST_PARAM_NAME,
-                    (String) null);
+    @Test
+    public void testDoFilterWhenBundleExploderRequestTrueDefaultButDisabled()
+        throws Throwable {
+        getSpringMockHttpServletRequest().setSession(null);
+
+        getObjectUnderTest().setBundleExplosionInitialValue(true);
+
+        getMockFilterChain().doFilter(
+                getSpringMockHttpServletRequest(), getSpringMockHttpServletResponse());
+
+        replay();
+
+        objectUnderTest.doFilter(getSpringMockHttpServletRequest(),
+                getSpringMockHttpServletResponse(), getMockFilterChain());
+
+        assertBundleExploderSessionAttributeValue(null);
     }
 
     private void recordBundleExploderRequestParamTrue() {
         getSpringMockHttpServletRequest()
                 .setParameter(
-                    BundleExploderAndCacheBypassActivatonFilter.BUNDLE_EXPLODER_REQUEST_PARAM_NAME,
-                    BundleExploderAndCacheBypassActivatonFilter.BOOLEAN_TRUE_PARAM_VALUE);
+                    BundleExploderActivatonFilter.BUNDLE_EXPLODER_REQUEST_PARAM_NAME,
+                    BundleExploderActivatonFilter.BOOLEAN_TRUE_PARAM_VALUE);
     }
 
     private void recordBundleExploderRequestParamFalse() {
         getSpringMockHttpServletRequest()
             .setParameter(
-                BundleExploderAndCacheBypassActivatonFilter.BUNDLE_EXPLODER_REQUEST_PARAM_NAME,
+                BundleExploderActivatonFilter.BUNDLE_EXPLODER_REQUEST_PARAM_NAME,
                 "0");
     }
 
-    private void recordBypassClientCacheRequestParamTrue() {
-        getSpringMockHttpServletRequest()
-            .setParameter(
-                BundleExploderAndCacheBypassActivatonFilter.BYPASS_CLIENT_CACHE_REQUEST_PARAM_NAME,
-                BundleExploderAndCacheBypassActivatonFilter.BOOLEAN_TRUE_PARAM_VALUE);
-    }
-
-    private void recordBypassClientCacheRequestParamFalse() {
-        getSpringMockHttpServletRequest()
-            .setParameter(
-                BundleExploderAndCacheBypassActivatonFilter.BYPASS_CLIENT_CACHE_REQUEST_PARAM_NAME,
-                "0");
-    }
-
-    private void enableBundleExplosionAndBypassClientCacheFeatures() {
+    private void enableBundleExplosionFeature() {
         getSimpleFeatureEnablementRegistryBean().setBundleExplosionEnabled(true);
-        getSimpleFeatureEnablementRegistryBean().setBypassClientCacheEnabled(true);
     }
 
     /**
@@ -525,7 +322,7 @@ public class BundleExploderAndCacheBypassActivatonFilterTestCase extends
     /**
      * @return the objectUnderTest
      */
-    public BundleExploderAndCacheBypassActivatonFilter getObjectUnderTest() {
+    public BundleExploderActivatonFilter getObjectUnderTest() {
         return objectUnderTest;
     }
 

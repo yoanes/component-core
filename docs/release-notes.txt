@@ -1,3 +1,15 @@
+==== Version 1.0.34 (tag: core_v1_0_34) ====
+
+Fixed:
+- CUI-265 Core component - cache bypass is redundant now that JavaScript files are cached indefinitely
+    - removed all code related to the cache bypass. 
+
+Upgrade notes:
+- If you're working on a component that depends on this wl-core-component, you should also update your wl-webapp-testbed
+  dependency to 1.0.9.       
+- The core.comp.bundleExploderAndCacheBypassActivatonFilter Spring bean has been renamed to core.comp.bundleExploderActivatonFilter.
+  Make sure you update references made from your web.xml (if any).
+
 ==== Version 1.0.33 (tag: core_v1_0_33) ====
 
 Fixed:

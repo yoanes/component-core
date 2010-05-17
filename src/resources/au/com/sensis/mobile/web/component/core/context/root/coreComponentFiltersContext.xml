@@ -9,12 +9,11 @@
     <!-- ================================================================================================ -->
     <!-- Filters. -->
     
-    <bean name="core.comp.bundleExploderAndCacheBypassActivatonFilter" 
-        class="au.com.sensis.mobile.web.component.core.bundle.BundleExploderAndCacheBypassActivatonFilter"
+    <bean name="core.comp.bundleExploderActivatonFilter" 
+        class="au.com.sensis.mobile.web.component.core.bundle.BundleExploderActivatonFilter"
         init-method="validateState">
         <property name="featureEnablementRegistry" ref="core.comp.featureEnablementRegistry" />
         <property name="bundleExplosionInitialValue" value="@{core.env.bundleExplosionInitialValue}" />
-        <property name="bypassClientCacheInitialValue" value="@{core.env.bypassClientCacheInitialValue}" />
     </bean>
     
     <bean name="core.comp.jsonLeadingAndTrailingWhitespaceTrimmingFilter" 

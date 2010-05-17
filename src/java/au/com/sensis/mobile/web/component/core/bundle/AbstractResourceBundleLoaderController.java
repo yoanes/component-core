@@ -30,17 +30,6 @@ public abstract class AbstractResourceBundleLoaderController extends
     private static final String URL_EMBEDDED_COOKIE_PREFIX = ";";
 
     /**
-     * Name of the session attribute that requests that the <b>client</b> side
-     * cache be bypassed. ie.
-     * {@link LastModified#getLastModified(HttpServletRequest)} should return
-     * -1. This parameter is only handled if
-     * {@link FeatureEnablementRegistry#isBypassClientCacheEnabled()} is true.
-     */
-    public static final String BYPASS_CLIENT_CACHE_SESSION_KEY =
-            AbstractResourceBundleLoaderController.class.getName()
-                    + ".bypassClientCache";
-
-    /**
      * Value returned by {@link #getLastModified(HttpServletRequest)} when the
      * modification time is unknown or cannot be determined.
      */
@@ -72,26 +61,6 @@ public abstract class AbstractResourceBundleLoaderController extends
      *         logger.
      */
     protected abstract Logger getLogger();
-
-    /**
-     * @param request
-     *            {@link HttpServletRequest}
-     * @return true if {@link #isAllowBypassClientCacheSessionKey()} is true and
-     *         the {@link #BYPASS_CLIENT_CACHE_SESSION_KEY} session key is set.
-     */
-    protected final boolean isByassClientCacheRequested(
-            final HttpServletRequest request) {
-        if (getFeatureEnablementRegistry().isBypassClientCacheEnabled()) {
-            final Object bypassClientCacheSessionValue =
-                    request.getSession().getAttribute(
-                            BYPASS_CLIENT_CACHE_SESSION_KEY);
-            return (bypassClientCacheSessionValue != null)
-                    && Boolean.TRUE.equals(bypassClientCacheSessionValue);
-        } else {
-            return false;
-        }
-
-    }
 
     /**
      * Extracts the resource name requested by extracting all text after

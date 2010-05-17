@@ -61,21 +61,17 @@ public class ExplodedBundleMemberResourceLoaderController extends
      * {@inheritDoc}
      */
     public long getLastModified(final HttpServletRequest request) {
-        if (isByassClientCacheRequested(request)) {
-            return LAST_MODIFIED_UNKNOWN;
-        } else {
-            try {
-                return getResourceBundleLoader()
-                        .getExplodedBundleMemberLastModified(
-                                extractResourceNameRequested(request));
-            } catch (final IOException e) {
-                if (getLogger().isEnabledFor(Level.WARN)) {
-                    getLogger().warn("Could not tell if bundle '"
-                        + extractResourceNameRequested(request)
-                        + "' was modified. Considering it to have been modified.", e);
-                }
-                return LAST_MODIFIED_UNKNOWN;
+        try {
+            return getResourceBundleLoader()
+                    .getExplodedBundleMemberLastModified(
+                            extractResourceNameRequested(request));
+        } catch (final IOException e) {
+            if (getLogger().isEnabledFor(Level.WARN)) {
+                getLogger().warn("Could not tell if bundle '"
+                    + extractResourceNameRequested(request)
+                    + "' was modified. Considering it to have been modified.", e);
             }
+            return LAST_MODIFIED_UNKNOWN;
         }
 
     }
