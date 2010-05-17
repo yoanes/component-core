@@ -9,6 +9,9 @@ Upgrade notes:
   dependency to 1.0.9.       
 - The core.comp.bundleExploderAndCacheBypassActivatonFilter Spring bean has been renamed to core.comp.bundleExploderActivatonFilter.
   Make sure you update references made from your web.xml (if any).
+- If your project overrides core-environment.properties.*, note that the following properties have been removed:
+    - env.bypassClientCacheEnabled
+    - env.bypassClientCacheInitialValue
 
 ==== Version 1.0.33 (tag: core_v1_0_33) ====
 
