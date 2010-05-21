@@ -10,7 +10,6 @@
                         <device>HTC-Diamond2</device>
                         <device>HTC-T7381</device>
                         <device>HTC-TouchHD</device>
-                        <device>HTC-TouchHD2</device>
                     </devices>
                 </targeted>
             </selection>
@@ -122,6 +121,33 @@
                         </policy-reference>
                     </base>
                     <relative>deviceport/js/deviceport-component-htcDesire-@project.version.complete@.js</relative>
+                </url>
+            </content>
+        </variant>
+        <variant>
+            <type>script</type>
+            <selection>
+                <targeted>
+                    <devices>
+                        <device>HTC-TouchHD2</device>
+                    </devices>
+                </targeted>
+            </selection>
+            <meta-data>
+                <script>
+                    <encoding>javascript</encoding>
+                    <character-set>utf-8</character-set>
+                </script>
+            </meta-data>
+            <content>
+                <url>
+                    <base>
+                        <policy-reference>
+                            <name>/comp/deviceport/deviceport-scripts.mgrp</name>
+                            <type>base-url</type>
+                        </policy-reference>
+                    </base>
+                    <relative>deviceport/js/deviceport-component-htcTouchHD2-@project.version.complete@.js</relative>
                 </url>
             </content>
         </variant>
