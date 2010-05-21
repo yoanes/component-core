@@ -1,3 +1,6 @@
+==== Version 1.0.35 (tag: core_v1_0_35) ====
+- Deviceport: additional bundle for HTC Touch HD 2
+
 ==== Version 1.0.34 (tag: core_v1_0_34) ====
 
 Fixed:
