@@ -7,11 +7,6 @@
             <selection>
                 <targeted>
                     <devices>
-                        <!--
-                          - We serve the JavaScript to _every_ device.
-                          - Components that depend on the core component should themselves determine whether
-                          - to serve this mscr file to the current device. 
-                          -->
                         <device>Master</device>
                     </devices>
                 </targeted>
@@ -24,17 +19,6 @@
             </meta-data>
             <content>
                 <url>
-                    <!-- 
-                      - By default, applications must use Ant token replacement to specify the
-                      - URL of the EMS JavaScript endpoint. If your build scripts call
-                      - the standard sensis:extract-all-component-policies Ant macrodef,
-                      - you can do this by specifying a "filtersetelements" nested element.
-                      -
-                      - Note that the token names currently use the "env.ems" prefix. In future,
-                      - it would be nice to use a map.comp prefix. However, doing so now would
-                      - cause duplication with the properties already used in the EMS Manager
-                      -  config. 
-                      -->
                     <relative>@env.ems.service.js@@env.ems.token@</relative>
                 </url>
             </content>
