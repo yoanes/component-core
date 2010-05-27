@@ -6,11 +6,11 @@
 >
 
     <tlib-version>1.0</tlib-version>
-    <uri>/au/com/sensis/mobile/web/component/logging/logging.tld</uri>
+    <uri>/au/com/sensis/mobile/web/component/core/logging/logging.tld</uri>
     <tag-file>
         <name>setup</name>
         <description>Setup the logging component. Must be called in the HTML head.</description>
-        <path>/META-INF/tags/au/com/sensis/mobile/web/component/logging/setup.tag</path>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/logging/setup.tag</path>
     </tag-file>
     <tag>
         <name>jsLoggerEnabled</name>

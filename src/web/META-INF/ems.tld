@@ -6,10 +6,10 @@
 >
     <description>Tag library for the ems component.</description>
     <tlib-version>1.0</tlib-version>
-    <uri>/au/com/sensis/mobile/web/component/ems/ems.tld</uri>
+    <uri>/au/com/sensis/mobile/web/component/core/ems/ems.tld</uri>
     <tag-file>
         <name>setup</name>
         <description>Setup the ems component. Must be called in the HTML head.</description>
-        <path>/META-INF/tags/au/com/sensis/mobile/web/component/ems/setup.tag</path>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/ems/setup.tag</path>
     </tag-file>
 </taglib>

@@ -6,10 +6,10 @@
 >
     <description>Tag library for the deviceport component.</description>
     <tlib-version>1.0</tlib-version>
-    <uri>/au/com/sensis/mobile/web/component/deviceport/deviceport.tld</uri>
+    <uri>/au/com/sensis/mobile/web/component/core/deviceport/deviceport.tld</uri>
     <tag-file>
         <name>setup</name>
         <description>Setup the deviceport component. Must be called in the HTML head.</description>
-        <path>/META-INF/tags/au/com/sensis/mobile/web/component/deviceport/setup.tag</path>
+        <path>/META-INF/tags/au/com/sensis/mobile/web/component/core/deviceport/setup.tag</path>
     </tag-file>
 </taglib>

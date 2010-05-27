@@ -14,8 +14,8 @@
     <bean name="core.comp.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <value>
-                @{core.comp.handler.mapping.url.prefix}/js/**/*=core.comp.getJavaScriptBundle
-                @{core.comp.handler.mapping.url.prefix}/jsmember/**/*=core.comp.getJavaScriptBundleMember
+                @{core.comp.handler.mapping.url.prefix}/**/js/**/*=core.comp.getJavaScriptBundle
+                @{core.comp.handler.mapping.url.prefix}/**/jsmember/**/*=core.comp.getJavaScriptBundleMember
             </value>
         </property>
         <property name="interceptors">

@@ -4,80 +4,80 @@
     xsi:schemaLocation="http://mobile.sensis.com.au/build-scripts au.com.sensis.mobile.bundles.xsd">
 
     <!-- Bundles for the core-component proper. -->    
-    <bundles basename="core-component" subpackage="core">
+    <bundles basename="core-component" package="core/base">
         <bundle name="common" abstract="true">
-            <fileset dir="${src.javascript.dir}/core/device-invariant">
+            <fileset dir="${src.javascript.dir}/core/base/device-invariant">
                 <include name="mootools.js" />
             </fileset>
-            <fileset dir="${src.javascript.dir}/core/device-invariant">
+            <fileset dir="${src.javascript.dir}/core/base/device-invariant">
                 <include name="**/*" />
                 <exclude name="mootools.js" />
             </fileset>
         </bundle>
         <bundle name="default" parent="common">
-        	<fileset dir="${src.javascript.dir}/core/device-variant/default">
+        	<fileset dir="${src.javascript.dir}/core/base/device-variant/default">
             </fileset>
         </bundle>
         <bundle name="apple" parent="common">
         </bundle>
         <bundle name="nokiaS60" parent="common">
-        	<fileset dir="${src.javascript.dir}/core/device-variant/nokiaS60">
+        	<fileset dir="${src.javascript.dir}/core/base/device-variant/nokiaS60">
             </fileset>
         </bundle>
         <bundle name="samsungC5220" parent="common">
-        	<fileset dir="${src.javascript.dir}/core/device-variant/samsungC5220">
+        	<fileset dir="${src.javascript.dir}/core/base/device-variant/samsungC5220">
             </fileset>
         </bundle>
     </bundles>
 
     <!-- Bundles for the logging-component. -->    
-    <bundles basename="logging-component" subpackage="logging">
+    <bundles basename="logging-component" package="core/logging">
         <bundle name="apple">
-            <fileset dir="${src.javascript.dir}/logging/device-variant/apple">
+            <fileset dir="${src.javascript.dir}/core/logging/device-variant/apple">
                 <include name="**/logger*.js" />        
             </fileset>
         </bundle>
         <bundle name="ie">
-            <fileset dir="${src.javascript.dir}/logging/device-variant/ie">
+            <fileset dir="${src.javascript.dir}/core/logging/device-variant/ie">
                 <include name="**/logger*.js" />
             </fileset>
         </bundle>
         <bundle name="default">
-            <fileset dir="${src.javascript.dir}/logging/device-variant/default">
+            <fileset dir="${src.javascript.dir}/core/logging/device-variant/default">
                 <include name="**/logger*.js" />        
             </fileset>
         </bundle>
     </bundles>
     
     <!-- Bundles for the util-component. -->    
-    <bundles basename="util-component" subpackage="util">
+    <bundles basename="util-component" package="core/util">
         <bundle name="default">
-            <fileset dir="${src.javascript.dir}/util/device-invariant">
+            <fileset dir="${src.javascript.dir}/core/util/device-invariant">
                 <include name="utils.js" />        
             </fileset>
         </bundle>
     </bundles>
     
     <!--  Bundles for the deviceport -->
-    <bundles basename="deviceport-component" subpackage="deviceport">
+    <bundles basename="deviceport-component" package="core/deviceport">
         <bundle name="apple">
-            <fileset dir="${src.javascript.dir}/deviceport/device-variant/apple">     
+            <fileset dir="${src.javascript.dir}/core/deviceport/device-variant/apple">     
             </fileset>
         </bundle>
         <bundle name="htcDiamond">
-            <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcDiamond">     
+            <fileset dir="${src.javascript.dir}/core/deviceport/device-variant/htcDiamond">     
             </fileset>
         </bundle>
         <bundle name="htcTouchHD">
-            <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcTouchHD">     
+            <fileset dir="${src.javascript.dir}/core/deviceport/device-variant/htcTouchHD">     
             </fileset>
         </bundle>
         <bundle name="htcTouchHD2">
-            <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcTouchHD2">     
+            <fileset dir="${src.javascript.dir}/core/deviceport/device-variant/htcTouchHD2">     
             </fileset>
         </bundle>
         <bundle name="htcDesire">
-            <fileset dir="${src.javascript.dir}/deviceport/device-variant/htcDesire">     
+            <fileset dir="${src.javascript.dir}/core/deviceport/device-variant/htcDesire">     
             </fileset>
         </bundle>
     </bundles>
