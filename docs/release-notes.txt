@@ -46,6 +46,21 @@ Upgrade notes:
 - Components that depend on this component, now require wl-build-scripts 1.0.18 or above to still build correctly.
 - javascript-bundles.xml need to be updated to change the "subpackage" attribute of each bundles
   element to "package". 
+- When a new javascript package is defined in javascript-bundles.xml, there is no longer any need to 
+  modify/add context files or property files in order for the javascript to be correctly served. Note that this relies
+  on the modified handlerMapping in coreComponentSpringMVCContext.xml that now looks for any number of paths under the 
+  prefix: 
+  
+    <bean name="core.comp.handlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        ...
+        <property name="mappings">
+            <value>
+                @{core.comp.handler.mapping.url.prefix}/**/js/**/*=core.comp.getJavaScriptBundle
+                @{core.comp.handler.mapping.url.prefix}/**/jsmember/**/*=core.comp.getJavaScriptBundleMember
+            </value>
+        </property>
+    ...
+  So for this principle to apply to your component, you need to modify your handlerMapping similarly.
 - JSPs that previously imported the core tag lib like so:
 
     <%@ taglib prefix="core" uri="/au/com/sensis/mobile/web/component/core/core.tld"%>
@@ -54,7 +69,7 @@ Upgrade notes:
   
     <%@ taglib prefix="base" uri="/au/com/sensis/mobile/web/component/core/base/base.tld"%>     
     
-  The tags in the taglib are the same as before.
+  The tags in the taglib are the same as before.  
 - You should ensure that you redeploy your policies and preferably delete the old policies first.
 
 ==== Version 1.0.36 (tag: core_v1_0_36) ====
