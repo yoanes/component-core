@@ -35,7 +35,7 @@
         abstract="true"
         init-method="validateState">
         <property name="resourceBundleLoader" ref="core.comp.resourceBundleLoader"/>
-        <property name="featureEnablementRegistry" ref="core.comp.featureEnablementRegistry"/>
+        <property name="featureEnablementRegistry" ref="core.comp.bundleFeatureEnablementRegistry"/>
         
         <property name="resourceNameRequestUriPrefix" value="@{core.env.context.root.component.prefix}"/>
         

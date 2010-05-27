@@ -8,10 +8,16 @@
                 
     <!-- ================================================================================================ -->                
     
-    <bean name="core.comp.featureEnablementRegistry"
+    <bean name="core.comp.bundleFeatureEnablementRegistry"
         class="au.com.sensis.mobile.web.component.core.bundle.SimpleFeatureEnablementRegistryBean">
         <property name="bundleExplosionEnabled" value="@{core.env.bundleExplosionEnabled}"/>
     </bean>
+    
+    <bean name="core.comp.loggingFeatureEnablementRegistry"
+        class="au.com.sensis.mobile.web.component.logging.SimpleFeatureEnablementRegistryBean">
+        <property name="javaScriptLoggerEnabled" value="@{core.env.javascript.logger.enabled}" />
+    </bean>
+    
     
     <!-- ================================================================================================ -->
 

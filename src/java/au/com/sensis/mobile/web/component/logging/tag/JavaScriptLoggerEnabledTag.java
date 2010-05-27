@@ -25,7 +25,7 @@ public class JavaScriptLoggerEnabledTag extends SimpleTagSupport {
      * that indicate if the JavaScript logger is enabled.
      */
     public static final String FEATURE_ENABLEMENT_REGISTRY_BEAN_ID
-        = "logging.comp.featureEnablementRegistry";
+        = "core.comp.loggingFeatureEnablementRegistry";
 
     private String var;
 
