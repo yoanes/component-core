@@ -1,3 +1,18 @@
+==== Version 1.1.1 (tag: core_v1_1_1) ====
+
+Fixed:
+- CUI-275: Device Config - infrastructure should be simplified somehow
+    - Now depends on:
+        - <dependency org="com.sensis" name="wl-build-scripts" rev="1.2.0" conf="buildBootstrap->default" />
+    - Added ivy publication that will be published by default:
+        - <artifact name="wl-core-component-device-config-xsd" type="xsd" ext="zip" conf="default"/>        
+    - Deleted src/resources/xjb        
+    - Added src/resources/au/com/sensis/mobile/web/component/core/device/device-config-xsd-catalog.xml
+    - Regenerated the JAXB artifacts from device-config.xml using the new build scripts.
+    
+Upgrade notes:
+- Upgrade should be transparent.    
+
 ==== Version 1.1.0 (tag: core_v1_1_0) ====
 
 Fixed:
