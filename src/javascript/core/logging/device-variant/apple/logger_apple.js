@@ -102,18 +102,25 @@ var Logger = new Class({
 	 	cmdClear.value = " Clear Log";
 	 	cmdClear.id = "clearButton";
 	 	
-	 	cmdClear.style.border = cmdSource.style.border = cmdRun.style.border = '1px solid black';
+	 	var cmdLog = document.createElement("input");
+	 	cmdLog.type = "button";
+	 	cmdLog.value = " Log to server";
+	 	cmdLog.id = "logButton";
+		
+	 	cmdClear.style.border = cmdSource.style.border = cmdRun.style.border = cmdLog.style.border = '1px solid black';
 	 	
 	 	cmdRun.addEvent('click', function() { _exec($('cmd').value); return false; });
 	 	cmdSource.addEvent('click', function() { _viewSource(); return false; });
 	 	cmdClear.addEvent('click', function() { _clear(); return false; });
-		
+	 	cmdLog.addEvent('click', function() { _log2server(); return false; });
+	 	
 		/* Add the command elements to the document */
 		var b = document.getElementsByTagName("body")[0];
 		b.appendChild(cmdField);
 		b.appendChild(cmdRun);
 		b.appendChild(cmdSource);
 		b.appendChild(cmdClear);
+		b.appendChild(cmdLog);
 	},
 
 	/***
@@ -341,3 +348,17 @@ function _viewSource() { sensis.traverseNode(document.getElementsByTagName("html
 
 /** This function is padded to onclick of the "Clear Log" button instantiated by the logger._cmd(); **/
 function _clear() { sensis.clear(); }
+
+function _log2server() {
+	var ajax = new Request({
+		method: 'get', 
+		url: window.location.href,
+		headers: {SERVLET_CAPTURE:'ON'},
+		onSuccess: function(){ 
+			sensis.log('--- Request logging done ---');
+		}
+	});
+	
+	sensis.log('--- Sending request to server ---');
+	ajax.send();
+}
