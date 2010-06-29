@@ -97,3 +97,16 @@ var ReportingUtilities = new Class({
 });
 
 var Reporting = new ReportingUtilities();
+
+var BasicUtilities = new Class({
+	
+	swap: function(id1, id2) {
+		if($(id1) && $(id2)) {
+			var temp = $(id1).value;
+			$(id1).value = $(id2).value;
+			$(id2).value = temp;
+		}
+	}
+});
+
+var B = new BasicUtilities();
