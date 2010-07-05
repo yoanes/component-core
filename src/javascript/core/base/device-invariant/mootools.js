@@ -2247,11 +2247,6 @@ Element.implement({
 			result[key] = this.getStyle(key);
 		}, this);
 		return result;
-	},
-	
-	clearStyles: function(styles){
-		for (var style in styles) this.setStyle(style, '');
-		return this;
 	}
 
 });
