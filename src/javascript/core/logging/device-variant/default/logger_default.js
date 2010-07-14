@@ -270,7 +270,7 @@ var Logger = new Class({
 		 **/
 		if(elementObj.nodeName == "#comment" || elementObj.id == "cmd" || 
 		   elementObj.id == "logger" || elementObj.id == "runButton" || elementObj.id == "clearButton" || 
-		   elementObj.id == "sourceButton" || elementObj.id == "_firebugConsole" ||
+		   elementObj.id == "sourceButton" || elementObj.id == "logButton" || elementObj.id == "_firebugConsole" ||
 		   elementObj.id == "_firebugCommandLineInjector") 
 			return;
 		
