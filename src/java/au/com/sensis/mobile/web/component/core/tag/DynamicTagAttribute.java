@@ -1,5 +1,9 @@
 package au.com.sensis.mobile.web.component.core.tag;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 
 /**
  * Simple bean representing a dynamic tag attribute set into a
@@ -58,5 +62,52 @@ public class DynamicTagAttribute {
     public Object getValue() {
         return value;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if ((obj == null) || !this.getClass().equals(obj.getClass())) {
+            return false;
+        }
+
+        final DynamicTagAttribute rhs = (DynamicTagAttribute) obj;
+        final EqualsBuilder equalsBuilder = new EqualsBuilder();
+
+        equalsBuilder.append(getNamespaceUri(), rhs.getNamespaceUri());
+        equalsBuilder.append(getLocalName(), rhs.getLocalName());
+        equalsBuilder.append(getValue(), rhs.getValue());
+        return equalsBuilder.isEquals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+        final HashCodeBuilder hashCodeBuilder = new HashCodeBuilder();
+        hashCodeBuilder.append(getNamespaceUri());
+        hashCodeBuilder.append(getLocalName());
+        hashCodeBuilder.append(getValue());
+        return hashCodeBuilder.toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        final ToStringBuilder toStringBuilder = new ToStringBuilder(this);
+        toStringBuilder.append("namespaceUri", getNamespaceUri());
+        toStringBuilder.append("localName", getLocalName());
+        toStringBuilder.append("value", getValue());
+        return toStringBuilder.toString();
+    }
+
 
 }

@@ -1,3 +1,7 @@
+==== Version 1.1.5 (tag: core_v1_1_5) ====
+
+DynamicTagAttribute now implements equals, hashCode, toString methods.
+
 ==== Version 1.1.4 (tag: core_v1_1_4) ====
 - Ignore the log button when traversing the node tree
 
