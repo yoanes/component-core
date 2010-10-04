@@ -1,0 +1,6 @@
+########################################################
+## ENVIRONMENT : DESK
+########################################################
+
+env.ems.service.js=http://ems.whereis.com/v1/web/js/ems/EMS.js?profile=mobi&amp;token=
+env.ems.token=4316381136292159452

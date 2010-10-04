@@ -1,3 +1,11 @@
+==== Version 1.1.6 (tag: core_v1_1_6) ====
+
+Fixed showcase so it now deploys. Broke this in some earlier version when upgrading build scripts
+(looks like I skipped a few steps from the build script release notes).
+
+Upgrade notes:
+- Upgrade should be transparent.    
+
 ==== Version 1.1.5 (tag: core_v1_1_5) ====
 
 DynamicTagAttribute now implements equals, hashCode, toString methods.
