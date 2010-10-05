@@ -3,6 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="base" uri="/au/com/sensis/mobile/web/component/core/base/base.tld"%>
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/core/logging/logging.tld"%>
+<%@ taglib prefix="crf" uri="/au/com/sensis/mobile/crf/crf.tld"%>
+
+<%@ attribute name="device" required="true"
+    type="au.com.sensis.wireless.common.volantis.devicerepository.api.Device"  
+    description="Device of the current user." %>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.core" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
@@ -16,19 +21,18 @@
 
 <base:script name="deviceInfo" type="text/javascript">
     var Device = new McsDevice(
-        '<pipeline:value-of expr="device:getDeviceName()"/>',
+        '${device.name}',
         
-        new McsBrowser('<pipeline:value-of expr="device:getPolicyValue('brwsrname')"/>',
-                       '<pipeline:value-of expr="device:getPolicyValue('browser.platform')"/>',
-                       '<pipeline:value-of expr="device:getPolicyValue('brwsrvers')"/>',
-                       '<pipeline:value-of expr="device:getPolicyValue('dial.link.info')"/>',
-                       '<pipeline:value-of expr="device:getPolicyValue('UAProf.WtaiLibraries')"/>'),
+        new McsBrowser('<crf:deviceProperty device="${device}" property="brwsrname"/>',
+                       '<crf:deviceProperty device="${device}" property="browser.platform"/>',
+                       '<crf:deviceProperty device="${device}" property="brwsrvers"/>',
+                       '<crf:deviceProperty device="${device}" property="dial.link.info"/>',
+                       '<crf:deviceProperty device="${device}" property="UAProf.WtaiLibraries"/>'),
                      
-        new McsCustom(<pipeline:value-of expr="device:getPolicyValue('custom.business.phone')"/>,
-                     '<pipeline:value-of expr="device:getPolicyValue('custom.imageCategory')"/>'),
+        new McsCustom(<crf:deviceProperty device="${device}" property="custom.business.phone"/>,
+                     '<crf:deviceProperty device="${device}" property="custom.imageCategory"/>'),
                    
-        new McsOutput(<pipeline:value-of expr="device:getPolicyValue('pixelsx')"/>,
-                      <pipeline:value-of expr="device:getPolicyValue('pixelsy')"/>)
+        new McsOutput(${device.pixelsX}, ${device.pixelsY})
     );
 </base:script>
 

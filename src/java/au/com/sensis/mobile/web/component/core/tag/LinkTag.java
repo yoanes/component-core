@@ -11,6 +11,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+import au.com.sensis.mobile.crf.presentation.tag.DynamicTagAttribute;
+
 /**
  * Facade to a link tag. This facade prevents duplicate tags from being written in the current
  * HTTP request. The unique id of each tag is governed by the value of the href attribute.

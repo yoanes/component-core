@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
+import au.com.sensis.mobile.crf.presentation.tag.DynamicTagAttribute;
+
 /**
  * Interface that knows how to write out a link tag instance (ie. with
  * specific attribute values) to a JSP.

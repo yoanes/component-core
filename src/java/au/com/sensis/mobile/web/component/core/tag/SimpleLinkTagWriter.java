@@ -6,6 +6,8 @@ import java.util.List;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 
+import au.com.sensis.mobile.crf.presentation.tag.DynamicTagAttribute;
+
 /**
  * Simple implementation of {@link LinkTagWriter} that outputs a link tag in the default namespace.
  *

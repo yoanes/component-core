@@ -5,6 +5,10 @@
 <%@ taglib prefix="base" uri="/au/com/sensis/mobile/web/component/core/base/base.tld"%>
 <%@ taglib prefix="logging" uri="/au/com/sensis/mobile/web/component/core/logging/logging.tld"%>
 
+<%@ attribute name="device" required="true"
+    type="au.com.sensis.wireless.common.volantis.devicerepository.api.Device"  
+    description="Device of the current user." %>
+
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.logging" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
@@ -17,7 +21,7 @@
             message="javascriptLoggerEnabled is '${javascriptLoggerEnabled}'. Enabling JavaScript logger." />    
     
     	<%-- Setup components that we depend on. --%>
-    	<base:setup />
+    	<base:setup device="${device}" />
     
     	<%-- Themes for current component. --%>
     	<%-- NOTE: none required --%>

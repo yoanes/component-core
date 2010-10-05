@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockJspWriter;
 
+import au.com.sensis.mobile.crf.presentation.tag.DynamicTagAttribute;
 import au.com.sensis.wireless.test.AbstractJUnit4TestCase;
 
 /**
