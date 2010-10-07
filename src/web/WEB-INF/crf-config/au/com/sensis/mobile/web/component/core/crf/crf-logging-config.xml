@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<crf:ui-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:crf="http://mobile.sensis.com.au/web/crf/config"
+         xsi:schemaLocation="http://mobile.sensis.com.au/web/crf/config crf-config.xsd">
+
+    <config-path>comp/core/logging</config-path>
+    <groups>
+        <group name="ie" expr="device.isA('HTC-Diamond2') or device.isA('HTC-Snap') 
+            or device.isA('HTC-TouchHD-IE') or device.isA('HTC-TouchHD2') 
+            or device.isA('PC-Win32-IE6') or device.isA('PC-Win32-IE7') 
+            or device.isA('PC-Win32-IE8')"/>
+           
+        <group name="touch" expr="device.isA('Apple') or device.isA('Android-OS')
+            or device.isA('GT-I8000T-Opera9') or device.isA('HTC-Diamond-Opera9') 
+            or device.isA('HTC-TouchHD') or device.isA('HTC-TouchPro-Opera9') 
+            or device.isA('Mot-A3100-Opera9') or device.isA('SE-X1-Opera9')" />
+            
+        <!-- TODO: need for this logging-default group will go when CRF-62 is implemented.  -->
+        <group name="logging-default" expr="!device.isA('Apple') and !device.isA('Android-OS') 
+            and !device.isA('GT-I8000T-Opera9') and !device.isA('HTC-Diamond-Opera9') 
+            and !device.isA('HTC-TouchHD') and !device.isA('HTC-TouchPro-Opera9') 
+            and !device.isA('Mot-A3100-Opera9') and !device.isA('SE-X1-Opera9')
+            and !device.isA('HTC-Diamond2') and !device.isA('HTC-Snap') 
+            and !device.isA('HTC-TouchHD-IE') and !device.isA('HTC-TouchHD2') 
+            and !device.isA('PC-Win32-IE6') and !device.isA('PC-Win32-IE7') 
+            and !device.isA('PC-Win32-IE8')" />
+            
+        <default-group name="default" />
+    </groups>
+
+</crf:ui-configuration>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<crf:ui-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:crf="http://mobile.sensis.com.au/web/crf/config"
+         xsi:schemaLocation="http://mobile.sensis.com.au/web/crf/config crf-config.xsd">
+
+    <config-path>comp/core/base</config-path>
+    <groups>
+        
+        <group name="samsungC5220" expr="device.isA('Samsung-GT-C5220')" />
+        <group name="nokiaS60" expr="device.isA('Nokia-6120c') or device.isA('Nokia-6720c') 
+            or device.isA('Nokia-E51') or device.isA('Nokia-E71')
+            or device.isA('Nokia-N85') or device.isA('Nokia-N95') 
+            or device.isA('Nokia-N96')" />
+        
+        <!-- TODO: need for this base-default group will go when CRF-62 is implemented.  -->
+        <group name="base-default" expr="!device.isA('Nokia-6120c') and !device.isA('Nokia-6720c') 
+            and !device.isA('Nokia-E51') and !device.isA('Nokia-E71') 
+            and !device.isA('Nokia-N85') and !device.isA('Nokia-N95') 
+            and !device.isA('Nokia-N96') and !device.isA('Samsung-GT-C5220')" />
+            
+        <default-group name="default" />
+    </groups>
+
+</crf:ui-configuration>

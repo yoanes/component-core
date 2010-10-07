@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<crf:ui-configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:crf="http://mobile.sensis.com.au/web/crf/config"
+         xsi:schemaLocation="http://mobile.sensis.com.au/web/crf/config crf-config.xsd">
+
+    <config-path>comp/core/deviceport</config-path>
+    <groups>
+        <group name="htcTouchHD" expr="device.isA('HTC-Diamond2') or device.isA('HTC-T7381')
+            or device.isA('HTC-TouchHD')" /> 
+        <group name="htcDiamond" expr="device.isA('HTC-Diamond')" /> 
+        <group name="apple" expr="device.isA('Apple')" />        
+        <group name="htcDesire" expr="device.isA('HTC-A8183') or device.isA('HTC-Desire')
+            or device.isA('SonyEricsson-X10')" />        
+        <group name="htcTouchHD2" expr="device.isA('HTC-TouchHD2')" />
+            
+        <default-group name="default" />
+    </groups>
+
+</crf:ui-configuration>
