@@ -1,11 +1,11 @@
-==== (Pending) Version 2.0.0-001 (tag: core_v2_0_0-001) ====
+==== Version 2.0.0-001 (tag: core_v2_0_0-001) ====
 
 Jiras:
 - CUI-293: NEW: core component - Content Rendering Framework migration
     - Now depends on:
     
         <dependency org="com.sensis" name="wl-build-scripts" rev="2.0.2" conf="buildBootstrap->default" />
-        <dependency org="com.sensis" name="wl-crf" rev="0.1.1-003" conf="default" />
+        <dependency org="com.sensis" name="wl-crf" rev="0.1.1-005" conf="default" />
         <dependency org="com.sensis" name="sdpCommon-volantis" rev="0.6-012" conf="default"/>
         <dependency org="com.sensis" name="wl-webapp-testbed" rev="2.0.1" conf="showcase->default"/>                        
 
@@ -23,6 +23,10 @@ Jiras:
       
     - Added README files under new dirs: showcase/web/resources/css, showcase/web/resources/images,
       showcase/web/resources/javascript. 
+      
+    - Updated config for a sandpit-uidev deployment.
+    
+    - TODO: remove old JavaScript related controllers, bundle explosion and config. 
     
 Upgrade notes:
 - base:setup and logging:setup tags require the device to be passed in: 
