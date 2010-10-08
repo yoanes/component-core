@@ -41,7 +41,7 @@
     </appender>
     
     <appender name="CAPTURE" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="${catalina.base}/logs/map-component-showcase-capture.log"/>
+        <param name="File" value="${catalina.base}/logs/core-component-showcase-capture.log"/>
         <param name="Append" value="true"/>
         <param name="Threshold" value="DEBUG"/>
         <param name="DatePattern" value="'.'yyyy-MM-dd"/>
