@@ -1,3 +1,8 @@
+==== Version 2.0.0-002 (tag: core_v2_0_0-002) ====
+
+Removed dependency:
+- <dependency org="com.sensis" name="sdpCommon-manager" rev="1.0-050" conf="showcase->default"/>
+
 ==== Version 2.0.0-001 (tag: core_v2_0_0-001) ====
 
 Jiras:
