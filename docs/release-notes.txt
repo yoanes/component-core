@@ -1,3 +1,11 @@
+==== Version 2.0.0-003 (tag: core_v2_0_0-003) ====
+
+Removed dependency:
+    <dependency org="com.sensis" name="ems-cxf-client" rev="1.6" conf="showcase->default"/>
+    
+Now depends on:
+    <dependency org="com.sensis" name="wl-webapp-testbed" rev="2.0.4" conf="showcase->default"/>            
+
 ==== Version 2.0.0-002 (tag: core_v2_0_0-002) ====
 
 Removed dependency:
