@@ -112,21 +112,26 @@ public abstract class AbstractEntryAndExitLoggingAspect implements Validatable {
         description.append("(");
 
         if (proceedingJoinPoint.getArgs() != null) {
-            for (int i = 0; i < proceedingJoinPoint.getArgs().length; i++) {
-                if (proceedingJoinPoint.getArgs()[i] != null) {
-                    description.append(proceedingJoinPoint.getArgs()[i]
-                            .getClass().getName());
-                } else {
-                    description.append("null");
-                }
-                if (i < proceedingJoinPoint.getArgs().length - 1) {
-                    description.append(", ");
-                }
-            }
+            appendJoinPointArgs(description, proceedingJoinPoint);
         }
         description.append(")");
 
         return description.toString();
+    }
+
+    private void appendJoinPointArgs(final StringBuilder description,
+            final ProceedingJoinPoint proceedingJoinPoint) {
+        for (int i = 0; i < proceedingJoinPoint.getArgs().length; i++) {
+            if (proceedingJoinPoint.getArgs()[i] != null) {
+                description.append(proceedingJoinPoint.getArgs()[i]
+                        .getClass().getName());
+            } else {
+                description.append("null");
+            }
+            if (i < proceedingJoinPoint.getArgs().length - 1) {
+                description.append(", ");
+            }
+        }
     }
 
     private StringBuilder createTypeAndMethodDescription(

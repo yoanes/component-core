@@ -54,38 +54,12 @@ public class JsonLeadingAndTrailingWhitespaceTrimmingFilter implements Filter {
             final ServletResponse servletResponse, final FilterChain filterChain)
             throws IOException, ServletException {
 
-        if (shouldWrapResponse(servletRequest, servletResponse)) {
+        if (shouldWrapResponse(servletRequest)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Will wrap the response for this request.");
             }
 
-            final HttpServletResponse httpServletResponse =
-                    (HttpServletResponse) servletResponse;
-            final CharArrayWriterHttpServletResponseWrapper wrapper =
-                    new CharArrayWriterHttpServletResponseWrapper(
-                            httpServletResponse,
-                            getInitialCharArrayWriterSize());
-
-            filterChain.doFilter(servletRequest, wrapper);
-
-            if (shouldTrimResponse(wrapper)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Will trim the response for this request.");
-                }
-
-                httpServletResponse.getWriter().write(
-                        wrapper.getWriterAsString().trim());
-                httpServletResponse.getWriter().close();
-            } else {
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Will not trim the response for this request.");
-                }
-
-                httpServletResponse.getWriter().write(
-                        wrapper.getWriterAsString().toString());
-                httpServletResponse.getWriter().close();
-            }
+            wrapResponseAndTrimIfNecessary(servletRequest, servletResponse, filterChain);
         } else {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Will not wrap the response for this request.");
@@ -94,13 +68,45 @@ public class JsonLeadingAndTrailingWhitespaceTrimmingFilter implements Filter {
         }
     }
 
+    private void wrapResponseAndTrimIfNecessary(final ServletRequest servletRequest,
+            final ServletResponse servletResponse, final FilterChain filterChain)
+            throws IOException, ServletException {
+
+        final HttpServletResponse httpServletResponse =
+                (HttpServletResponse) servletResponse;
+        final CharArrayWriterHttpServletResponseWrapper wrapper =
+                new CharArrayWriterHttpServletResponseWrapper(
+                        httpServletResponse,
+                        getInitialCharArrayWriterSize());
+
+        filterChain.doFilter(servletRequest, wrapper);
+
+        if (shouldTrimResponse(wrapper)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Will trim the response for this request.");
+            }
+
+            httpServletResponse.getWriter().write(
+                    wrapper.getWriterAsString().trim());
+            httpServletResponse.getWriter().close();
+        } else {
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Will not trim the response for this request.");
+            }
+
+            httpServletResponse.getWriter().write(
+                    wrapper.getWriterAsString().toString());
+            httpServletResponse.getWriter().close();
+        }
+    }
+
     private boolean shouldTrimResponse(
             final CharArrayWriterHttpServletResponseWrapper wrapper) {
         return "text/javascript".equalsIgnoreCase(wrapper.getContentType());
     }
 
-    private boolean shouldWrapResponse(final ServletRequest servletRequest,
-            final ServletResponse servletResponse) {
+    private boolean shouldWrapResponse(final ServletRequest servletRequest) {
 
         final HttpServletRequest httpServletRequest =
             (HttpServletRequest) servletRequest;
