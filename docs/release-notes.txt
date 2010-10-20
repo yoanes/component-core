@@ -1,3 +1,7 @@
+==== Version 2.0.2 (tag: core_v2_0_2) ====
+
+Bumping version to 2.0.2 since it was actually completed in this iteration.
+
 ==== Version 2.0.1 (tag: core_v2_0_1) ====
 
 Removed more code no longer needed with the Content Rendering Framework migration:
