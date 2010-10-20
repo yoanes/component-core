@@ -13,8 +13,6 @@
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.util" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
-<base:compMcsBasePath var="compMcsBasePath" />
-
 <crf:script src="comp/core/deviceport/deviceport.js" device="${device}" />
 
 <logging:debug logger="${logger}" message="Exiting setup.tag" />

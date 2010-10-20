@@ -1,3 +1,29 @@
+==== Version 2.0.1 (tag: core_v2_0_1) ====
+
+Removed more code no longer needed with the Content Rendering Framework migration:
+* Removed all code for serving JavaScript via a Spring controller. 
+* Removed all device config related code.
+* Removed compMcsBasePath.tag, ScriptTag and LinkTag and associated classes.
+
+Now depends on:
+* <dependency org="com.sensis" name="wl-build-scripts" rev="2.0.5" conf="buildBootstrap->default" />
+* <dependency org="com.sensis" name="wl-crf" rev="0.1.2-002" conf="default" />.
+* <dependency org="com.sensis" name="wl-webapp-testbed" rev="2.0.5" conf="showcase->default"/>
+
+Upgrade notes:
+* Any calls to the following JSP tags must be removed:
+    * <base:compMcsBasePath /> 
+    * <base:script /> - use <crf:script /> instead.
+    * <base:link /> - use <crf:link /> instead.
+* Any references to the following Spring beans must be removed:
+    * core.comp.abstractResourceBundleLoaderController
+    * core.comp.abstractGetJavaScriptBundle
+    * core.comp.getJavaScriptBundle
+    * core.comp.getJavaScriptBundleMember
+    * core.comp.abstractResourceBundleLoader
+    * core.comp.resourceBundleLoader
+* Any use of the device config and device config registry infrastructure must be removed.    
+
 ==== Version 2.0.0-003 (tag: core_v2_0_0-003) ====
 
 Removed dependency:

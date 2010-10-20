@@ -12,8 +12,6 @@
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.base" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
-<base:compMcsBasePath var="compMcsBasePath" />
-
 <crf:script src="comp/core/base/package" device="${device}" />
 
 <crf:script name="deviceInfo" type="text/javascript" device="${context.device}">

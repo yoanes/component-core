@@ -3,6 +3,7 @@
 ########################################################
 
 env.resources.jsp.root.dir=D:/Software/apache-tomcat-hotdeploy/webapps/wl-core-component-showcase/
+env.resources.properties.root.dir=D:/Software/apache-tomcat-hotdeploy/webapps/wl-core-component-showcase/WEB-INF/properties
 env.resources.css.root.dir=D:/Software/apache-tomcat-hotdeploy/webapps/wl-core-component-showcase/resources/css
 env.resources.javascript.root.dir=D:/Software/apache-tomcat-hotdeploy/webapps/wl-core-component-showcase/resources/javascript
 env.resources.images.root.dir=D:/Software/apache-tomcat-hotdeploy/webapps/wl-core-component-showcase/resources/images

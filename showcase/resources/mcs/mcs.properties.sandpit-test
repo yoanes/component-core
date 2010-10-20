@@ -1,8 +1,5 @@
 mcs.devicerepository.filepath=/app/smtestapp/sandpit-test/core-component/devices/devices.mdpr
 mcs.policies.filepath=/app/smtestapp/sandpit-test/core-component/policies
 
-mcs.mgrp.component.scripts.base.url=/test/core-component-showcase/comp/
-mcs.mgrp.component.images.base.url=/test/core-component-imageserver/
-
 mcs.cache.policies=false
 #!mcs.script.asset.path=/core-component-showcase/scripts/

@@ -15,8 +15,6 @@
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.ems" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
-<base:compMcsBasePath var="compMcsBasePath" />
-
 <%-- Scripts for current component. --%>
 <crf:script src="${emsJsUrl}" device="${device}" type="text/javascript"/>
 <crf:script name="core-ems-communicationMode" type="text/javascript" device="${device}">

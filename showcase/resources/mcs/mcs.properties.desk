@@ -3,9 +3,5 @@ mcs.devicerepository.filepath=D:/var/mcs/devices/devices.mdpr
 # TODO: may be possible to change mcs-config.xml to get rid of the policies directory altogether. 
 mcs.policies.filepath=D:/var/mcs/
 
-mcs.mgrp.base.url=http://localhost:8080/core-imageserver/
-mcs.mgrp.component.scripts.base.url=/wl-core-component-showcase/comp/
-mcs.mgrp.component.images.base.url=http://localhost:8080/common-imageserver/
-
 mcs.cache.policies=false
 mcs.script.asset.path=/core-component-showcase/scripts/

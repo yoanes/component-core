@@ -1,2 +1,0 @@
-# Context root relative prefix for all components.
-env.context.root.component.prefix=/test/core-component-showcase/comp/

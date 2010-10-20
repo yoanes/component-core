@@ -13,8 +13,6 @@
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.logging" />
 <logging:debug logger="${logger}" message="Entering setup.tag" />
 
-<base:compMcsBasePath var="compMcsBasePath" />
-
 <logging:jsLoggerEnabled var="javascriptLoggerEnabled"/>
 <c:choose>
     <c:when test="${javascriptLoggerEnabled}">
