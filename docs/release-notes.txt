@@ -1,3 +1,8 @@
+==== Version 2.0.3 (tag: core_v2_0_3) ====
+
+Jiras:
+* CRF-65: Changed web resources directory to uiresources.
+
 ==== Version 2.0.2 (tag: core_v2_0_2) ====
 
 Bumping version to 2.0.2 since it was actually completed in this iteration.
