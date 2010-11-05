@@ -58,7 +58,7 @@
         <dependency org="com.sensis" name="wl-build-scripts" rev="2.0.9" conf="buildBootstrap->default" />
         
         <!-- New Content Rendering Framework. -->    
-        <dependency org="com.sensis" name="wl-crf" rev="0.1.2-102" conf="default" />
+        <dependency org="com.sensis" name="wl-crf" rev="0.1.2-103" conf="default" />
         
         <!-- Commons -->
         <dependency org="apache" name="commons-lang" rev="2.4" conf="default" />

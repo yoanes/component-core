@@ -1,3 +1,8 @@
+==== Version 2.0.4 (tag: core_v2_0_4) ====
+
+Now depends on:
+    <dependency org="com.sensis" name="wl-crf" rev="0.1.2-103" conf="default" />
+
 ==== Version 2.0.3-001 (tag: core_v2_0_3-001) ====
 
 Changes:
