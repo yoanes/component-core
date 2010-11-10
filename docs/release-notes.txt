@@ -1,3 +1,17 @@
+==== Version 2.0.5 (tag: core_v2_0_5) ====
+
+Jiras:
+* CUI-325: Maps for Intermediate devices-  Controls on the map lock 
+    * Utilities.getJSessionId in src/web/uiresources/javascript/default/comp/core/util/utils.js 
+      modified to behaviour correctly if there is an anchor in the URL. 
+      For nokia devices, if the anchor a user clicked on contains something like #myAnchor, 
+      window.location may contain this anchor by the time getJSessionId is invoked.
+      
+Other changes:
+* Utilities.maintainSession will now refuse to add a jsessionid to the url if it already contains 
+  one.
+* Also implemented simple unit tests for the abov in test/unit/javascript/default/comp/core/util/      
+    
 ==== Version 2.0.4 (tag: core_v2_0_4) ====
 
 Now depends on:

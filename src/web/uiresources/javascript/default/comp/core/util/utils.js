@@ -11,28 +11,39 @@
  * Dependencies:
  * - mootools.js
  * 
- * Change Log:
- * 	1.0		6/05/2009		Initial version released.		Tony Filipe, Yoanes Koesno
- *   
  *******************************************************************************************/
 
 var Utilities = new Class({
 	
-	version: '1.0',
+	/**
+	 * Separate delegate method to allow overriding by unit tests.
+	 */
+	getWindowLocation: function() {
+		return window.location;
+	},
 	
 	/**
 	 * Returns the JSessionId appended to the current window URL, if any.
 	 */	
 	getJSessionId: function(){
-		var path = new String(window.location);
+		var path = new String(this.getWindowLocation());
 		var start = path.indexOf(';');
 		var sessionId = "";
 		
 		/* try to get from the location's URL */
 		if (start > -1) {
-			var end = path.indexOf("?");
-			if (end > -1) {
-				sessionId = path.substring(start, end);
+			var paramStartIndex = path.indexOf("?");
+			
+			/**
+			 * For nokia devices, if the anchor a user clicked on contains something like #myAnchor, 
+			 * window.location may contain this anchor by the time this function is invoked.
+			 * So we protect against it. 
+			 **/
+			var anchorStartIndex = path.indexOf("#");
+			if (anchorStartIndex > -1){
+				sessionId = path.substring(start, anchorStartIndex);
+			} else if (paramStartIndex > -1) {
+				sessionId = path.substring(start, paramStartIndex);
 			} else {
 				sessionId = path.substring(start);
 			}
@@ -54,15 +65,18 @@ var Utilities = new Class({
 	 * @return The URL with session id appended (if one exists)
 	 */
 	maintainSession: function(url) {
-		var sessid = this.getJSessionId();
-		if (sessid != '') {
-			var urlPrts = url.split("?");
-			url = urlPrts[0] + sessid;
-			if (urlPrts.length > 1) {
-				url+= "?" + urlPrts[1];
+		if (!url.match(";jsessionid=")) {
+			var sessid = this.getJSessionId();
+			if (sessid != '') {
+				var urlPrts = url.split("?");
+				url = urlPrts[0] + sessid;
+				if (urlPrts.length > 1) {
+					url+= "?" + urlPrts[1];
+				}
 			}
 		}
-		return url;
+	 
+	 	return url;
 	}
 });
 
