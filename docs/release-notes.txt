@@ -1,3 +1,10 @@
+==== Version 2.0.6 (tag: core_v2_0_6) ====
+
+All JSP tag files now set trimDirectiveWhitespaces="true".
+
+Now depends on:
+    <dependency org="com.sensis" name="wl-webapp-testbed" rev="2.0.7" conf="showcase->default"/>        
+
 ==== Version 2.0.5 (tag: core_v2_0_5) ====
 
 Jiras:
