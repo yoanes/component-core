@@ -55,7 +55,7 @@
     <dependencies>
     
         <!-- Shared build scripts required by this project. -->    
-        <dependency org="com.sensis" name="wl-build-scripts" rev="2.1.1" conf="buildBootstrap->default" />
+        <dependency org="com.sensis" name="wl-build-scripts" rev="2.1.2" conf="buildBootstrap->default" />
         
         <!-- New Content Rendering Framework. -->    
         <dependency org="com.sensis" name="wl-crf" rev="0.1.2-103" conf="default" />
