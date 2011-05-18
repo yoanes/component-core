@@ -1,3 +1,7 @@
+==== Version 2.0.7 (tag: core_v2_0_7) ====
+
+Changes to accommodate Linux development. No changes to component functionality.
+
 ==== Version 2.0.6 (tag: core_v2_0_6) ====
 
 All JSP tag files now set trimDirectiveWhitespaces="true".
