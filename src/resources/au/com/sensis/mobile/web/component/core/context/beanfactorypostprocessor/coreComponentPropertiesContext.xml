@@ -13,9 +13,7 @@
         <property name="locations">
             <list>
                 <value>classpath:/au/com/sensis/mobile/web/component/core/core-component.properties</value>
-                
-                <!-- Load a platform dependent environment properties file. -->
-                <value>classpath:/au/com/sensis/mobile/web/component/core/core-environment.properties.@{global.platform}</value>
+                <value>classpath:/core-environment.properties</value>
             </list>
         </property>
     </bean>                
@@ -31,7 +29,6 @@
         <property name="locations">
             <list>
                 <value>classpath:/core-component.properties</value>
-                <value>classpath:/core-environment.properties</value>
             </list>
         </property>
         <property name="ignoreResourceNotFound" value="true"/>

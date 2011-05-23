@@ -1,3 +1,32 @@
+==== Version 2.0.8 (tag: core_v2_0_8) ====
+
+Default environment property files are no longer shipped with the component. This is due to the Mobiles team restructure.
+There is no longer anything common between the environments of each app and hence the components can no longer predict 
+sensible defaults.
+
+Upgrade steps:
+1. _Before you upgrade_, take the version prior to this and extract all property files that match the following pattern
+    from the component's jar file:
+
+    au/com/sensis/mobile/web/component/core/core-environment.properties.<platform>
+    
+2. Place these property files in your project source tree somewhere.
+
+3. Change your build scripts to ensure that these property files result in core-environment.properties being in the
+   root of your classpath at deployment time. For example:
+   
+   a) when building the deployment unit for dev, core-environment.properties.dev should be copied to 
+      core-environment.properties in the root of the deployed app's classpath.
+   b) when building the deployment unit for prd, core-environment.properties.prd should be copied to 
+      core-environment.properties in the root of the deployed app's classpath.
+      
+4. Now you can upgrade your dependency and pull in the new version of this component.
+
+5. For future upgrades, note that the following file in the jar is provided as a template for you to check what properties
+   should be specified by your app.
+
+    au/com/sensis/mobile/web/component/core/core-environment-template.properties
+
 ==== Version 2.0.7 (tag: core_v2_0_7) ====
 
 Changes to accommodate Linux development. No changes to component functionality.
