@@ -1,3 +1,20 @@
+==== Version 3.0.0 (tag: core_v3_0_0) ====
+
+Upgraded to depend on CRF 2.x. If you are not okay with this, then do not depend on this version of core.
+Simplified some (internal) things:
+* crf-base-config.xml: removed now redundant base-default group. 
+* crf-logging-config.xml: removed now redundant logging-default group. 
+
+Also now depends on <dependency org="com.sensis" name="wl-build-scripts" rev="2.5.1" conf="buildBootstrap->default" />
+and build.xml updated so that hotswapping the showcase works.
+
+Upgrade notes:
+- Now depends on:
+
+    <dependency org="com.sensis" name="wl-crf" rev="2.0.11" conf="default" />
+    
+  If you are not okay in taking CRF 2.0.11, then do not upgrade to this version of core. 
+
 ==== Version 2.0.8 (tag: core_v2_0_8) ====
 
 Default environment property files are no longer shipped with the component. This is due to the Mobiles team restructure.

@@ -13,12 +13,6 @@
             or device.isA('Nokia-N85') or device.isA('Nokia-N95') 
             or device.isA('Nokia-N96')" />
         
-        <!-- TODO: need for this base-default group will go when CRF-62 is implemented.  -->
-        <group name="base-default" expr="!device.isA('Nokia-6120c') and !device.isA('Nokia-6720c') 
-            and !device.isA('Nokia-E51') and !device.isA('Nokia-E71') 
-            and !device.isA('Nokia-N85') and !device.isA('Nokia-N95') 
-            and !device.isA('Nokia-N96') and !device.isA('Samsung-GT-C5220')" />
-            
         <default-group name="default" />
     </groups>
 
