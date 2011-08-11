@@ -1,3 +1,10 @@
+==== Version 3.0.1 (tag: core_v3_0_1) ====
+
+Refactored device.js and base/setup.tag to behave sanely with the crf:bundleScripts tag.
+
+Upgrade steps:
+- should be transparent.
+
 ==== Version 3.0.0 (tag: core_v3_0_0) ====
 
 Upgraded to depend on CRF 2.x. If you are not okay with this, then do not depend on this version of core.
