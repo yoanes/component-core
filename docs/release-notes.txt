@@ -1,3 +1,20 @@
+==== Version 3.1.0 (tag: core_v3_1_0) ====
+
+ems/setup.tag no longer sets the following:
+
+    EMS.Services.communicationMode = 'CrossDomain'; 
+    
+This is to accommodate an expected future change to the crf:bundleScriptsTag which will no longer
+guarantee the relative order of inline scripts and absolutely referenced external scripts.
+
+Upgrade steps:
+- Any component or app that uses the ems/setup.tag should set the following javascript themselves:
+
+    EMS.Services.communicationMode = 'CrossDomain';
+    
+  or otherwise change their code to support the default EMS XMLHttpRequest communication mode
+  (which would typically require a proxy to work around the cross domain restrictions.
+
 ==== Version 3.0.1 (tag: core_v3_0_1) ====
 
 Refactored device.js and base/setup.tag to behave sanely with the crf:bundleScripts tag.

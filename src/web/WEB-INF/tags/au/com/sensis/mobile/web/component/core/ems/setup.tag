@@ -17,8 +17,5 @@
 
 <%-- Scripts for current component. --%>
 <crf:script src="${emsJsUrl}" device="${device}" type="text/javascript"/>
-<crf:script name="core-ems-communicationMode" type="text/javascript" device="${device}">
-    EMS.Services.communicationMode = 'CrossDomain';
-</crf:script>
 
 <logging:debug logger="${logger}" message="Exiting setup.tag" />
