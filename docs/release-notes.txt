@@ -1,3 +1,15 @@
+==== Version 4.0.???
+
+Migrated to WURFL based crf.
+Removed any Volantis dependencies.
+Please CRF release notes for further details about the wurfl migration.
+
+Upgrade Steps:
+
+The "Device" variable that is setup by the base setup tag has been modified. 
+The browser property of the device has had the following properties removed:
+"name", "telSupport" & "wtaiSupport".
+
 ==== Version 3.1.0 (tag: core_v3_1_0) ====
 
 ems/setup.tag no longer sets the following:

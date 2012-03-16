@@ -58,7 +58,7 @@
         <dependency org="com.sensis" name="wl-build-scripts" rev="2.5.1" conf="buildBootstrap->default" />
         
         <!-- New Content Rendering Framework. -->    
-        <dependency org="com.sensis" name="wl-crf" rev="2.0.11" conf="default" />
+        <dependency org="com.sensis" name="wl-crf" rev="3.0.0.wurfl-snapshot-1" conf="default" />
         
         <!-- Commons -->
         <dependency org="apache" name="commons-lang" rev="2.4" conf="default" />
@@ -67,10 +67,7 @@
         <!-- jstl tags -->
         <!-- note this is already referenced in the spring 2.0.6 ivy.xml -->
         <!-- not sure why - seems a weird place for it -->
-        <dependency org="taglibs" name="standard" rev="1.1.2" conf="default"/>        
-        
-        <!-- MCS -->
-        <dependency org="com.volantis" name="com.volantis.mcs.servlet" rev="5.1.2" conf="showcase->default"/>
+        <dependency org="taglibs" name="standard" rev="1.1.2" conf="default"/>
         
         <!-- Struts2 -->
         <!-- default conf instead of showcase->default since we contain a fragment of sdpcommon at the moment. -->
@@ -117,9 +114,8 @@
         <!-- SDP Common -->
         <dependency org="com.sensis" name="sdpCommon-logging" rev="0.5" conf="default"/>        
         <!-- Validatable is in sdpCommon-web so we need it for all configurations.  -->
-        <dependency org="com.sensis" name="sdpCommon-web" rev="1.6-012" conf="default"/>
+        <dependency org="com.sensis" name="sdpCommon-web" rev="3.0-wurfl-snapshot-5" conf="default"/>
         <dependency org="com.sensis" name="sdpCommon-utils" rev="1.0-005" conf="default"/>
-        <dependency org="com.sensis" name="sdpCommon-volantis" rev="0.6-012" conf="default"/>
 
         <!-- Hibernate Persistence -->
         <!-- Should be included in hibernate 3.2.6.ga dependencies??
@@ -140,7 +136,7 @@
         <dependency org="com.thoughtworks" name="selenium-server" rev="1.0-beta-1" conf="test->default"/>
         <dependency org="com.vladium" name="emma" rev="2.0" conf="test->default"/>
         
-        <dependency org="com.sensis" name="wl-webapp-testbed" rev="2.1.0" conf="showcase->default"/>        
+        <dependency org="com.sensis" name="wl-webapp-testbed" rev="3.0.wurfl-snapshot-4" conf="showcase->default"/>        
         
         <!-- 
           - Exclude old versions of ehcache which were from a different org and had a different 

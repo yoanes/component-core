@@ -9,7 +9,7 @@
 <%@ attribute name="emsJsUrl" required="true"
     description="URL of the EMS JavaScript library." %>
 <%@ attribute name="device" required="true"
-    type="au.com.sensis.wireless.common.volantis.devicerepository.api.Device"  
+    type="au.com.sensis.devicerepository.Device"  
     description="Device of the current user." %>
 
 <logging:logger var="logger" name="au.com.sensis.mobile.web.component.ems" />
