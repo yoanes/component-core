@@ -12,7 +12,7 @@
                and (device.getPropertyAsString('brand_name') eq 'internet explorer'))"/>
            
         <group name="touch" expr="device.isA('Apple') or device.supportsOs('Android')
-            or device.isA('Samsung-GT-I8000T') or 
+            or device.isA('Samsung-GT-I8000T') 
             or device.isA('SonyEricsson-X10i') 
             or device.isA('SonyEricsson-X10a') 
             or device.isA('SonyEricsson-X10iv') 
