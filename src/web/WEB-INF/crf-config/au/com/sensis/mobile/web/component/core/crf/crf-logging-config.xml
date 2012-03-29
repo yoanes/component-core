@@ -6,15 +6,17 @@
 
     <config-path>comp/core/logging</config-path>
     <groups>
-        <group name="ie" expr="device.isA('HTC-Diamond2') or device.isA('HTC-Snap') 
-            or device.isA('HTC-TouchHD-IE') or device.isA('HTC-TouchHD2') 
-            or device.isA('PC-Win32-IE6') or device.isA('PC-Win32-IE7') 
-            or device.isA('PC-Win32-IE8')"/>
+        <group name="ie" expr="device.isA('HTC-Touch-Diamond-2') or device.isA('HTC-Snap') 
+            or device.isA('HTC-HD2') 
+            or (device.getPropertyAsString('custom.device.classification') eq 'pc' 
+               and (device.getPropertyAsString('brand_name') eq 'internet explorer'))"/>
            
-        <group name="touch" expr="device.isA('Apple') or device.isA('Android-OS')
-            or device.isA('GT-I8000T-Opera9') or device.isA('HTC-Diamond-Opera9') 
-            or device.isA('HTC-TouchHD') or device.isA('HTC-TouchPro-Opera9') 
-            or device.isA('Mot-A3100-Opera9') or device.isA('SE-X1-Opera9')" />
+        <group name="touch" expr="device.isA('Apple') or device.supportsOs('Android')
+            or device.isA('Samsung-GT-I8000T') or 
+            or device.isA('SonyEricsson-X10i') 
+            or device.isA('SonyEricsson-X10a') 
+            or device.isA('SonyEricsson-X10iv') 
+            or device.isA('SonyEricsson-SO-01B')" />
             
         <default-group name="default" />
     </groups>

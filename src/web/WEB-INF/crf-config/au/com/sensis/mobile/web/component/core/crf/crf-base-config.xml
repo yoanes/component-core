@@ -8,7 +8,7 @@
     <groups>
         
         <group name="samsungC5220" expr="device.isA('Samsung-GT-C5220')" />
-        <group name="nokiaS60" expr="device.isA('Nokia-6120c') or device.isA('Nokia-6720c') 
+        <group name="nokiaS60" expr="device.isA('Nokia-6120-classic') or device.isA('Nokia-6720') 
             or device.isA('Nokia-E51') or device.isA('Nokia-E71')
             or device.isA('Nokia-N85') or device.isA('Nokia-N95') 
             or device.isA('Nokia-N96')" />
